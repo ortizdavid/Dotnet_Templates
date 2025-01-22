@@ -1,0 +1,2256 @@
+{
+	"info": {
+		"_postman_id": "2be9a134-0d27-45cf-b46a-811b1f096c8e",
+		"name": ".NET Template API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "13144775"
+	},
+	"item": [
+		{
+			"name": "API Root",
+			"item": [
+				{
+					"name": "Index",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{TEMPLATE_API}}",
+							"host": [
+								"{{TEMPLATE_API}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Download Collection",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{TEMPLATE_API}}/download-collections",
+							"host": [
+								"{{TEMPLATE_API}}"
+							],
+							"path": [
+								"download-collections"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Auth",
+					"item": [
+						{
+							"name": "Login",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TEMPLATE_API_JWT}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"username\": \"dev-on-bits\",\r\n    \"password\": \"Admin123$\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{TEMPLATE_API}}/auth/login",
+									"host": [
+										"{{TEMPLATE_API}}"
+									],
+									"path": [
+										"auth",
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Logout",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TEMPLATE_API_JWT}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{TEMPLATE_API}}/auth/logout",
+									"host": [
+										"{{TEMPLATE_API}}"
+									],
+									"path": [
+										"auth",
+										"logout"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Refresh Token",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TEMPLATE_API_JWT}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"token\": \"RN+B6ku1aFiwjiu2qzii/q4u1tQdacCPP+fBXlqeYL8jjjjjjjjjj=\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{TEMPLATE_API}}/auth/refresh-token",
+									"host": [
+										"{{TEMPLATE_API}}"
+									],
+									"path": [
+										"auth",
+										"refresh-token"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Recover Password",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TEMPLATE_API_JWT}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"newPassword\": \"Admin1234$\",\r\n    \"passwordConfirmation\": \"Admin1234$\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{TEMPLATE_API}}/auth/recover-password/7hzWUaBz+iEKjVmf0G5gbo9HK1zduHabOKOkPZK0nCwabapIbjOsFfBSY+mjLe4/DT74d2CVwXfBY3YEOhRm6ymb1PinH0XEniabG51vd/8YL0ae8mnNggeo3UnteQbdtlUHH49yv28ofTXX7UXfDoA9c4X6AoUCRGoQXBc1uCb+avnfkD9P4w9gUvfk9ZlOEsav/rI+",
+									"host": [
+										"{{TEMPLATE_API}}"
+									],
+									"path": [
+										"auth",
+										"recover-password",
+										"7hzWUaBz+iEKjVmf0G5gbo9HK1zduHabOKOkPZK0nCwabapIbjOsFfBSY+mjLe4",
+										"DT74d2CVwXfBY3YEOhRm6ymb1PinH0XEniabG51vd",
+										"8YL0ae8mnNggeo3UnteQbdtlUHH49yv28ofTXX7UXfDoA9c4X6AoUCRGoQXBc1uCb+avnfkD9P4w9gUvfk9ZlOEsav",
+										"rI+"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Recover Link",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TEMPLATE_API_JWT}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"admin01@gmail.com\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{TEMPLATE_API}}/auth/get-recover-link",
+									"host": [
+										"{{TEMPLATE_API}}"
+									],
+									"path": [
+										"auth",
+										"get-recover-link"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Roles",
+					"item": [
+						{
+							"name": "Get All Roles",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TEMPLATE_API_JWT}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{TEMPLATE_API}}/roles?pageIndex=0&pageSize=2",
+									"host": [
+										"{{TEMPLATE_API}}"
+									],
+									"path": [
+										"roles"
+									],
+									"query": [
+										{
+											"key": "pageIndex",
+											"value": "0"
+										},
+										{
+											"key": "pageSize",
+											"value": "2"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get All not Paginated",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TEMPLATE_API_JWT}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{TEMPLATE_API}}/roles/not-paginated",
+									"host": [
+										"{{TEMPLATE_API}}"
+									],
+									"path": [
+										"roles",
+										"not-paginated"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get By Code",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TEMPLATE_API_JWT}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{TEMPLATE_API}}/roles/by-code/role_admin",
+									"host": [
+										"{{TEMPLATE_API}}"
+									],
+									"path": [
+										"roles",
+										"by-code",
+										"role_admin"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get By Unique ID",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TEMPLATE_API_JWT}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{TEMPLATE_API}}/roles/046d11e2-5a4e-4eb4-8d6d-c32f050583a2",
+									"host": [
+										"{{TEMPLATE_API}}"
+									],
+									"path": [
+										"roles",
+										"046d11e2-5a4e-4eb4-8d6d-c32f050583a2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create Role",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"roleName\": \"User Test333\",\r\n    \"code\": \"role_test333\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{TEMPLATE_API}}/roles",
+									"host": [
+										"{{TEMPLATE_API}}"
+									],
+									"path": [
+										"roles"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Role",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TEMPLATE_API_JWT}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"roleName\": \"Administrator\",\r\n    \"code\": \"role_admin\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{TEMPLATE_API}}/roles/046d11e2-5a4e-4eb4-8d6d-c32f050583a2",
+									"host": [
+										"{{TEMPLATE_API}}"
+									],
+									"path": [
+										"roles",
+										"046d11e2-5a4e-4eb4-8d6d-c32f050583a2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Role",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TEMPLATE_API_JWT}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{TEMPLATE_API}}/roles/989d1781-0bbe-4a32-a1d1-a6a68158c5c5",
+									"host": [
+										"{{TEMPLATE_API}}"
+									],
+									"path": [
+										"roles",
+										"989d1781-0bbe-4a32-a1d1-a6a68158c5c5"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Users",
+					"item": [
+						{
+							"name": "Get All Users",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TEMPLATE_API_JWT}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{TEMPLATE_API}}/users?pageIndex=0&pageSize=10",
+									"host": [
+										"{{TEMPLATE_API}}"
+									],
+									"path": [
+										"users"
+									],
+									"query": [
+										{
+											"key": "pageIndex",
+											"value": "0"
+										},
+										{
+											"key": "pageSize",
+											"value": "10"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get User By UniqueId",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TEMPLATE_API_JWT}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{TEMPLATE_API}}/users/eecd0044-4fac-4105-b6e7-e5e2e53490b3",
+									"host": [
+										"{{TEMPLATE_API}}"
+									],
+									"path": [
+										"users",
+										"eecd0044-4fac-4105-b6e7-e5e2e53490b3"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get User By UserName",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TEMPLATE_API_JWT}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{TEMPLATE_API}}/users/by-name/admin01",
+									"host": [
+										"{{TEMPLATE_API}}"
+									],
+									"path": [
+										"users",
+										"by-name",
+										"admin01"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create User",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TEMPLATE_API_JWT}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"roleId\": 1,\r\n    \"userName\": \"dev-on-bits\",\r\n    \"email\": \"developeronbits@gmail.com\",\r\n    \"password\": \"Admin123$\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{TEMPLATE_API}}/users",
+									"host": [
+										"{{TEMPLATE_API}}"
+									],
+									"path": [
+										"users"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Upload User Image",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TEMPLATE_API_JWT}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "file",
+											"type": "file",
+											"src": "/C:/Users/ortiz/Downloads/WhatsApp Image 2024-12-09 at 15.01.22.jpeg"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{TEMPLATE_API}}/users/eecd0044-4fac-4105-b6e7-e5e2e53490b3/upload-image",
+									"host": [
+										"{{TEMPLATE_API}}"
+									],
+									"path": [
+										"users",
+										"eecd0044-4fac-4105-b6e7-e5e2e53490b3",
+										"upload-image"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Change Password",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TEMPLATE_API_JWT}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"newPassword\": \"Admin123$\",\r\n    \"passwordConfirmation\": \"Admin123$\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{TEMPLATE_API}}/users/a9060d6a-86c7-462b-8f89-0d1a0a6e8918/change-password",
+									"host": [
+										"{{TEMPLATE_API}}"
+									],
+									"path": [
+										"users",
+										"a9060d6a-86c7-462b-8f89-0d1a0a6e8918",
+										"change-password"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Activate User",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TEMPLATE_API_JWT}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{TEMPLATE_API}}/users/a9060d6a-86c7-462b-8f89-0d1a0a6e8918/activate",
+									"host": [
+										"{{TEMPLATE_API}}"
+									],
+									"path": [
+										"users",
+										"a9060d6a-86c7-462b-8f89-0d1a0a6e8918",
+										"activate"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Deactivate User",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TEMPLATE_API_JWT}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{TEMPLATE_API}}/users/a9060d6a-86c7-462b-8f89-0d1a0a6e8918/deactivate",
+									"host": [
+										"{{TEMPLATE_API}}"
+									],
+									"path": [
+										"users",
+										"a9060d6a-86c7-462b-8f89-0d1a0a6e8918",
+										"deactivate"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete User",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TEMPLATE_API_JWT}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{TEMPLATE_API}}/users/7725cd5f-df4b-4f13-b6c3-eaf7801fe1a3",
+									"host": [
+										"{{TEMPLATE_API}}"
+									],
+									"path": [
+										"users",
+										"7725cd5f-df4b-4f13-b6c3-eaf7801fe1a3"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Current User",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TEMPLATE_API_JWT}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{TEMPLATE_API}}/users/current",
+									"host": [
+										"{{TEMPLATE_API}}"
+									],
+									"path": [
+										"users",
+										"current"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Categories",
+			"item": [
+				{
+					"name": "Get All Categories",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TEMPLATE_API_JWT}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{TEMPLATE_API}}/categories?pageIndex=0&pageSize=10",
+							"host": [
+								"{{TEMPLATE_API}}"
+							],
+							"path": [
+								"categories"
+							],
+							"query": [
+								{
+									"key": "pageIndex",
+									"value": "0"
+								},
+								{
+									"key": "pageSize",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Category by Unique ID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TEMPLATE_API_JWT}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{TEMPLATE_API}}/categories/f234c510-f64e-475e-9318-86f710f23ad5",
+							"host": [
+								"{{TEMPLATE_API}}"
+							],
+							"path": [
+								"categories",
+								"f234c510-f64e-475e-9318-86f710f23ad5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Category",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TEMPLATE_API_JWT}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"CategoryName\": \"Tdaaaaaaddudssi\",\r\n    \"Description\": \"Tddddddddddddd\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{TEMPLATE_API}}/categories",
+							"host": [
+								"{{TEMPLATE_API}}"
+							],
+							"path": [
+								"categories"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Import Categories CSV",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TEMPLATE_API_JWT}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/C:/Users/ortiz/Downloads/Uploads for Testing/Dotnet templates/CSV/categories_for_import.csv"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{TEMPLATE_API}}/categories/import-csv",
+							"host": [
+								"{{TEMPLATE_API}}"
+							],
+							"path": [
+								"categories",
+								"import-csv"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Category",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TEMPLATE_API_JWT}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"CategoryName\": \"Computers\",\r\n    \"Description\": \"Related to PCs\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{TEMPLATE_API}}}/categories/00fed5bd-05b0-4cbb-adfe-454142e7c887",
+							"host": [
+								"{{TEMPLATE_API}}}"
+							],
+							"path": [
+								"categories",
+								"00fed5bd-05b0-4cbb-adfe-454142e7c887"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Category",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TEMPLATE_API_JWT}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{TEMPLATE_API}}/categories/00fed5bd-05b0-4cbb-adfe-454142e7c887",
+							"host": [
+								"{{TEMPLATE_API}}"
+							],
+							"path": [
+								"categories",
+								"00fed5bd-05b0-4cbb-adfe-454142e7c887"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Suppliers",
+			"item": [
+				{
+					"name": "Get All Suppliers",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TEMPLATE_API_JWT}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{TEMPLATE_API}}/suppliers?pageIndex=0&pageSize=20",
+							"host": [
+								"{{TEMPLATE_API}}"
+							],
+							"path": [
+								"suppliers"
+							],
+							"query": [
+								{
+									"key": "pageIndex",
+									"value": "0"
+								},
+								{
+									"key": "pageSize",
+									"value": "20"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Supplier by Unique ID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TEMPLATE_API_JWT}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{TEMPLATE_API}}/suppliers/313855d6-c09d-45c7-91b1-6578be4698c8",
+							"host": [
+								"{{TEMPLATE_API}}"
+							],
+							"path": [
+								"suppliers",
+								"313855d6-c09d-45c7-91b1-6578be4698c8"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Supplier Products",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TEMPLATE_API_JWT}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{TEMPLATE_API}}/suppliers/313855d6-c09d-45c7-91b1-6578be4698c8/products",
+							"host": [
+								"{{TEMPLATE_API}}"
+							],
+							"path": [
+								"suppliers",
+								"313855d6-c09d-45c7-91b1-6578be4698c8",
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Supplier",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{PRODUCTS_JWT_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"supplierName\": \"Supplier00\",\r\n    \"identificationNumber\": \"07234s567890\",\r\n    \"email\": \"supplier00@example.com\",\r\n    \"primaryPhone\": \"023-456-7890\",\r\n    \"secondaryPhone\": \"986-654-3510\",\r\n    \"address\": \"123 Main St\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{TEMPLATE_API}}/suppliers",
+							"host": [
+								"{{TEMPLATE_API}}"
+							],
+							"path": [
+								"suppliers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Supplier",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TEMPLATE_API_JWT}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"supplierName\": \"Supplier00\",\r\n    \"identificationNumber\": \"07234s567890\",\r\n    \"email\": \"supplier00@example.com\",\r\n    \"primaryPhone\": \"023-456-7890\",\r\n    \"secondaryPhone\": \"986-654-3510\",\r\n    \"address\": \"123 Main St\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{TEMPLATE_API}}/suppliers/c09d0fa4-ce43-497a-a213-282da63f384a",
+							"host": [
+								"{{TEMPLATE_API}}"
+							],
+							"path": [
+								"suppliers",
+								"c09d0fa4-ce43-497a-a213-282da63f384a"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Import Suppliers CSV",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TEMPLATE_API_JWT}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/C:/Users/ortiz/Downloads/Uploads for Testing/Dotnet templates/CSV/suppliers_for_import.csv"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{TEMPLATE_API}}/suppliers/import-csv",
+							"host": [
+								"{{TEMPLATE_API}}"
+							],
+							"path": [
+								"suppliers",
+								"import-csv"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Supplier",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TEMPLATE_API_JWT}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{TEMPLATE_API}}/suppliers/c09d0fa4-ce43-497a-a213-282da63f384a",
+							"host": [
+								"{{TEMPLATE_API}}"
+							],
+							"path": [
+								"suppliers",
+								"c09d0fa4-ce43-497a-a213-282da63f384a"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Products",
+			"item": [
+				{
+					"name": "Get All products",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TEMPLATE_API_JWT}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{TEMPLATE_API}}/products?pageIndex=0&pageSize=5",
+							"host": [
+								"{{TEMPLATE_API}}"
+							],
+							"path": [
+								"products"
+							],
+							"query": [
+								{
+									"key": "pageIndex",
+									"value": "0"
+								},
+								{
+									"key": "pageSize",
+									"value": "5"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Product",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TEMPLATE_API_JWT}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"productName\": \"XXXe\",\r\n    \"code\": \"P0392\",\r\n    \"unitPrice\": 19.99,\r\n    \"description\": \"Test\",\r\n    \"categoryId\": 1,\r\n    \"supplierId\": 1\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{TEMPLATE_API}}/products",
+							"host": [
+								"{{TEMPLATE_API}}"
+							],
+							"path": [
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Upload Product Images",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TEMPLATE_API_JWT}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "files",
+									"type": "file",
+									"src": [
+										"/C:/Users/ortiz/OneDrive/Imagens/Capturas de Ecrã/Screenshot 2024-11-19 123516.png",
+										"/C:/Users/ortiz/OneDrive/Imagens/Capturas de Ecrã/Screenshot 2024-11-19 132035.png",
+										"/C:/Users/ortiz/OneDrive/Imagens/Capturas de Ecrã/Screenshot 2024-11-22 121738.png"
+									]
+								}
+							]
+						},
+						"url": {
+							"raw": "{{TEMPLATE_API}}/products/6fc2ac66-fe63-4386-aedb-5ecc468fcd54/images",
+							"host": [
+								"{{TEMPLATE_API}}"
+							],
+							"path": [
+								"products",
+								"6fc2ac66-fe63-4386-aedb-5ecc468fcd54",
+								"images"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Import Produts CSV",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TEMPLATE_API_JWT}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/C:/Users/ortiz/Downloads/Uploads for Testing/Dotnet templates/CSV/products_for_import.csv"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{TEMPLATE_API}}/products/import-csv",
+							"host": [
+								"{{TEMPLATE_API}}"
+							],
+							"path": [
+								"products",
+								"import-csv"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Product Images",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TEMPLATE_API_JWT}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{TEMPLATE_API}}/products/6fc2ac66-fe63-4386-aedb-5ecc468fcd54/images",
+							"host": [
+								"{{TEMPLATE_API}}"
+							],
+							"path": [
+								"products",
+								"6fc2ac66-fe63-4386-aedb-5ecc468fcd54",
+								"images"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Product by Unique ID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TEMPLATE_API_JWT}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{TEMPLATE_API}}/products/6fc2ac66-fe63-4386-aedb-5ecc468fcd54",
+							"host": [
+								"{{TEMPLATE_API}}"
+							],
+							"path": [
+								"products",
+								"6fc2ac66-fe63-4386-aedb-5ecc468fcd54"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Product",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TEMPLATE_API_JWT}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"productName\": \"Fitness Tracker\",\r\n    \"code\": \"F333\",\r\n    \"unitPrice\": 199.99,\r\n    \"description\": \"Test\",\r\n    \"categoryId\": 3,\r\n    \"supplierId\": 5\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{TEMPLATE_API}}/products/16d53674-4d2b-459c-8eef-3ef0ec1e7be1",
+							"host": [
+								"{{TEMPLATE_API}}"
+							],
+							"path": [
+								"products",
+								"16d53674-4d2b-459c-8eef-3ef0ec1e7be1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Product",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TEMPLATE_API_JWT}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{TEMPLATE_API}}/products/f06b88d0-7d3d-46eb-8c3a-ec68419a539b",
+							"host": [
+								"{{TEMPLATE_API}}"
+							],
+							"path": [
+								"products",
+								"f06b88d0-7d3d-46eb-8c3a-ec68419a539b"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Reports",
+			"item": [
+				{
+					"name": "Categories",
+					"item": [
+						{
+							"name": "Export All Categories PDF",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TEMPLATE_API_JWT}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{TEMPLATE_API}}/categories-report/all-categories?startDate=2024-01-01&endDate=2024-12-31&format=pdf",
+									"host": [
+										"{{TEMPLATE_API}}"
+									],
+									"path": [
+										"categories-report",
+										"all-categories"
+									],
+									"query": [
+										{
+											"key": "startDate",
+											"value": "2024-01-01"
+										},
+										{
+											"key": "endDate",
+											"value": "2024-12-31"
+										},
+										{
+											"key": "format",
+											"value": "pdf"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Export All Categories Excel",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TEMPLATE_API_JWT}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{TEMPLATE_API}}/categories-report/all-categories?startDate=2024-01-01&endDate=2024-12-31&format=excel",
+									"host": [
+										"{{TEMPLATE_API}}"
+									],
+									"path": [
+										"categories-report",
+										"all-categories"
+									],
+									"query": [
+										{
+											"key": "startDate",
+											"value": "2024-01-01"
+										},
+										{
+											"key": "endDate",
+											"value": "2024-12-31"
+										},
+										{
+											"key": "format",
+											"value": "excel"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Export All Categories CSV",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TEMPLATE_API_JWT}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{TEMPLATE_API}}/categories-report/all-categories?startDate=2024-01-01&endDate=2024-12-31&format=csv",
+									"host": [
+										"{{TEMPLATE_API}}"
+									],
+									"path": [
+										"categories-report",
+										"all-categories"
+									],
+									"query": [
+										{
+											"key": "startDate",
+											"value": "2024-01-01"
+										},
+										{
+											"key": "endDate",
+											"value": "2024-12-31"
+										},
+										{
+											"key": "format",
+											"value": "csv"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Export All Categories JSON",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TEMPLATE_API_JWT}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{TEMPLATE_API}}/categories-report/all-categories?startDate=2024-01-01&endDate=2024-12-31&format=JSON",
+									"host": [
+										"{{TEMPLATE_API}}"
+									],
+									"path": [
+										"categories-report",
+										"all-categories"
+									],
+									"query": [
+										{
+											"key": "startDate",
+											"value": "2024-01-01"
+										},
+										{
+											"key": "endDate",
+											"value": "2024-12-31"
+										},
+										{
+											"key": "format",
+											"value": "JSON"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Suppliers",
+					"item": [
+						{
+							"name": "Export All Suppliers PDF",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{PRODUCTS_JWT_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{TEMPLATE_API}}/suppliers-report/all-suppliers?startDate=2024-01-01&endDate=2024-12-31&format=pdf",
+									"host": [
+										"{{TEMPLATE_API}}"
+									],
+									"path": [
+										"suppliers-report",
+										"all-suppliers"
+									],
+									"query": [
+										{
+											"key": "startDate",
+											"value": "2024-01-01"
+										},
+										{
+											"key": "endDate",
+											"value": "2024-12-31"
+										},
+										{
+											"key": "format",
+											"value": "pdf"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Export All  Suppliers Excel",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{PRODUCTS_JWT_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{TEMPLATE_API}}/suppliers-report/all-suppliers?startDate=2024-01-01&endDate=2024-12-31&format=excel",
+									"host": [
+										"{{TEMPLATE_API}}"
+									],
+									"path": [
+										"suppliers-report",
+										"all-suppliers"
+									],
+									"query": [
+										{
+											"key": "startDate",
+											"value": "2024-01-01"
+										},
+										{
+											"key": "endDate",
+											"value": "2024-12-31"
+										},
+										{
+											"key": "format",
+											"value": "excel"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Export All Suppliers CSV",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{PRODUCTS_JWT_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{TEMPLATE_API}}/suppliers-report/all-suppliers?startDate=2024-01-01&endDate=2024-12-31&format=csv",
+									"host": [
+										"{{TEMPLATE_API}}"
+									],
+									"path": [
+										"suppliers-report",
+										"all-suppliers"
+									],
+									"query": [
+										{
+											"key": "startDate",
+											"value": "2024-01-01"
+										},
+										{
+											"key": "endDate",
+											"value": "2024-12-31"
+										},
+										{
+											"key": "format",
+											"value": "csv"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Export All Suppliers JSON",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{PRODUCTS_JWT_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{TEMPLATE_API}}/suppliers-report/all-suppliers?startDate=2024-01-01&endDate=2024-12-31&format=json",
+									"host": [
+										"{{TEMPLATE_API}}"
+									],
+									"path": [
+										"suppliers-report",
+										"all-suppliers"
+									],
+									"query": [
+										{
+											"key": "startDate",
+											"value": "2024-01-01"
+										},
+										{
+											"key": "endDate",
+											"value": "2024-12-31"
+										},
+										{
+											"key": "format",
+											"value": "json"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Products",
+					"item": [
+						{
+							"name": "Export All Products PDF",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TEMPLATE_API_JWT}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{TEMPLATE_API}}/products-report?format=pdf",
+									"host": [
+										"{{TEMPLATE_API}}"
+									],
+									"path": [
+										"products-report"
+									],
+									"query": [
+										{
+											"key": "format",
+											"value": "pdf"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Export All Products Excel",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TEMPLATE_API_JWT}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{TEMPLATE_API}}/products-report/all-products?startDate=2024-01-01&endDate=2024-12-31&format=excel",
+									"host": [
+										"{{TEMPLATE_API}}"
+									],
+									"path": [
+										"products-report",
+										"all-products"
+									],
+									"query": [
+										{
+											"key": "startDate",
+											"value": "2024-01-01"
+										},
+										{
+											"key": "endDate",
+											"value": "2024-12-31"
+										},
+										{
+											"key": "format",
+											"value": "excel"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Export All Products CSV",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TEMPLATE_API_JWT}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{TEMPLATE_API}}/products-report/all-products?startDate=2024-01-01&endDate=2024-12-31&format=csv",
+									"host": [
+										"{{TEMPLATE_API}}"
+									],
+									"path": [
+										"products-report",
+										"all-products"
+									],
+									"query": [
+										{
+											"key": "startDate",
+											"value": "2024-01-01"
+										},
+										{
+											"key": "endDate",
+											"value": "2024-12-31"
+										},
+										{
+											"key": "format",
+											"value": "csv"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Export All Products JSON",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TEMPLATE_API_JWT}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{TEMPLATE_API}}/products-report/all-products?startDate=2024-01-01&endDate=2024-12-31&format=json",
+									"host": [
+										"{{TEMPLATE_API}}"
+									],
+									"path": [
+										"products-report",
+										"all-products"
+									],
+									"query": [
+										{
+											"key": "startDate",
+											"value": "2024-01-01"
+										},
+										{
+											"key": "endDate",
+											"value": "2024-12-31"
+										},
+										{
+											"key": "format",
+											"value": "json"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Statistics",
+			"item": [
+				{
+					"name": "Users",
+					"item": [
+						{
+							"name": "Total Active and Inactive Users",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TEMPLATE_API_JWT}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{TEMPLATE_API}}/user-statistics/active-inactive",
+									"host": [
+										"{{TEMPLATE_API}}"
+									],
+									"path": [
+										"user-statistics",
+										"active-inactive"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Percentage of Active ans Inactive Users",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TEMPLATE_API_JWT}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{TEMPLATE_API}}/user-statistics/percent-active-inactive",
+									"host": [
+										"{{TEMPLATE_API}}"
+									],
+									"path": [
+										"user-statistics",
+										"percent-active-inactive"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Products",
+					"item": [
+						{
+							"name": "Total By Categories",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TEMPLATE_API_JWT}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{TEMPLATE_API}}/product-statistics/total-by-categories",
+									"host": [
+										"{{TEMPLATE_API}}"
+									],
+									"path": [
+										"product-statistics",
+										"total-by-categories"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Total By Suppliers",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TEMPLATE_API_JWT}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{TEMPLATE_API}}/product-statistics/total-by-suppliers",
+									"host": [
+										"{{TEMPLATE_API}}"
+									],
+									"path": [
+										"product-statistics",
+										"total-by-suppliers"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Suppliers",
+					"item": [
+						{
+							"name": "Top Suppliers",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TEMPLATE_API_JWT}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{TEMPLATE_API}}/supplier-statistics/top-suppliers",
+									"host": [
+										"{{TEMPLATE_API}}"
+									],
+									"path": [
+										"supplier-statistics",
+										"top-suppliers"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Categories",
+					"item": [
+						{
+							"name": "Top Categories",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TEMPLATE_API_JWT}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{TEMPLATE_API}}/category-statistics/top-categories",
+									"host": [
+										"{{TEMPLATE_API}}"
+									],
+									"path": [
+										"category-statistics",
+										"top-categories"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	]
+}

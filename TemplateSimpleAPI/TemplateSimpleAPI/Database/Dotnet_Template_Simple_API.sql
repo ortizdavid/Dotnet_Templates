@@ -1,0 +1,16 @@
+-- SWITCH TO THE DATABASE
+USE Dotnet_Template_Simple_Api;
+GO
+
+-- Prodcts TABLE
+IF OBJECT_ID('Products', 'U') IS NOT NULL
+    DROP TABLE Products;
+GO
+CREATE TABLE Products (
+    Id INT IDENTITY PRIMARY KEY,
+    Name NVARCHAR(50) NOT NULL,
+    Code NVARCHAR(20) UNIQUE NOT NULL,
+    Price DECIMAL(18, 2) NOT NULL DEFAULT 0.00,
+    Description NVARCHAR(100),
+);
+GO

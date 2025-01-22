@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TemplateSimpleAPI", "TemplateSimpleAPI\TemplateSimpleAPI.csproj", "{24AA3392-6D49-4077-8BAC-D2FEE5292E3E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TemplateSimpleAPI.Tests", "TemplateSimpleAPI.Tests\TemplateSimpleAPI.Tests.csproj", "{843035D5-F04C-4886-9A3B-4A0B893FB48D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{24AA3392-6D49-4077-8BAC-D2FEE5292E3E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24AA3392-6D49-4077-8BAC-D2FEE5292E3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{24AA3392-6D49-4077-8BAC-D2FEE5292E3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{24AA3392-6D49-4077-8BAC-D2FEE5292E3E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{843035D5-F04C-4886-9A3B-4A0B893FB48D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{843035D5-F04C-4886-9A3B-4A0B893FB48D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{843035D5-F04C-4886-9A3B-4A0B893FB48D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{843035D5-F04C-4886-9A3B-4A0B893FB48D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
