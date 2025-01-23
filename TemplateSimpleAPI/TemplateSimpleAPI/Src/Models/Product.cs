@@ -1,4 +1,4 @@
-namespace TemplateSimpleApi.Core.Models
+namespace TemplateSimpleApi.Models
 {
     public class Product
     {

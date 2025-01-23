@@ -1,9 +1,9 @@
 using System.Net;
 using Microsoft.AspNetCore.Mvc;
-using TemplateSimpleApi.Core.Models;
-using TemplateSimpleApi.Core.Repositories;
+using TemplateSimpleApi.Models;
+using TemplateSimpleApi.Repositories;
 
-namespace TemplateSimpleApi.Core.Controllers
+namespace TemplateSimpleApi.Controllers
 {
     [Route("api/products")]
     [ApiController]

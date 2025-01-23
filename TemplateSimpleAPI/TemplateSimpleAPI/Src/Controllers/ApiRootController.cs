@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace TemplateSimpleApi.Core.Controlers
+namespace TemplateSimpleApi.Controlers
 {
     [Route("")]
     [Route("api")]

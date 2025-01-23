@@ -1,4 +1,4 @@
-namespace TemplateSimpleApi.Core.Repositories
+namespace TemplateSimpleApi.Repositories
 {
     public interface IRepository<T> where T : class
     {

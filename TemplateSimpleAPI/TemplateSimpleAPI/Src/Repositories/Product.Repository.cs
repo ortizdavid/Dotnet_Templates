@@ -1,8 +1,8 @@
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using TemplateSimpleApi.Core.Models;
+using TemplateSimpleApi.Models;
 
-namespace TemplateSimpleApi.Core.Repositories
+namespace TemplateSimpleApi.Repositories
 {
     public class ProductRepository : IRepository<Product>
     {

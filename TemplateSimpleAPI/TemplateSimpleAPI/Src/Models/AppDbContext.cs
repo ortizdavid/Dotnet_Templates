@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 
-namespace TemplateSimpleApi.Core.Models
+namespace TemplateSimpleApi.Models
 {
     public class AppDbContext : DbContext
     {

@@ -1,6 +1,6 @@
-using TemplateSimpleApi.Core.Repositories;
+using TemplateSimpleApi.Repositories;
 
-namespace TemplateSimpleApi.Core.Extensions
+namespace TemplateSimpleApi.Extensions
 {
     public static class RepositoryExtensions
     {

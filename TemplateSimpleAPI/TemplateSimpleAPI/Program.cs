@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
-using TemplateSimpleApi.Core.Models;
-using TemplateSimpleApi.Core.Extensions;
+using TemplateSimpleApi.Models;
+using TemplateSimpleApi.Extensions;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,7 +13,6 @@ builder.Services.AddControllers();
 // configure database
 builder.Services.AddDbContext<AppDbContext>(
     options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
 
 // Repositories
 builder.Services.AddRepositories();
