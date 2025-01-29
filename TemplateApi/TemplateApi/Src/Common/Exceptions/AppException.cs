@@ -1,9 +1,8 @@
-namespace TemplateApi.Common.Exceptions
+namespace TemplateApi.Common.Exceptions;
+
+public class AppException : Exception
 {
-    public class AppException : Exception
-    {
-        public int StatusCode { get; set; }
-        
-        public AppException(string message) : base(message) {}
-    }
+    public int StatusCode { get; set; }
+    
+    public AppException(string message) : base(message) {}
 }

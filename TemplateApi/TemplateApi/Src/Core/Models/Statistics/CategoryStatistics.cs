@@ -1,8 +1,7 @@
-namespace TemplateApi.Core.Models.Statistics
+namespace TemplateApi.Core.Models.Statistics;
+
+public class CategoryTopCategories
 {
-    public class CategoryTopCategories
-    {
-        public string? CategoryName { get; set; }
-        public int ProductCount { get; set; }
-    }
+    public string? CategoryName { get; set; }
+    public int ProductCount { get; set; }
 }

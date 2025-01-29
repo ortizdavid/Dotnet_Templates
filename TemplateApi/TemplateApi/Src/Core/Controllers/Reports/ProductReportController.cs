@@ -5,38 +5,37 @@ using TemplateApi.Core.Services.Reports;
 using TemplateApi.Common.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 
-namespace TemplateApi.Core.Controllers.Reports
+namespace TemplateApi.Core.Controllers.Reports;
+
+[Authorize]
+[Route("api/products-report")]
+[ApiController]
+public class ProductReportController : ControllerBase
 {
-    [Authorize]
-    [Route("api/products-report")]
-    [ApiController]
-    public class ProductReportController : ControllerBase
+    private readonly ProductReportService _service;
+    private readonly IGenerator<ProductReport> _generator;
+
+    public ProductReportController(ProductReportService service)
     {
-        private readonly ProductReportService _service;
-        private readonly IGenerator<ProductReport> _generator;
+        _service = service;
+        _generator = new ProductGenerator();
+    }
 
-        public ProductReportController(ProductReportService service)
+    [HttpGet("all-products")]
+    public async Task<IActionResult> GeAllProducts([FromQuery] ReportFilter filter)
+    {
+        try
         {
-            _service = service;
-            _generator = new ProductGenerator();
+            var products = await _service.GetAllProducts(filter);
+            return ReportFormat.Handle(_generator, products, filter.Format, "All_Products");
         }
-
-        [HttpGet("all-products")]
-        public async Task<IActionResult> GeAllProducts([FromQuery] ReportFilter filter)
+        catch (AppException ex) 
         {
-            try
-            {
-                var products = await _service.GetAllProducts(filter);
-                return ReportFormat.Handle(_generator, products, filter.Format, "All_Products");
-            }
-            catch (AppException ex) 
-            {
-                return StatusCode(ex.StatusCode, new { Message = ex.Message });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode((int)HttpStatusCode.InternalServerError, new { Message = $"An error occurred: {ex.Message}" });
-            }
+            return StatusCode(ex.StatusCode, new { Message = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode((int)HttpStatusCode.InternalServerError, new { Message = $"An error occurred: {ex.Message}" });
         }
     }
 }

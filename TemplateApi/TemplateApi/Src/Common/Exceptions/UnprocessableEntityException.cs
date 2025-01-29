@@ -1,12 +1,11 @@
 using System.Net;
 
-namespace TemplateApi.Common.Exceptions
+namespace TemplateApi.Common.Exceptions;
+
+public class UnprocessableEntityException : AppException
 {
-    public class UnprocessableEntityException : AppException
+    public UnprocessableEntityException(string message) : base(message) 
     {
-        public UnprocessableEntityException(string message) : base(message) 
-        {
-            StatusCode = (int)HttpStatusCode.UnprocessableEntity;
-        }
+        StatusCode = (int)HttpStatusCode.UnprocessableEntity;
     }
 }

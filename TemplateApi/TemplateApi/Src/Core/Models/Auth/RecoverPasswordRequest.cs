@@ -1,10 +1,9 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace TemplateApi.Core.Models.Auth
+namespace TemplateApi.Core.Models.Auth;
+
+public class GetRecoverLinkRequest
 {
-    public class GetRecoverLinkRequest
-    {
-        [Required]
-        public string? Email { get; set; }
-    }
+    [Required]
+    public string? Email { get; set; }
 }

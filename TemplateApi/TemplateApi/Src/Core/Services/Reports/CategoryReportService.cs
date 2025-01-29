@@ -2,34 +2,33 @@ using TemplateApi.Common.Exceptions;
 using TemplateApi.Core.Models.Reports;
 using TemplateApi.Core.Repositories.Reports;
 
-namespace TemplateApi.Core.Services.Reports
+namespace TemplateApi.Core.Services.Reports;
+
+public class CategoryReportService
 {
-    public class CategoryReportService
+    private readonly CategoryReportRepository _repository;
+
+    public CategoryReportService(CategoryReportRepository repository)
     {
-        private readonly CategoryReportRepository _repository;
+        _repository = repository;
+    }
 
-        public CategoryReportService(CategoryReportRepository repository)
+    public async Task<ReportResponse<CategoryReport>> GetAllCategories(ReportFilter filter)
+    {
+        if (filter is null)
         {
-            _repository = repository;
+            throw new BadRequestException("The report filter is required and must include valid dates and format.");
         }
-
-        public async Task<ReportResponse<CategoryReport>> GetAllCategories(ReportFilter filter)
+        var categories = await _repository.GetAllAsync(filter);
+        return new ReportResponse<CategoryReport>
         {
-            if (filter is null)
+            Items = categories,
+            Metadata = new Metadata
             {
-                throw new BadRequestException("The report filter is required and must include valid dates and format.");
+                TotalRecords = categories.Count(),
+                StartDate = filter.StartDate.ToString("yyyy-MM-dd"), 
+                EndDate = filter.EndDate.ToString("yyyy-MM-dd")     
             }
-            var categories = await _repository.GetAllAsync(filter);
-            return new ReportResponse<CategoryReport>
-            {
-                Items = categories,
-                Metadata = new Metadata
-                {
-                    TotalRecords = categories.Count(),
-                    StartDate = filter.StartDate.ToString("yyyy-MM-dd"), 
-                    EndDate = filter.EndDate.ToString("yyyy-MM-dd")     
-                }
-            };            
-        }
+        };            
     }
 }

@@ -1,14 +1,13 @@
-namespace TemplateApi.Core.Models.Statistics
-{
-    public class ProductTotalPriceByCategories
-    {
-        public string? CategoryName { get; set; }
-        public decimal TotalPrice { get; set; }
-    }
+namespace TemplateApi.Core.Models.Statistics;
 
-    public class ProductTotalPriceBySuppliers
-    {
-        public string? SupplierName { get; set; }
-        public decimal? TotalPrice { get; set; }
-    }
+public class ProductTotalPriceByCategories
+{
+    public string? CategoryName { get; set; }
+    public decimal TotalPrice { get; set; }
+}
+
+public class ProductTotalPriceBySuppliers
+{
+    public string? SupplierName { get; set; }
+    public decimal? TotalPrice { get; set; }
 }

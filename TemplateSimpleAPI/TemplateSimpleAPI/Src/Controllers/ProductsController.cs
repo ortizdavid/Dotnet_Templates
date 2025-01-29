@@ -3,91 +3,90 @@ using Microsoft.AspNetCore.Mvc;
 using TemplateSimpleApi.Models;
 using TemplateSimpleApi.Repositories;
 
-namespace TemplateSimpleApi.Controllers
+namespace TemplateSimpleApi.Controllers;
+
+[Route("api/products")]
+[ApiController]
+public class ProductsController : ControllerBase
 {
-    [Route("api/products")]
-    [ApiController]
-    public class ProductsController : ControllerBase
+    private ProductRepository _repository;
+    private readonly ILogger<ProductsController> _logger;
+
+    public ProductsController(ProductRepository repository, ILogger<ProductsController> logger)
     {
-        private ProductRepository _repository;
-        private readonly ILogger<ProductsController> _logger;
+        _repository = repository;
+        _logger = logger;
+    }
 
-        public ProductsController(ProductRepository repository, ILogger<ProductsController> logger)
+    [HttpPost]
+    public IActionResult CreateProduct([FromBody]Product productReq)
+    {
+        if (productReq is null)
         {
-            _repository = repository;
-            _logger = logger;
+            return BadRequest("Create Product request cannot be null");
         }
+        if (_repository.ExistsRecord("Name", productReq.Name))
+        {
+            return StatusCode((int)HttpStatusCode.Conflict, $"Product '{productReq.Name}' already exists");
+        }
+        if (_repository.ExistsRecord("Code", productReq.Code))
+        {
+            return StatusCode((int)HttpStatusCode.Conflict, $"Product code '{productReq.Code}' already exists");
+        }
+        _repository.Create(productReq);
+        var msg = $"Product '{productReq.Name}' was created";
+        _logger.LogInformation(msg);	
+        return StatusCode((int)HttpStatusCode.Created, new { Message = msg });
+    }
 
-        [HttpPost]
-        public IActionResult CreateProduct([FromBody]Product productReq)
-        {
-            if (productReq is null)
-            {
-                return BadRequest("Create Product request cannot be null");
-            }
-            if (_repository.ExistsRecord("Name", productReq.Name))
-            {
-                return StatusCode((int)HttpStatusCode.Conflict, $"Product '{productReq.Name}' already exists");
-            }
-            if (_repository.ExistsRecord("Code", productReq.Code))
-            {
-                return StatusCode((int)HttpStatusCode.Conflict, $"Product code '{productReq.Code}' already exists");
-            }
-            _repository.Create(productReq);
-            var msg = $"Product '{productReq.Name}' was created";
-            _logger.LogInformation(msg);	
-            return StatusCode((int)HttpStatusCode.Created, new { Message = msg });
-        }
+    [HttpGet]
+    public IActionResult GetAllProducts()
+    {
+        var products = _repository.GetAll();
+        return Ok(products);
+    }
 
-        [HttpGet]
-        public IActionResult GetAllProducts()
+    [HttpGet("{id}")]
+    public IActionResult GetProductById(int id)
+    {
+        var product = _repository.GetById(id);
+        if (product is null)
         {
-            var products = _repository.GetAll();
-            return Ok(products);
+            return NotFound($"Product with ID '{id}' not found");
         }
+        return Ok(product);
+    }
 
-        [HttpGet("{id}")]
-        public IActionResult GetProductById(int id)
+    [HttpPut("{id}")]
+    public IActionResult UpdateProduct([FromBody]Product productReq, int id)
+    {
+        if (productReq is null)
         {
-            var product = _repository.GetById(id);
-            if (product is null)
-            {
-                return NotFound($"Product with ID '{id}' not found");
-            }
-            return Ok(product);
+            return BadRequest("Update Product request cannot be null");
         }
+        var product = _repository.GetById(id);
+        if (product is null)
+        {
+            return NotFound($"Product with ID '{id}' not found");
+        }
+        product.Name = productReq.Name;
+        product.Code = productReq.Code;
+        product.Price = productReq.Price;
+        _repository.Update(product);
+        var msg = $"Product '{product.Name}' was updated.";
+        _logger.LogInformation(msg);
+        return Ok(new { Message = msg });
+    }
 
-        [HttpPut("{id}")]
-        public IActionResult UpdateProduct([FromBody]Product productReq, int id)
+    [HttpDelete("{id}")]
+    public IActionResult DeleteProduct(int id)
+    {
+        var product = _repository.GetById(id);
+        if (product is null)
         {
-            if (productReq is null)
-            {
-                return BadRequest("Update Product request cannot be null");
-            }
-            var product = _repository.GetById(id);
-            if (product is null)
-            {
-                return NotFound($"Product with ID '{id}' not found");
-            }
-            product.Name = productReq.Name;
-            product.Code = productReq.Code;
-            product.Price = productReq.Price;
-            _repository.Update(product);
-            var msg = $"Product '{product.Name}' was updated.";
-            _logger.LogInformation(msg);
-            return Ok(new { Message = msg });
+            return NotFound($"Product with ID '{id}' not found");
         }
-
-        [HttpDelete("{id}")]
-        public IActionResult DeleteProduct(int id)
-        {
-            var product = _repository.GetById(id);
-            if (product is null)
-            {
-                return NotFound($"Product with ID '{id}' not found");
-            }
-            _repository.Delete(product);
-            return NoContent();
-        }
+        _repository.Delete(product);
+        return NoContent();
     }
 }

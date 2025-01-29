@@ -1,20 +1,19 @@
 using TemplateApi.Core.Models.Statistics;
 using TemplateApi.Core.Repositories.Statistics;
 
-namespace TemplateApi.Core.Services.Statistics
+namespace TemplateApi.Core.Services.Statistics;
+
+public class CategoryStatisticsService
 {
-    public class CategoryStatisticsService
+    private readonly CategoryStatisticsRepository _repository;
+
+    public CategoryStatisticsService(CategoryStatisticsRepository repository)
     {
-        private readonly CategoryStatisticsRepository _repository;
+        _repository = repository;
+    }
 
-        public CategoryStatisticsService(CategoryStatisticsRepository repository)
-        {
-            _repository = repository;
-        }
-
-        public async Task<IEnumerable<CategoryTopCategories>> GetCategoryTopCategories()
-        {
-            return await _repository.GetCategoryTopCategoriesAsync();
-        }
+    public async Task<IEnumerable<CategoryTopCategories>> GetCategoryTopCategories()
+    {
+        return await _repository.GetCategoryTopCategoriesAsync();
     }
 }

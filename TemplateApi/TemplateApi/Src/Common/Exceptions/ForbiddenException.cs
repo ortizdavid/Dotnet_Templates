@@ -1,12 +1,11 @@
 using System.Net;
 
-namespace TemplateApi.Common.Exceptions
+namespace TemplateApi.Common.Exceptions;
+
+public class ForbiddenException : AppException
 {
-    public class ForbiddenException : AppException
+    public ForbiddenException(string message) : base(message) 
     {
-        public ForbiddenException(string message) : base(message) 
-        {
-            StatusCode = (int)HttpStatusCode.Forbidden;
-        }
+        StatusCode = (int)HttpStatusCode.Forbidden;
     }
 }

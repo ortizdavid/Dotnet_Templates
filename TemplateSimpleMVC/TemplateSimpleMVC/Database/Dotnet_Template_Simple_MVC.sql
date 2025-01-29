@@ -1,0 +1,27 @@
+-- SWITCH TO THE DATABASE
+USE Dotnet_Template_Simple_MVC;
+GO
+
+-- Users TABLE
+IF OBJECT_ID('Users', 'U') IS NOT NULL
+    DROP TABLE Users;
+GO
+CREATE TABLE Users (
+    Id INT IDENTITY PRIMARY KEY,
+    UserName VARCHAR(50) UNIQUE NOT NULL,
+    Password VARCHAR(150)  NOT NULL
+);
+GO
+
+-- Products TABLE
+IF OBJECT_ID('Products', 'U') IS NOT NULL
+    DROP TABLE Products;
+GO
+CREATE TABLE Products (
+    Id INT IDENTITY PRIMARY KEY,
+    Name VARCHAR(50) NOT NULL,
+    Code VARCHAR(20) UNIQUE NOT NULL,
+    Price DECIMAL(18, 2) NOT NULL DEFAULT 0.00,
+    Description VARCHAR(100),
+);
+GO
