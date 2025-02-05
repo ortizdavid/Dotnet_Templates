@@ -8,7 +8,7 @@ This repository contains a collection of .NET project templates. From architectu
 - [X] **Rest API**: A template for building a RESTful API with .NET.
 - [X] **Simple REST API**: A simplified version of the REST API template, ideal for lightweight applications.
 - [ ] **MVC App**: A template for creating a Model-View-Controller web application.
-- [ ] **Simple MVC App**: A basic version of the MVC app template for rapid prototyping.
+- [X] **Simple MVC App**: A basic version of the MVC app template for rapid prototyping.
 - [ ] **Event Driven**: A template for implementing an event-driven architecture in .NET applications.
 - [ ] **Simple Event Driven**: A simplified version of the event-driven architecture template.
 - [ ] **CQRS**: A template for implementing the Command Query Responsibility Segregation (CQRS) pattern.
