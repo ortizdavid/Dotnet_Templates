@@ -36,11 +36,6 @@ public class AuthController : ControllerBase
         {
             return StatusCode(ex.StatusCode, new { Message = ex.Message });
         }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex.Message);
-            return StatusCode((int)HttpStatusCode.InternalServerError, new { Message = ex.Message });
-        }
     }
 
     [HttpGet("logout")]
@@ -55,11 +50,6 @@ public class AuthController : ControllerBase
         catch (AppException ex)
         {
             return StatusCode(ex.StatusCode, new { Message = ex.Message });
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex.Message);
-            return StatusCode((int)HttpStatusCode.InternalServerError, new { Message = ex.Message });
         }
     }
 
@@ -77,11 +67,6 @@ public class AuthController : ControllerBase
         {
             return StatusCode(ex.StatusCode, new { Message = ex.Message });
         }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex.Message);
-            return StatusCode((int)HttpStatusCode.InternalServerError, new { Message = ex.Message });
-        }
     }
 
     [HttpPost("recover-password/{token}")]
@@ -97,11 +82,6 @@ public class AuthController : ControllerBase
         catch (AppException ex)
         {
             return StatusCode(ex.StatusCode, new { Message = ex.Message });
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex.Message);
-            return StatusCode((int)HttpStatusCode.InternalServerError, new { Message = ex.Message });
         }
     }
 }

@@ -34,11 +34,6 @@ public class RolesController : ControllerBase
         {
             return StatusCode(ex.StatusCode, new { Message = ex.Message });
         }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex.Message);
-            return StatusCode((int)HttpStatusCode.InternalServerError, new { Message = ex.Message });
-        }
     }
 
     [HttpGet("not-paginated")]
@@ -52,11 +47,6 @@ public class RolesController : ControllerBase
         catch (AppException ex)
         {
             return StatusCode(ex.StatusCode, new { Message = ex.Message });
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex.Message);
-            return StatusCode((int)HttpStatusCode.InternalServerError, new { Message = ex.Message });
         }
     }
 
@@ -75,11 +65,6 @@ public class RolesController : ControllerBase
         {
             return StatusCode(ex.StatusCode, new { Message = ex.Message });
         }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex.Message);
-            return StatusCode((int)HttpStatusCode.InternalServerError, new { Message = ex.Message });
-        }
     }
 
     [HttpPut("{uniqueId}")]
@@ -96,11 +81,6 @@ public class RolesController : ControllerBase
         {
             return StatusCode(ex.StatusCode, new { Message = ex.Message });
         }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex.Message);
-            return StatusCode((int)HttpStatusCode.InternalServerError, new { Message = ex.Message });
-        }
     }
 
     [HttpGet("{uniqueId}")]
@@ -114,11 +94,6 @@ public class RolesController : ControllerBase
         catch (AppException ex)
         {
             return StatusCode(ex.StatusCode, new { Message = ex.Message });
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex.Message);
-            return StatusCode((int)HttpStatusCode.InternalServerError, new { Message = ex.Message });
         }
     }
 
@@ -134,11 +109,6 @@ public class RolesController : ControllerBase
         {
             return StatusCode(ex.StatusCode, new { Message = ex.Message });
         }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex.Message);
-            return StatusCode((int)HttpStatusCode.InternalServerError, new { Message = ex.Message });
-        }
     }
 
     [HttpDelete("{uniqueId}")]
@@ -153,11 +123,6 @@ public class RolesController : ControllerBase
         catch (AppException ex)
         {
             return StatusCode(ex.StatusCode, new { Message = ex.Message });
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex.Message);
-            return StatusCode((int)HttpStatusCode.InternalServerError, new { Message = ex.Message });
         }
     }
 

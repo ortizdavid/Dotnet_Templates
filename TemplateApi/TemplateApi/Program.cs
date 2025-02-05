@@ -1,4 +1,5 @@
 using TemplateApi.Common.Extensions;
+using TemplateApi.Common.Middlewares;
 
 internal class Program
 {
@@ -26,7 +27,12 @@ internal class Program
 
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
-        {}
+        {
+            app.UseDeveloperExceptionPage();
+        }
+
+        // Use custom middlewares
+        app.UseMiddleware<ExceptionHandlerMiddleware>();
 
         //app.UseHttpsRedirection();
 

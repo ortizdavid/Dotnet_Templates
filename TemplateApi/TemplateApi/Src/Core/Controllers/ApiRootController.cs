@@ -44,4 +44,10 @@ public class ApiRootController : ControllerBase
         };
     }
 
+    [HttpGet("test-exception")]
+    public IActionResult TestException()
+    {
+        throw new Exception("Error Here");
+    }
+
 }

@@ -36,11 +36,6 @@ public class UsersController : ControllerBase
         {
             return StatusCode(ex.StatusCode, new { Message = ex.Message });
         }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex.Message);
-            return StatusCode((int)HttpStatusCode.InternalServerError, new { Message = ex.Message });
-        }
     }
 
     [HttpPost]
@@ -58,11 +53,6 @@ public class UsersController : ControllerBase
         {
             return StatusCode(ex.StatusCode, new { Message = ex.Message });
         }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex.Message);
-            return StatusCode((int)HttpStatusCode.InternalServerError, new { Message = ex.Message });
-        }
     }
 
     [HttpGet("{uniqueId}")]
@@ -77,11 +67,6 @@ public class UsersController : ControllerBase
         {
             return StatusCode(ex.StatusCode, new { Message = ex.Message });
         }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex.Message);
-            return StatusCode((int)HttpStatusCode.InternalServerError, new { Message = ex.Message });
-        }
     }
 
     [HttpGet("by-name/{userName}")]
@@ -95,11 +80,6 @@ public class UsersController : ControllerBase
         catch (AppException ex)
         {
             return StatusCode(ex.StatusCode, new { Message = ex.Message });
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex.Message);
-            return StatusCode((int)HttpStatusCode.InternalServerError, new { Message = ex.Message });
         }
     }
 
@@ -116,8 +96,7 @@ public class UsersController : ControllerBase
         catch (AppException ex)
         {
             return StatusCode(ex.StatusCode, new { Message = ex.Message });
-        }
-        catch (Exception ex)
+        } catch (Exception ex)
         {
             _logger.LogError(ex.Message);
             return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
@@ -137,8 +116,7 @@ public class UsersController : ControllerBase
         catch (AppException ex)
         {
             return StatusCode(ex.StatusCode, new { Message = ex.Message });
-        }
-        catch (Exception ex)
+        } catch (Exception ex)
         {
             _logger.LogError(ex.Message);
             return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
@@ -157,8 +135,7 @@ public class UsersController : ControllerBase
         catch (AppException ex)
         {
             return StatusCode(ex.StatusCode, new { Message = ex.Message });
-        }
-        catch (Exception ex)
+        } catch (Exception ex)
         {
             _logger.LogError(ex.Message);
             return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
@@ -178,8 +155,7 @@ public class UsersController : ControllerBase
         catch (AppException ex)
         {
             return StatusCode(ex.StatusCode, new { Message = ex.Message });
-        }
-        catch (Exception ex)
+        } catch (Exception ex)
         {
             _logger.LogError(ex.Message);
             return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
@@ -200,8 +176,7 @@ public class UsersController : ControllerBase
         catch (AppException ex)
         {
             return StatusCode(ex.StatusCode, new { Message = ex.Message });
-        }
-        catch (Exception ex)
+        } catch (Exception ex)
         {
             _logger.LogError(ex.Message);
             return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
@@ -220,8 +195,7 @@ public class UsersController : ControllerBase
         catch (AppException ex)
         {
             return StatusCode(ex.StatusCode, new { Message = ex.Message });
-        }
-        catch (Exception ex)
+        } catch (Exception ex)
         {
             _logger.LogError(ex.Message);
             return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);

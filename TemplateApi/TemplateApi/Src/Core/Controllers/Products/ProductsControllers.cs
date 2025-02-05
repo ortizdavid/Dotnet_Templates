@@ -34,11 +34,6 @@ public class ProductsController : ControllerBase
         {
             return StatusCode(ex.StatusCode, new { Message = ex.Message });
         }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex.Message);
-            return StatusCode((int)HttpStatusCode.InternalServerError, new { Message = ex.Message });
-        }
     }
 
     [HttpPost]
@@ -54,11 +49,6 @@ public class ProductsController : ControllerBase
         catch (AppException ex)
         {
             return StatusCode(ex.StatusCode, new { Message = ex.Message });
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex.Message);
-            return StatusCode((int)HttpStatusCode.InternalServerError, new { Message = ex.Message });
         }
     }
 
@@ -76,11 +66,6 @@ public class ProductsController : ControllerBase
         {
             return StatusCode(ex.StatusCode, new { Message = ex.Message });
         }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex.Message);
-            return StatusCode((int)HttpStatusCode.InternalServerError, new { Message = ex.Message });
-        }
     }
 
     [HttpGet("{uniqueId}")]
@@ -94,11 +79,6 @@ public class ProductsController : ControllerBase
         catch (AppException ex)
         {
             return StatusCode(ex.StatusCode, new { Message = ex.Message });
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex.Message);
-            return StatusCode((int)HttpStatusCode.InternalServerError, new { Message = ex.Message });
         }
     }
 
@@ -114,11 +94,6 @@ public class ProductsController : ControllerBase
         catch (AppException ex)
         {
             return StatusCode(ex.StatusCode, new { Message = ex.Message });
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex.Message);
-            return StatusCode((int)HttpStatusCode.InternalServerError, new { Message = ex.Message });
         }
     }
 
@@ -136,11 +111,6 @@ public class ProductsController : ControllerBase
         {
             return StatusCode(ex.StatusCode, new { Message = ex.Message });
         }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex.Message);
-            return StatusCode((int)HttpStatusCode.InternalServerError, new { Message = ex.Message });
-        }
     }
 
     [HttpGet("{uniqueId}/images")]
@@ -154,11 +124,6 @@ public class ProductsController : ControllerBase
         catch (AppException ex)
         {
             return StatusCode(ex.StatusCode, new { Message = ex.Message });
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex.Message);
-            return StatusCode((int)HttpStatusCode.InternalServerError, new { Message = ex.Message });
         }
     }
 
@@ -175,11 +140,6 @@ public class ProductsController : ControllerBase
         catch (AppException ex)
         {
             return StatusCode(ex.StatusCode, new { Message = ex.Message });
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex.Message);
-            return StatusCode((int)HttpStatusCode.InternalServerError, new { Message = ex.Message });
         }
     }
 }
