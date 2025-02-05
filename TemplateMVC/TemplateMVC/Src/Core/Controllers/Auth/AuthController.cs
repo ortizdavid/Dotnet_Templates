@@ -25,7 +25,6 @@ public class AuthController : Controller
         return View();
     }
 
-    [AllowAnonymous]
     [HttpPost]
     public async Task<IActionResult> Login(LoginViewModel viewModel)
     {
@@ -44,11 +43,6 @@ public class AuthController : Controller
             ModelState.AddModelError("", ex.Message);
             return View();
         }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex.Message);
-            return View();
-        }
     }
 
     public IActionResult Logout()
@@ -59,15 +53,15 @@ public class AuthController : Controller
             _logger.LogInformation("User Logged out sucessfully!");
             return RedirectToAction(nameof(Logout));
         }
-        catch (Exception ex)
+        catch (AppException ex)
         {
             _logger.LogError(ex.Message);
+            ModelState.AddModelError("", ex.Message);
             return View("Login");
         }
     }
 
-    [AllowAnonymous]
-    [HttpPost("recover-password/{token}")]
+    [HttpPost("{token}")]
     public async Task<IActionResult> RecoverPassword(ChangePasswordViewModel viewModel, string token)
     {
         try
@@ -79,12 +73,9 @@ public class AuthController : Controller
         }
         catch (AppException ex)
         {
-            return StatusCode(ex.StatusCode, new { Message = ex.Message });
-        }
-        catch (Exception ex)
-        {
             _logger.LogError(ex.Message);
-            return StatusCode((int)HttpStatusCode.InternalServerError, new { Message = ex.Message });
+            ModelState.AddModelError("", ex.Message);
+            return View();
         }
     }
 }

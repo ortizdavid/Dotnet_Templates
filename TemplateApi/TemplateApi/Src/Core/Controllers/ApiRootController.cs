@@ -30,7 +30,7 @@ public class ApiRootController : ControllerBase
     [HttpGet("download-collections")]
     public IActionResult DownloadCollections()
     {
-        var fileName = "postman.postman_collection.json";
+        var fileName = ".NET Template API.postman_collection.json";
         var path = _configuration["ApiCollectionsPath"] ?? string.Empty;
         var filePath = Path.Combine(path, fileName);
         

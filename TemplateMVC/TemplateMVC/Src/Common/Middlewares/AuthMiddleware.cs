@@ -11,7 +11,7 @@ public class AuthMiddleware
 
     public async Task InvokeAsync(HttpContext context)
     {
-        var skipPaths = new[]{"/", "/Error", "/Auth/Login"};
+        var skipPaths = new[]{"/", "/Auth/Login"};
         if (skipPaths.Contains(context.Request.Path.Value))
         {
             await _next(context);

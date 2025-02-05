@@ -46,7 +46,7 @@ public class AuthService
         var userName = _contextAccessor?.HttpContext?.Session.GetString("UserName");
         if (string.IsNullOrEmpty(userName))
         {
-            throw new Exception("UserName is not set");
+            throw new NotFoundException("UserName is not set");
         }
         _contextAccessor?.HttpContext?.Session.Remove("UserName");
         _contextAccessor?.HttpContext?.Session.Clear();

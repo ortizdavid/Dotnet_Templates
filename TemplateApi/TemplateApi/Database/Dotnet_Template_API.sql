@@ -150,7 +150,15 @@ SELECT
     Ro.RoleName,
     Ro.Code AS RoleCode
 FROM Users Us
-LEFT JOIN UserRefreshTokens Rt ON Rt.UserId = Us.UserId
+LEFT JOIN (
+    -- Get the latest refresh token per user
+    SELECT 
+        UserId, 
+        MAX(RefreshId) AS LatestRefreshId
+    FROM UserRefreshTokens
+    GROUP BY UserId
+) AS LatestRt ON LatestRt.UserId = Us.UserId
+LEFT JOIN UserRefreshTokens Rt ON Rt.RefreshId = LatestRt.LatestRefreshId
 LEFT JOIN Roles Ro ON Ro.RoleId = Us.RoleId;
 GO
 

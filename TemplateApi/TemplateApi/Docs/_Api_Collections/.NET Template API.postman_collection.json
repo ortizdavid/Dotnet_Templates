@@ -584,7 +584,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"roleId\": 1,\r\n    \"userName\": \"dev-on-bits\",\r\n    \"email\": \"developeronbits@gmail.com\",\r\n    \"password\": \"Admin123$\"\r\n}",
+									"raw": "{\r\n    \"roleId\": 1,\r\n    \"userName\": \"admin01\",\r\n    \"email\": \"admin01@gmail.com\",\r\n    \"password\": \"Admin123$\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1320,7 +1320,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"productName\": \"XXXe\",\r\n    \"code\": \"P0392\",\r\n    \"unitPrice\": 19.99,\r\n    \"description\": \"Test\",\r\n    \"categoryId\": 1,\r\n    \"supplierId\": 1\r\n}\r\n",
+							"raw": "{\r\n    \"productName\": \"Iphone\",\r\n    \"code\": \"S222\",\r\n    \"unitPrice\": 1999.99,\r\n    \"description\": \"Test\",\r\n    \"categoryId\": 1,\r\n    \"supplierId\": 1\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2251,6 +2251,14 @@
 					]
 				}
 			]
+		},
+		{
+			"name": "New Request",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
 		}
 	]
 }
