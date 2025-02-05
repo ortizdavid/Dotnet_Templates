@@ -1,4 +1,4 @@
-namespace TemplateSimpleMVC.Common.Middlewares;
+namespace TemplateMVC.Common.Middlewares;
 
 public class AuthMiddleware
 {
@@ -11,7 +11,7 @@ public class AuthMiddleware
 
     public async Task InvokeAsync(HttpContext context)
     {
-        var skipPaths = new[]{"/", "/Auth/Login"};
+        var skipPaths = new[]{"/", "/Error", "/Auth/Login"};
         if (skipPaths.Contains(context.Request.Path.Value))
         {
             await _next(context);

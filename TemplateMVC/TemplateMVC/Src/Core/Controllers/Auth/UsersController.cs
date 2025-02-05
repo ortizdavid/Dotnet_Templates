@@ -33,11 +33,6 @@ public class UsersController : Controller
         {
             return StatusCode(ex.StatusCode, new { Message = ex.Message });
         }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex.Message);
-            return StatusCode((int)HttpStatusCode.InternalServerError, new { Message = ex.Message });
-        }
     }
 
     [HttpPost]

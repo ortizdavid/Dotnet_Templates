@@ -1,5 +1,5 @@
 using TemplateMVC.Common.Extensions;
-using TemplateSimpleMVC.Common.Middlewares;
+using TemplateMVC.Common.Middlewares;
 
 internal class Program
 {
@@ -28,7 +28,7 @@ internal class Program
         // Configure the HTTP request pipeline.
         if (!app.Environment.IsDevelopment())
         {
-            app.UseExceptionHandler("/Home/Error");
+            app.UseExceptionHandler("/Error");
             // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
             app.UseHsts();
         }
@@ -45,6 +45,7 @@ internal class Program
 
         // Custom Middlewares
         app.UseMiddleware<AuthMiddleware>();
+        app.UseMiddleware<ExceptionHandlerMiddleware>();
 
         app.MapControllerRoute(
             name: "default",
