@@ -1,9 +1,3 @@
-using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using TemplateApi.Common.Exceptions;
-
 namespace TemplateApi.Helpers;
 
 public class Pagination<T>
@@ -76,4 +70,10 @@ public class PaginationMetadata
     public string? LastPageUrl { get; set; }
     public string? PreviousPageUrl { get; set; }
     public string? NextPageUrl { get; set; }
+}
+
+public class PaginationParam
+{
+    public int PageIndex { get; set; } = 0;
+    public int PageSize { get; set;} = 10;
 }

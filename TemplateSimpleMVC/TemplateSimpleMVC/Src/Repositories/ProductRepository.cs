@@ -36,7 +36,29 @@ public class ProductRepository : IRepository<Product>
 
     public IEnumerable<Product> GetAll()
     {
-        return _context.Products.ToList();
+        return _context.Products.
+            AsNoTracking().
+            ToList();
+    }
+
+    public IQueryable<Product> GetAllSorted(string sortOrder, string searchString)
+    {
+        var products = _context.Products.AsQueryable();
+        // apply filter
+        if (!string.IsNullOrEmpty(searchString))
+        {
+            products = products.Where(p => p.Name.Contains(searchString) || p.Code.Contains(searchString));
+        }
+        // apply sorting
+        products = sortOrder switch
+        {
+            "name_desc" => products.OrderByDescending(p => p.Name),
+            "code_desc" => products.OrderByDescending(p => p.Code),
+            "name" => products.OrderBy(p => p.Name),
+            "code" => products.OrderBy(p => p.Code),
+            _ => products.OrderBy(p => p.Id),
+        };
+        return products;
     }
 
     public IEnumerable<Product> GetAllLimit(int limit, int offset)

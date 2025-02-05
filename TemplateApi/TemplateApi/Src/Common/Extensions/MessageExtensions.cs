@@ -8,7 +8,7 @@ public static class MessageExtensions
     {
         // Register the EmailSettings from appsettings.json
         services.Configure<EmailSettings>(configuration.GetSection("EmailSettings"));
-
+           
         // Register EmailService 
         services.AddSingleton<EmailService>();
     }

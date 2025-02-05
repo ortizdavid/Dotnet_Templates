@@ -1,0 +1,59 @@
+@model IEnumerable<TemplateSimpleMVC.Models.Product>;
+
+@{
+    Layout = "_Layout";
+    ViewBag.Title = "Products";
+}
+
+<h1>@ViewBag.Title</h1>
+
+<p>
+    <a asp-action="Create" asp-asp-controller="Create" class="btn btn-outline-primary">Add New</a>
+</p>
+<form asp-action="Index" method="get">
+    <div class="form-actions no-color">
+        <p>
+            <label>Find by name: <input type="text" name="SearchString" value="@ViewBag.CurrentFilter" /></label>
+            <input type="submit" value="Search" class="btn btn-outline-primary" /> |
+            <a asp-action="Index">Back to List</a>
+        </p>
+    </div>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.Id)</th>
+
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewBag.NameSort">
+                    @Html.DisplayNameFor(model => model.Name)
+                </a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewBag.CodeSort">
+                    @Html.DisplayNameFor(model => model.Code)
+                </a>
+            </th>
+            <th>@Html.DisplayNameFor(model => model.Price)</th>
+            <td>Options</td>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Id</td>
+                <td>@item.Name</td>
+                <td>@item.Code</td>
+                <td>@Html.DisplayFor(modelItem => item.Price)</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a> 
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+

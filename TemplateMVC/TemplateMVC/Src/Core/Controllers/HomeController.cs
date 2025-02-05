@@ -1,0 +1,22 @@
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using TemplateMVC.Core.Services.Auth;
+
+namespace TemplateMVC.Core.Controllers;
+
+[Route("Home")]
+public class HomeController : Controller
+{
+    private readonly AuthService _authService;
+    public HomeController(AuthService authService)
+    {
+        _authService = authService;
+    }
+    [HttpGet("Index")]
+    public async Task<IActionResult> Index()
+    {
+        var loggedUser = await _authService.GetLoggedUser();
+        ViewBag.LoggedUser = loggedUser;
+        return View();
+    }
+}

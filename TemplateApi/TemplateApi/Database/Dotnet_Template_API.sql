@@ -15,6 +15,10 @@ CREATE TABLE Roles (
     UpdatedAt DATETIME DEFAULT GETDATE()
 );
 GO
+-- INSERT
+INSERT INTO Roles(Code, RoleName) VALUES('role_super_admin', 'Super Administrator');
+INSERT INTO Roles(Code, RoleName) VALUES('role_admin', 'Administrator');
+GO
 
 -- USERS TABLE
 IF OBJECT_ID('Users', 'U') IS NOT NULL
@@ -34,6 +38,9 @@ CREATE TABLE Users (
     UpdatedAt DATETIME DEFAULT GETDATE(),
     CONSTRAINT FK_Role FOREIGN KEY(RoleId) REFERENCES Roles(RoleId)
 );
+GO
+-- INSERT
+INSERT INTO Users(RoleId, UserName, Email, Password) VALUES(1, 'admin01', 'admin01@gmail.com', '$2a$11$SkXy0zV.0RV6ZSvZlblIBeqSRsBQSNGz3tWTEva24wJi/Tcav5CtS');
 GO
 
 -- UserRefreshTokens table

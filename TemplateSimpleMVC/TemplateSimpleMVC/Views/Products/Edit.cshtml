@@ -1,0 +1,45 @@
+@model TemplateSimpleMVC.Models.Product;
+
+@{
+    Layout = "_Layout";
+    ViewBag.Title = "Edit";
+}
+
+<h1>@ViewBag.Title</h1>
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alter-danger">
+        @Html.ValidationSummary(false, "Please fix the following errors:")
+    </div>
+}
+
+<form asp-action="Edit" asp-asp-route-id="Id" method="post">
+    @Html.AntiForgeryToken()
+    
+    
+    <div class="form-group">
+        <label asp-for="Name" class="control-label"></label>
+        <input asp-for="Name" class="form-control" aria-required="true" autofocus />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Code" class="control-label"></label>
+        <input asp-for="Code" class="form-control" aria-required="true" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Price" class="control-label"></label>
+        <input asp-for="Price" class="form-control" aria-required="true" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Description" class="control-label"></label>
+        <textarea asp-for="Description" class="form-control" aria-required="true" ></textarea>
+    </div>
+
+    <br>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Save</button>
+    </div>
+</form>

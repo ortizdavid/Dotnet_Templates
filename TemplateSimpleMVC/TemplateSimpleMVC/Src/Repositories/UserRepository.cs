@@ -36,7 +36,9 @@ public class UserRepository : IRepository<User>
 
     public IEnumerable<User> GetAll()
     {
-        return _context.Users.ToList();
+        return _context.Users
+            .AsNoTracking()
+            .ToList();
     }
 
     public User? GetById(int id)

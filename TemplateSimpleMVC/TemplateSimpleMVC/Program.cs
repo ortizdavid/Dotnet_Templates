@@ -11,13 +11,7 @@ internal class Program
         var builder = WebApplication.CreateBuilder(args);
 
         // Add sessions service
-        builder.Services.AddSession(options =>
-        {
-            options.IdleTimeout = TimeSpan.FromMinutes(30);
-            options.Cookie.HttpOnly = true;
-            options.Cookie.IsEssential = true;
-            options.Cookie.Name = ".SimpleMVC";
-        });
+        builder.Services.AddSession();
 
         // Add services to the container.
         builder.Services.AddControllersWithViews();
@@ -55,7 +49,7 @@ internal class Program
 
         // Session
         app.UseSession();
-        
+
         // Custom Middlewares
         app.UseMiddleware<AuthMiddleware>();
 

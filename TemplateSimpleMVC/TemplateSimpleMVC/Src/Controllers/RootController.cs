@@ -25,13 +25,13 @@ public class RootController : Controller
     }
 
     [HttpGet("Register")]
-    [ValidateAntiForgeryToken]
     public IActionResult Register()
     {
         return View();
     }
 
     [HttpPost("Register")]
+    [ValidateAntiForgeryToken]
     public IActionResult Register(User model)
     {
         if (!ModelState.IsValid)
