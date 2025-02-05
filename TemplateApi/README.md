@@ -41,7 +41,7 @@ The project focuses on managing products, providing a comprehensive set of featu
 3. **Clone the repository:**
 
   	```sh
-	git clone https://github.com/your-username/TemplateApi.git
+	git clone https://github.com/ortizdavid/TemplateApi.git
 	cd TemplateApi/TemplateApi
 	```
 

@@ -1,7 +1,6 @@
 using System.Net;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using TemplateApi.Common.Exceptions;
 using TemplateApi.Helpers;
 using TemplateApi.Core.Models.Auth;
 using TemplateApi.Core.Services.Auth;
@@ -25,105 +24,55 @@ public class RolesController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetAllRoles([FromQuery]PaginationParam param)
     {
-        try
-        {
-            var roles = await _service.GetAllRoles(param);
-            return Ok(roles);
-        }
-        catch (AppException ex)
-        {
-            return StatusCode(ex.StatusCode, new { Message = ex.Message });
-        }
+        var roles = await _service.GetAllRoles(param);
+        return Ok(roles);   
     }
 
     [HttpGet("not-paginated")]
     public async Task<IActionResult> GetRolesNotPaginated()
     {
-        try
-        {
-            var roles = await _service.GetRolesNotPaginated();
-            return Ok(roles);
-        }
-        catch (AppException ex)
-        {
-            return StatusCode(ex.StatusCode, new { Message = ex.Message });
-        }
+        var roles = await _service.GetRolesNotPaginated();
+        return Ok(roles);
     }
 
     [HttpPost]
     [AllowAnonymous]
     public async Task<IActionResult> CreateRole([FromBody]RoleRequest request)
     {
-        try
-        {
-            await _service.CreateRole(request);
-            var msg = $"Role '{request.RoleName}' created";
-            _logger.LogInformation(msg);
-            return StatusCode((int)HttpStatusCode.Created, new{ Message = msg });
-        }
-        catch (AppException ex)
-        {
-            return StatusCode(ex.StatusCode, new { Message = ex.Message });
-        }
+        await _service.CreateRole(request);
+        var msg = $"Role '{request.RoleName}' created";
+        _logger.LogInformation(msg);
+        return StatusCode((int)HttpStatusCode.Created, new{ Message = msg });
     }
 
     [HttpPut("{uniqueId}")]
     public async Task<IActionResult> UpdateRole([FromBody]RoleRequest request, Guid uniqueId)
     {
-        try
-        {
-            await _service.UpdateRole(request, uniqueId);
-            var msg = $"Role with ID '{uniqueId}' updated";
-            _logger.LogInformation(msg);
-            return Ok(new{ Message = msg });
-        }
-        catch (AppException ex)
-        {
-            return StatusCode(ex.StatusCode, new { Message = ex.Message });
-        }
+        await _service.UpdateRole(request, uniqueId);
+        var msg = $"Role with ID '{uniqueId}' updated";
+        _logger.LogInformation(msg);
+        return Ok(new{ Message = msg });
     }
 
     [HttpGet("{uniqueId}")]
     public async Task<IActionResult> GetRoleByUniqueId(Guid uniqueId)
     {
-        try
-        {
-            var role = await _service.GetRoleByUniqueId(uniqueId);
-            return Ok(role);
-        }
-        catch (AppException ex)
-        {
-            return StatusCode(ex.StatusCode, new { Message = ex.Message });
-        }
+        var role = await _service.GetRoleByUniqueId(uniqueId);
+        return Ok(role);
     }
 
     [HttpGet("by-code/{code}")]
     public async Task<IActionResult> GetRoleByCode(string code)
     {
-        try
-        {
-            var role = await _service.GetRoleByCode(code);
-            return Ok(role);
-        }
-        catch (AppException ex)
-        {
-            return StatusCode(ex.StatusCode, new { Message = ex.Message });
-        }
+        var role = await _service.GetRoleByCode(code);
+        return Ok(role);
     }
 
     [HttpDelete("{uniqueId}")]
     public async Task<IActionResult> DeleteRole(Guid uniqueId)
     {
-        try
-        {
-            await _service.DeleteRole(uniqueId);
-            _logger.LogInformation($"Role with ID '{uniqueId}' deleted");
-            return NoContent();
-        }
-        catch (AppException ex)
-        {
-            return StatusCode(ex.StatusCode, new { Message = ex.Message });
-        }
+        await _service.DeleteRole(uniqueId);
+        _logger.LogInformation($"Role with ID '{uniqueId}' deleted");
+        return NoContent();
     }
-
 }

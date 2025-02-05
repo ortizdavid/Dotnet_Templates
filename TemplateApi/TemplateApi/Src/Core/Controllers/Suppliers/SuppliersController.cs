@@ -1,8 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using TemplateApi.Core.Services.Suppliers;
-using TemplateApi.Core.Models.Suppliers;
 using TemplateApi.Helpers;
-using TemplateApi.Common.Exceptions;
 using System.Net;
 using Microsoft.AspNetCore.Authorization;
 
@@ -25,105 +23,56 @@ public class SuppliersController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetAllSuppliers([FromQuery]PaginationParam param)
     {
-        try
-        {
-            var suppliers = await _service.GetAllSuppliers(param);
-            return Ok(suppliers);
-        }
-        catch (AppException ex)
-        {
-            return StatusCode(ex.StatusCode, new { Message = ex.Message });
-        }
+        var suppliers = await _service.GetAllSuppliers(param);
+        return Ok(suppliers);
     }
 
     [HttpPost]
     public async Task<IActionResult> CreateSupplier([FromBody]SupplierRequest request)
     {
-        try
-        {
-            await _service.CreateSupplier(request);
-            var msg = $"Supplier '{request.SupplierName}' created.";
-            _logger.LogInformation(msg);
-            return StatusCode((int)HttpStatusCode.Created, new { Message = msg });
-        }
-        catch (AppException ex)
-        {
-            return StatusCode(ex.StatusCode, new { Message = ex.Message });
-        }
+        await _service.CreateSupplier(request);
+        var msg = $"Supplier '{request.SupplierName}' created.";
+        _logger.LogInformation(msg);
+        return StatusCode((int)HttpStatusCode.Created, new { Message = msg });
     }
 
     [HttpGet("{uniqueId}")]
     public async Task<IActionResult> GetSupplier(Guid uniqueId)
     {
-        try 
-        {
-            var supplier = await _service.GetSupplierByUniqueId(uniqueId);
-            return Ok(supplier);
-        }
-        catch (AppException ex)
-        {
-            return StatusCode(ex.StatusCode, new { Message = ex.Message });
-        }
+        var supplier = await _service.GetSupplierByUniqueId(uniqueId);
+        return Ok(supplier);
     }
 
     [HttpPut("{uniqueId}")]
     public async Task<IActionResult> UpdateSupplier([FromBody]SupplierRequest request, Guid uniqueId)
     {
-        try
-        {
-            await _service.UpdateSupplier(request, uniqueId);
-            var msg = $"Supplier '{request.SupplierName}' updated.";
-            _logger.LogInformation(msg);
-            return Ok(new { Message = msg });
-        }
-        catch (AppException ex)
-        {
-            return StatusCode(ex.StatusCode, new { Message = ex.Message });
-        }
+        await _service.UpdateSupplier(request, uniqueId);
+        var msg = $"Supplier '{request.SupplierName}' updated.";
+        _logger.LogInformation(msg);
+        return Ok(new { Message = msg });
     }
     
     [HttpDelete("{uniqueId}")]
     public async Task<IActionResult> DeleteSupplier(Guid uniqueId)
     {
-        try
-        {
-            await _service.DeleteSupplier(uniqueId);
-            _logger.LogInformation($"Supplier with ID '{uniqueId}' deleted.");
-            return NoContent();
-        }
-        catch (AppException ex)
-        {
-            return StatusCode(ex.StatusCode, new { Message = ex.Message });
-        }
+        await _service.DeleteSupplier(uniqueId);
+        _logger.LogInformation($"Supplier with ID '{uniqueId}' deleted.");
+        return NoContent();
     }
 
     [HttpGet("{uniqueId}/products")]
     public async Task<IActionResult> GetSupplierProducts(Guid uniqueId)
     {
-        try
-        {
-            var products = await _service.GetSupplierProducts(uniqueId);
-            return Ok(products);
-        }
-        catch (AppException ex)
-        {
-            return StatusCode(ex.StatusCode, new { Message = ex.Message });
-        }
+        var products = await _service.GetSupplierProducts(uniqueId);
+        return Ok(products);
     }
 
     [HttpPost("import-csv")]
     public async Task<IActionResult> ImportSuppiersCSV(IFormFile file)
     {
-        try
-        {
-            await _service.ImportSuppliersCSV(file);
-            var msg = $"Suppliers imported by CSV successfully";
-            _logger.LogInformation(msg);
-            return StatusCode((int)HttpStatusCode.Created, new { Message = msg });
-        }
-        catch (AppException ex)
-        {
-            return StatusCode(ex.StatusCode, new { Message = ex.Message });
-        }
+        await _service.ImportSuppliersCSV(file);
+        var msg = $"Suppliers imported by CSV successfully";
+        _logger.LogInformation(msg);
+        return StatusCode((int)HttpStatusCode.Created, new { Message = msg });
     }
 }

@@ -49,5 +49,4 @@ public class ApiRootController : ControllerBase
     {
         throw new Exception("Error Here");
     }
-
 }
