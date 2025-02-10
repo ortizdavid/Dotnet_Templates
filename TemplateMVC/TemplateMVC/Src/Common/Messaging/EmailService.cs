@@ -45,6 +45,10 @@ public class EmailService
             mailMessage.To.Add(recipientEmail);
             smtpClient.Send(mailMessage);
         }
+        catch (SmtpException ex)
+        {
+            throw new InvalidOperationException("Error sending email. SMTP Exception occurred.", ex);
+        }
         catch (Exception ex)
         {
             throw new InvalidOperationException("Error sending email", ex);

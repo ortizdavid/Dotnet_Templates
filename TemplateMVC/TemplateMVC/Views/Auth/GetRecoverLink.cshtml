@@ -1,0 +1,36 @@
+@model TemplateMVC.Core.Models.Auth.GetRecoverLinkViewModel;
+
+@{
+    Layout = "_AuthLayout";
+    ViewBag.Title = "Get Recovery Link";
+}
+
+<h1>@ViewBag.Title</h1>
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger">
+        @Html.ValidationSummary(false, "Recover Password Error")
+    </div>
+}
+
+<form asp-action="GetRecoverLink" method="post">
+    <div class="form-group">
+        <label asp-for="Email" class="control-label"></label>
+        <input asp-for="Email" class="form-control" aria-required="true" autofocus />
+    </div>
+
+    <br>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="reset" class="btn btn-secondary">Reset</button>
+    </div>
+</form>
+
+<div>
+    Did you get recovery link? Click <a href="/auth/login">Here</a>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

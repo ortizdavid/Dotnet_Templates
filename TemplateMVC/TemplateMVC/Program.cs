@@ -1,4 +1,5 @@
 using TemplateMVC.Common.Extensions;
+using TemplateMVC.Common.Helpers;
 using TemplateMVC.Common.Middlewares;
 
 internal class Program
@@ -20,6 +21,7 @@ internal class Program
         builder.Services.AddDatabaseConfiguration(configuration);
         builder.Services.AddRepositories();
         builder.Services.AddServices();
+        builder.Services.AddScoped<UrlHelperService>(); // Url Helper
 
         var app = builder.Build();
 
@@ -49,7 +51,7 @@ internal class Program
 
         app.MapControllerRoute(
             name: "default",
-            pattern: "{controller=Home}/{action=Index}/{id?}")
+            pattern: "{controller=home}/{action=index}/{id?}")
             .WithStaticAssets();
 
 

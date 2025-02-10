@@ -117,22 +117,22 @@ public class UserService
         return user;
     }
 
-    public async Task<UserData> GetUserByRefreshToken(string token)
-    {
-        var user = await _repository.GetDataByRefreshTokenAsync(token);
-        if (user is null)
-        {
-            throw new NotFoundException($"User refresh token not found");
-        }
-        return user;
-    }
-
     public async Task<User> GetUserByRecoveryToken(string token)
     {
         var user = await _repository.GetByRecoveryTokenAsync(token);
         if (user is null)
         {
             throw new NotFoundException($"User with token '{token}' not found");
+        }
+        return user;
+    }
+
+    public async Task<User> GetUserByEmail(string email)
+    {
+        var user = await _repository.GetByEmailAsync(email);
+        if (user is null)
+        {
+            throw new NotFoundException($"User with email '{email}' not found");
         }
         return user;
     }

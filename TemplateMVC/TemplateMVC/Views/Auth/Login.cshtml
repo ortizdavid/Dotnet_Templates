@@ -17,7 +17,7 @@
 <form asp-action="Login" method="post">
     <div class="form-group">
         <label asp-for="UserName" class="control-label"></label>
-        <input asp-for="UserName" class="form-control" aria-required="true" />
+        <input asp-for="UserName" class="form-control" aria-required="true" autofocus />
     </div>
 
     <div class="form-group">
@@ -31,6 +31,10 @@
         <button type="reset" class="btn btn-secondary">Reset</button>
     </div>
 </form>
+
+<div>
+    Forgot Password? Click <a href="/auth/get-recover-link">Here</a>
+</div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

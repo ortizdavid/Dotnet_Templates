@@ -1,9 +1,5 @@
 using System.Net;
 using System.Text;
-using System.Threading.Tasks;
-using Azure.Core;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace TemplateMVC.Common.Middlewares;
 

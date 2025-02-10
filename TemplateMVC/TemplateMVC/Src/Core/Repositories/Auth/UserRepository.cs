@@ -23,6 +23,12 @@ public class UserRepository : RepositoryBase<User>
             .FirstOrDefaultAsync(u => u.UserName == userName);
     }
 
+    public async Task<User?> GetByEmailAsync(string? email)
+    {
+        return await _context.Users
+            .FirstOrDefaultAsync(u => u.Email == email);
+    }
+
     public async Task<IEnumerable<UserData>> GetAllDataAsync(int limit, int offset)
     {
         var sql = "SELECT * FROM ViewUserData ORDER BY CreatedAt DESC " + 

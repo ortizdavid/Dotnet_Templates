@@ -31,11 +31,7 @@ public class CategoriesController : Controller
         {
             return StatusCode(ex.StatusCode, new { Message = ex.Message });  
         }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex.Message, ex);
-            return StatusCode((int)HttpStatusCode.InternalServerError, new { Message = ex.Message });;
-        }
+        
     }
 
     [HttpGet("{uniqueId}")]
@@ -49,11 +45,6 @@ public class CategoriesController : Controller
         catch (AppException ex)
         {
             return StatusCode(ex.StatusCode, new { Message = ex.Message });  
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex.Message, ex);
-            return StatusCode((int)HttpStatusCode.InternalServerError, new { Message = ex.Message });;
         }
     }
 
@@ -71,11 +62,7 @@ public class CategoriesController : Controller
         {
             return StatusCode(ex.StatusCode, new { Message = ex.Message });  
         }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex.Message, ex);
-            return StatusCode((int)HttpStatusCode.InternalServerError, new { Message = ex.Message });;
-        }
+        
     }
 
 
@@ -93,11 +80,6 @@ public class CategoriesController : Controller
         {
             return StatusCode(ex.StatusCode, new { Message = ex.Message });  
         }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex.Message, ex);
-            return StatusCode((int)HttpStatusCode.InternalServerError, new { Message = ex.Message });;
-        }
     }
 
     [HttpDelete("{uniqueId}")]
@@ -112,11 +94,6 @@ public class CategoriesController : Controller
         catch (AppException ex)
         {
             return StatusCode(ex.StatusCode, new { Message = ex.Message });  
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex.Message, ex);
-            return StatusCode((int)HttpStatusCode.InternalServerError, new { Message = ex.Message });;
         }
     }
 
@@ -133,11 +110,6 @@ public class CategoriesController : Controller
         catch (AppException ex)
         {
             return StatusCode(ex.StatusCode, new { Message = ex.Message });  
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex.Message, ex);
-            return StatusCode((int)HttpStatusCode.InternalServerError, new { Message = ex.Message });
         }
     }
 }

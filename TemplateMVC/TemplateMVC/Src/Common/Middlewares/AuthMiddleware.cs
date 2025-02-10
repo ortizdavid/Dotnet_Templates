@@ -11,18 +11,24 @@ public class AuthMiddleware
 
     public async Task InvokeAsync(HttpContext context)
     {
-        var skipPaths = new[]{"/", "/Auth/Login"};
-        if (skipPaths.Contains(context.Request.Path.Value))
+        var currentPath = context.Request.Path.Value ?? "";
+
+        if (currentPath == "/" || 
+            currentPath == "/auth/login" || 
+            currentPath.StartsWith("/auth/get-recover-link") || 
+            currentPath.StartsWith("/auth/recover-password"))
         {
             await _next(context);
             return;
         }
-        var userName = context.Session.GetString("UserName");
-        if (string.IsNullOrEmpty(userName))
+
+        if (string.IsNullOrEmpty(context.Session.GetString("UserName")))
         {
-            context.Response.Redirect("/Auth/Login");
+            context.Response.Redirect("/auth/login");
             return;
         }
+
         await _next(context);
     }
+
 }

@@ -1,4 +1,3 @@
-using System.Text;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Controllers;
@@ -15,5 +14,4 @@ public class RootController : Controller
     {
         return RedirectToAction("Login", "Auth");
     }
-
 }
