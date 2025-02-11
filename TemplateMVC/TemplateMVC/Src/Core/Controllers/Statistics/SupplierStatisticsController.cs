@@ -14,6 +14,10 @@ public class SupplierStatisticsController : Controller
     {
         _service = service;
     }
+    public IActionResult Index()
+    {
+        return View();
+    }
 
     [HttpGet("top-suppliers")]
     public async Task<IActionResult> GetTopSuppliers()

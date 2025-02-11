@@ -20,6 +20,11 @@ public class CategoryReportController : Controller
         _service = service;
         _generator = new CategoryGenerator();
     }
+
+    public IActionResult Index()
+    {
+        return View();
+    }
     
     [HttpGet("all-categories")]
     public async Task<IActionResult> GeAllCategories([FromQuery] ReportFilter filter)

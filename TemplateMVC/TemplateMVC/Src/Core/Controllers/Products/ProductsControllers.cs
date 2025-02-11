@@ -8,6 +8,7 @@ using TemplateMVC.Core.Services.Products;
 
 namespace TemplateMVC.Core.Controllers.Products;
 
+[Route("products")]
 public class ProductsController : Controller
 {
     private readonly ProductService _service;
@@ -20,6 +21,11 @@ public class ProductsController : Controller
     }
 
     [HttpGet]
+    public IActionResult Index()
+    {
+        return View();
+    }
+
     public async Task<IActionResult> GetAllProducts([FromQuery]PaginationParam param)
     {
         try

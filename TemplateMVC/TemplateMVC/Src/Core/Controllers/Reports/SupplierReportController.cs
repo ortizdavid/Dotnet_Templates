@@ -22,6 +22,11 @@ public class SupplierReportController : Controller
         _generator = new SupplierGenerator();
     }
 
+    public IActionResult Index()
+    {
+        return View();
+    }
+
     [HttpGet("all-suppliers")]
     public async Task<IActionResult> GetAllSuppliers([FromQuery]ReportFilter filter)
     {

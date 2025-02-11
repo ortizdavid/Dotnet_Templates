@@ -11,11 +11,11 @@ internal class Program
 
         // Add services to the container.
         // Default Framework Services
-        builder.Services.AddSession();
         builder.Services.AddControllersWithViews();
         builder.Services.AddHttpContextAccessor();
-
-        // Application-Specific Services via Extensions
+        
+        // Application-Specific Services via Extensions  
+        builder.Services.AddSessionConfiguration(configuration);
         builder.Host.AddSerilogConfiguration();
         builder.Services.AddEmailConfigurations(configuration);
         builder.Services.AddDatabaseConfiguration(configuration);

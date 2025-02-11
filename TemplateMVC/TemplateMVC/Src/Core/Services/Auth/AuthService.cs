@@ -65,7 +65,7 @@ public class AuthService
             throw new NotFoundException($"User with email '{viewModel.Email}' not found");
         }
         var recoverLink = _urlService.GetPasswordRecoveryLink(user.RecoveryToken);
-        _emailService.SendEmail(user?.Email, "Recover Link", RecoveryLinkTemplate(user?.UserName, recoverLink));
+        _emailService.SendEmail(user?.Email, "Recover Link", EmailTemplateHelper.RecoveryLink(user?.UserName, recoverLink));
     }
 
     public async Task RecoverPassword(ChangePasswordViewModel viewModel, string token)
@@ -92,7 +92,7 @@ public class AuthService
             throw new NotFoundException("User not found");
         }
         await _userService.ChangePassword(viewModel, user.UniqueId);
-        _emailService.SendEmail(user.Email, "Password Recovery Success", NewPasswordTemplate(user.UserName, viewModel.NewPassword));
+        _emailService.SendEmail(user.Email, "Password Recovery Success", EmailTemplateHelper.ChangePassword(user.UserName, viewModel.NewPassword));
     }
 
     public async Task<UserData?> GetLoggedUser()
@@ -104,31 +104,5 @@ public class AuthService
             throw new NotFoundException("User not found.");
         }
         return user;
-    }
-
-    private string RecoveryLinkTemplate(string? userName, string recoverLink)
-    {
-        return $"""
-            <html>
-                <body>
-                    <h1>Password Recovery!</h1>
-                    <p>Hello, <b>{userName}</b></p>
-                    <p>To recover password Click <a href="{recoverLink}">Here</a></p>
-                </body>
-            </html>
-            """;
-    }
-
-    private string NewPasswordTemplate(string? userName, string password)
-    {
-        return $"""
-            <html>
-                <body>
-                    <h1>Password Changed!</h1>
-                    <p>Hello, <b>{userName}</b></p>
-                    <p>Your new Password is: <b>{password}</b></p>
-                </body>
-            </html>
-            """;
     }
 }

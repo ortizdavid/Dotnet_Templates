@@ -15,6 +15,11 @@ public class ProductStatisticsController : Controller
         _service = service;
     }
 
+    public IActionResult Index()
+    {
+        return View();
+    }
+
     [HttpGet("total-price-by-categories")]
     public async Task<IActionResult> TotalPriceByCategories()
     {

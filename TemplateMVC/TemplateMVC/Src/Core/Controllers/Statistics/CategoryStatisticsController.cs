@@ -14,6 +14,11 @@ public class CategoryStatisticsController : Controller
     {
         _service = service;
     }
+    
+    public IActionResult Index()
+    {
+        return View();
+    }
 
     [HttpGet("top-categories")]
     public async Task<IActionResult> GetTopCategories()

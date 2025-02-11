@@ -1,0 +1,12 @@
+﻿@{
+    Layout = "_Layout";
+    ViewBag.Title = "Current User";
+}
+
+<h1 class="display-4">@ViewBag.Title</h1>
+<p><strong>Use Name: </strong>@ViewBag.LoggedUser.UserName</p>
+<p><strong>Role: </strong>@ViewBag.LoggedUser.RoleName</p>
+<p><strong>Email: </strong>@ViewBag.LoggedUser.Email</p>
+<p><strong>Created At: </strong>@ViewBag.LoggedUser.CreatedAt</p>
+<p><strong>Updated At: </strong>@ViewBag.LoggedUser.UpdatedAt</p>
+

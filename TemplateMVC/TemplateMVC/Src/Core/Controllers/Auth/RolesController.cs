@@ -8,6 +8,7 @@ using TemplateMVC.Core.Services.Auth;
 
 namespace TemplateMVC.Core.Controllers.Auth;
 
+[Route("roles")]
 public class RolesController : Controller
 {
     private readonly RoleService _service;
@@ -20,6 +21,11 @@ public class RolesController : Controller
     }
 
     [HttpGet]
+    public IActionResult Index()
+    {
+        return View();
+    }
+
     public async Task<IActionResult> GetAllRoles([FromQuery]PaginationParam param)
     {
         try

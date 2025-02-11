@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace TemplateMVC.Core.Controllers.Auth;
 
+[Route("users")]
 public class UsersController : Controller
 {
     private readonly UserService _service;
@@ -22,6 +23,11 @@ public class UsersController : Controller
     }
 
     [HttpGet]
+    public IActionResult Index()
+    {
+        return View();
+    }
+
     public async Task<IActionResult> GetAllUsers([FromQuery]PaginationParam param)
     {
         try
@@ -154,21 +160,6 @@ public class UsersController : Controller
             var msg = $"User with ID '{uniqueId}' was deactivated.";
             _logger.LogInformation(msg);
             return Ok(new { Message = msg });
-        }
-        catch (AppException ex)
-        {
-            return StatusCode(ex.StatusCode, new { Message = ex.Message });
-        }
-    }
-
-    [Authorize]
-    [HttpGet("current")]
-    public async Task<IActionResult> GetCurrentUser()
-    {
-        try
-        {
-            var user = await _authService.GetLoggedUser();
-            return Ok(user);
         }
         catch (AppException ex)
         {

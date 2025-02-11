@@ -16,6 +16,11 @@ public class UserStatisticsController : Controller
         _service = service;
     }
 
+    public IActionResult Index()
+    {
+        return View();
+    }
+
     [HttpGet("active-inactive")]
     public async Task<IActionResult> TotalActiveAndInactive()
     {

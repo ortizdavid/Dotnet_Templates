@@ -7,9 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace TemplateMVC.Core.Controllers.Suppliers;
 
-[Authorize]
-
-
+[Route("suppliers")]
 public class SuppliersController : Controller
 {
     private readonly SupplierService _service;
@@ -22,6 +20,11 @@ public class SuppliersController : Controller
     }
 
     [HttpGet]
+    public IActionResult Index()
+    {
+        return View();
+    }
+
     public async Task<IActionResult> GetAllSuppliers([FromQuery]PaginationParam param)
     {
         try

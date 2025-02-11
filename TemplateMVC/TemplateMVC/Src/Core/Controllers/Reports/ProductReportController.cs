@@ -21,6 +21,11 @@ public class ProductReportController : Controller
         _generator = new ProductGenerator();
     }
 
+    public IActionResult Index()
+    {
+        return View();
+    }
+
     [HttpGet("all-products")]
     public async Task<IActionResult> GeAllProducts([FromQuery] ReportFilter filter)
     {

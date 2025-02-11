@@ -8,6 +8,7 @@ using System.Net;
 
 namespace TemplateMVC.Core.Controllers.Products;
 
+[Route("categories")]
 public class CategoriesController : Controller
 {
     private readonly CategoryService _service;
@@ -18,8 +19,13 @@ public class CategoriesController : Controller
         _service = service;
         _logger = logger;
     }
-    
+
     [HttpGet]
+    public IActionResult Index()
+    {
+        return View();
+    }
+    
     public async Task<IActionResult> GetAllCategories([FromQuery]PaginationParam param)
     {
         try
@@ -64,7 +70,6 @@ public class CategoriesController : Controller
         }
         
     }
-
 
     [HttpPut("{uniqueId}")]
     public async Task<IActionResult> UpdateCategory(CategoryViewModel viewModel, Guid uniqueId)

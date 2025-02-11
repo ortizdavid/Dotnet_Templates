@@ -1,0 +1,32 @@
+ /*{
+ "Kestrel": {
+    "Endpoints": {
+      "Http": {
+        "Url": "http://0.0.0.0:5068"
+      }
+    }
+  },
+
+  "AllowedHosts": "*",
+  
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=localhost;Database=Dotnet_Template_MVC;User Id=USER;Password=PASSWORD;TrustServerCertificate=True"
+  },
+
+  "EmailSettings": {
+    "Host": "smtp.gmail.com",
+    "Port": 587,
+    "User": "USER",
+    "Password": "PASSWORD",
+    "EnableSsl": true
+  },
+
+  "SessionSettings": {
+    "IdleTimeout": 30,
+    "CookieHttpOnly": true,
+    "CookieIsEssential": true
+  },
+    
+  "UploadsDirectory": "Resources/Uploads"
+}
+*/
