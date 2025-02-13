@@ -1,7 +1,118 @@
+@model Pagination<TemplateMVC.Core.Models.Auth.UserData>
+
 @{
     Layout = "_Layout";
     ViewBag.Title = "Users";
+
+    int pageIndex = ViewBag.PaginationParam.PageIndex;
+    int pageSize = ViewBag.PaginationParam.PageSize; 
 }
 
-<h1 class="display-4">@ViewBag.Title</h1>
+<h4 class="display-4">@ViewBag.Title</h4>
 
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <form asp-action="Index" method="get" class="d-flex">
+        <div class="input-group">
+            <input type="text" name="SearchString" value="@ViewBag.CurrentSearch" 
+                   class="form-control" placeholder="Search by Name or Role" />
+            <button type="submit" class="btn btn-primary">Search</button>
+        </div>
+        <a asp-action="Index" class="btn btn-outline-secondary ms-2">Reset</a>
+    </form>
+    
+    <a href="/users/create" class="btn btn-primary">Add New</a>
+</div>
+
+
+@if (Model.Metadata.TotalItems > 0)
+{
+    <p><strong>Total: </strong>@Model.Metadata.TotalItems records</p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>
+                    <a href="/users?pageIndex=@pageIndex&pageSize=@pageSize&sortOrder=@ViewBag.NameSort">
+                       User Name
+                    </a>
+                </th>
+                <th>
+                    <a href="/users?pageIndex=@pageIndex&pageSize=@pageSize&sortOrder=@ViewBag.RoleSort">
+                        Role
+                    </a
+                </th>
+                <th>Email</th>
+                <th>Status</th>
+                <th>Created At</th>
+                <th>Options</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Items)
+            {
+                <tr class="@(item.IsActive ? "table-success" : "table-danger")">
+                    <td>@item.UserId</td>
+                    <td>@item.UserName</td>
+                    <td>@item.RoleName</td>
+                    <td>@item.Email</td>
+                    <td>
+                        <span class="badge @(item.IsActive ? "bg-success" : "bg-danger")">
+                            @(item.IsActive ? "Active" : "Inactive")
+                        </span>
+                    </td>
+                    <td>@item.CreatedAt</td>
+                    <td>
+                        <div class="btn-group">
+                            <a href="/users/@item.UniqueId/edit" class="btn btn-warning btn-sm">Edit</a>
+                            @if (item.IsActive)
+                            {
+                                <a href="/users/@item.UniqueId/deactivate" class="btn btn-danger btn-sm">Deactivate</a>
+                            }
+                            else
+                            {
+                                <a href="/users/@item.UniqueId/activate" class="btn btn-primary btn-sm">Activate</a>
+                            }
+                            <a href="/users/@item.UniqueId/details" class="btn btn-info btn-sm">Details</a>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    @if (Model.HasNextPage())
+    {
+        <nav>
+            <ul class="pagination">
+                <li class="page-item @(Model.HasPreviousPage() ? "" : "disabled")">
+                    <a class="page-link" href="@(Model.HasPreviousPage() ? Model.Metadata.FirstPageUrl : "#")">First</a>
+                </li>
+                <li class="page-item @(Model.HasPreviousPage() ? "" : "disabled")">
+                    <a class="page-link" href="@(Model.HasPreviousPage() ? Model.Metadata.PreviousPageUrl : "#")">
+                        <i class="bi bi-chevron-left"></i> Previous
+                    </a>
+                </li>
+                <li class="page-item disabled">
+                    <span class="page-link">Page @(Model.Metadata.PageIndex+1) of @(Model.Metadata.TotalPages+1)</span>
+                </li>
+                <li class="page-item @(Model.HasNextPage() ? "" : "disabled")">
+                    <a class="page-link" href="@(Model.HasNextPage() ? Model.Metadata.NextPageUrl : "#")">
+                        Next <i class="bi bi-chevron-right"></i>
+                    </a>
+                </li>
+                <li class="page-item @(Model.HasNextPage() ? "" : "disabled")">
+                    <a class="page-link" href="@(Model.HasNextPage() ? Model.Metadata.LastPageUrl : "#")">Last</a>
+                </li>
+            </ul>
+        </nav>
+    }
+    else
+    {
+        <div class="alert alert-warning">No records found</div>
+    }
+}
+else
+{
+    <div class="alert alert-warning">
+        No records found
+    </div>
+}

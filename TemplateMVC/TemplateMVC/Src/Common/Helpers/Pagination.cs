@@ -78,9 +78,25 @@ public class PaginationMetadata
     public string? NextPageUrl { get; set; }
 }
 
-
 public class PaginationParam
 {
     public int PageIndex { get; set; } = 0;
-    public int PageSize { get; set;} = 10;
+    public int PageSize { get; set; } = 10;
+
+    public static PaginationParam GetFromContext(HttpContext? context)
+    {
+        var query = context?.Request.Query;
+        if (query is null)
+        {
+            throw new Exception();
+        }
+        int pageIndex = int.TryParse(query["pageIndex"], out var current) ? current : 0;
+        int pageSize = int.TryParse(query["pageSize"], out var limit) ? limit : 10;
+
+        return new PaginationParam()
+        {
+            PageIndex = pageIndex,
+            PageSize = pageSize
+        };
+    }
 }

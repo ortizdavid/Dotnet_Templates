@@ -1,0 +1,54 @@
+@model TemplateMVC.Core.Models.Auth.UpdateUserViewModel;
+
+@{
+    Layout = "_Layout";
+    ViewBag.Title = "Edit User";
+}
+
+<h4 class="display-4">@ViewBag.Title</h4>
+
+@if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+{
+    <div class="alert alert-danger">
+        @ViewBag.ErrorMessage
+    </div>
+}
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger">
+        @Html.ValidationSummary(false, "Please fix the following errors:")
+    </div>
+}
+
+<form asp-action="EditUser" asp-asp-route-uniqueId="@Model.UniqueId" method="post">
+    @Html.AntiForgeryToken()
+
+    <div class="form-group">
+        <label asp-for="UserName" class="control-label"></label>
+        <input asp-for="UserName" type="text" class="form-control" value="@Model.UserName" aria-required="true" autofocus />
+    </div>
+
+    <div class="form-group">
+    <label asp-for="RoleId" class="control-label"></label>
+    <select asp-for="RoleId" class="form-control">
+            <option value="@Model.RoleId" selected>@Model.RoleName</option>
+            @foreach (var role in Model.Roles)
+            {
+                <option value="@role.RoleId">@role.RoleName</option>
+            }
+        </select>
+    </div>
+
+
+    <div class="form-group">
+        <label asp-for="Email" class="control-label"></label>
+        <input asp-for="Email" type="email" class="form-control" value="@Model.Email" aria-required="true"/>
+    </div>
+
+    <br>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a href="/users/@Model.UniqueId/details" class="btn btn-danger">Cancel</a>
+    </div>
+</form>

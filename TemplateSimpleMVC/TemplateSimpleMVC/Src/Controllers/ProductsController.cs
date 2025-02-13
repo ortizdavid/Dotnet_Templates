@@ -20,18 +20,14 @@ public class ProductsController : Controller
     }
 
     [HttpGet]
-    public async Task<IActionResult> Index(string sortOrder, string currentFilter, string searchString, int pageNumber=1)
+    public IActionResult Index(string sortOrder, string searchString)
     {
         ViewBag.CurrentSort = sortOrder;
         ViewBag.CurrentFilter = searchString;
-        ViewBag.NameSort = (sortOrder == "name_desc") ? "name" : "name_desc"; // Toogling the sort order
+        ViewBag.NameSort = (sortOrder == "name_desc") ? "name" : "name_desc"; 
         ViewBag.CodeSort = (sortOrder == "code_desc") ? "code" : "code_desc";
-    
-        int pageSize = 10;
-        if (searchString != currentFilter) pageNumber = 1;
 
         var products = _repository.GetAllSorted(sortOrder, searchString);
-        var paginatedList = await PaginatedList<Product>.CreateAsync(products, pageNumber, pageSize);
         return View(products);
     }
 

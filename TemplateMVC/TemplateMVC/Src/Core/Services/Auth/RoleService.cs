@@ -61,7 +61,7 @@ public class RoleService
             throw new BadRequestException("Please provide 'PageIndex' and 'PageSize'");
         }
         var count = await _repository.CountAsync();
-        var roles = await _repository.GetAllDataAsync(param.PageSize, param.PageIndex);
+        var roles = await _repository.GetAllAsync(param.PageSize, param.PageIndex);
         var pagination = new Pagination<Role>(roles, count, param.PageIndex, param.PageSize, _contextAccessor);
         return pagination;
     }

@@ -17,11 +17,26 @@ public class ProductRepository : RepositoryBase<Product>
         _dapper = ddapper;
     }
 
-    public async Task<IEnumerable<ProductData>> GetAllDataAsync(int limit, int offset)
+    public async Task<IEnumerable<ProductData>> GetAllDataAsync(int pageSize, int pageIndex)
     {
-        var sql = "SELECT * FROM ViewProductData ORDER BY CreatedAt DESC " + 
-                $"OFFSET {offset} ROWS FETCH NEXT {limit} ROWS ONLY;";
-        return await _dapper.QueryAsync<ProductData>(sql);
+        int offset = pageIndex * pageSize; 
+          var sql = @"SELECT * FROM ViewProductData 
+                    ORDER BY UserId ASC 
+                    OFFSET @Offset ROWS FETCH NEXT @PageSize ROWS ONLY;";
+
+        var parameters = new { Offset = offset, PageSize = pageSize };
+        return await _dapper.QueryAsync<ProductData>(sql, parameters);
+    }
+
+     public async Task<IEnumerable<ProductData>> GetAllDataSortedAsync(int pageSize, int pageIndex)
+    {
+        int offset = pageIndex * pageSize; 
+          var sql = @"SELECT * FROM ViewProductData 
+                    ORDER BY UserId ASC 
+                    OFFSET @Offset ROWS FETCH NEXT @PageSize ROWS ONLY;";
+
+        var parameters = new { Offset = offset, PageSize = pageSize };
+        return await _dapper.QueryAsync<ProductData>(sql, parameters);
     }
 
     public async Task<Product?> GetByCodeAsync(string? code)

@@ -69,11 +69,16 @@ public class RepositoryBase<T> : IRepository<T> where T : class
         return await _dbSet.AnyAsync(e => EF.Property<string>(e, field) == value);
     }
 
-    public async Task<IEnumerable<T>> GetAllAsync(int limit, int offset)
+    public async Task<IEnumerable<T>> GetAllAsync(int pageSize, int pageIndex)
     {
+        if (pageSize <= 0 || pageIndex < 0)
+        {
+            throw new ArgumentException("Invalid pagination parameters.");
+        }
         return await _dbSet
-            .Skip(offset)
-            .Take(limit)
+            .OrderByDescending(e => EF.Property<DateTime>(e, "CreatedAt")) 
+            .Skip(pageIndex * pageSize)
+            .Take(pageSize)
             .AsNoTracking()
             .ToListAsync();
     }

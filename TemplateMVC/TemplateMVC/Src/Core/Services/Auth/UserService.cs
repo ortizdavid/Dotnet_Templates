@@ -2,6 +2,7 @@ using TemplateMVC.Common.Exceptions;
 using TemplateMVC.Helpers;
 using TemplateMVC.Core.Models.Auth;
 using TemplateMVC.Core.Repositories.Auth;
+using TemplateMVC.Common.Helpers;
 
 namespace TemplateMVC.Core.Services.Auth;
 
@@ -51,6 +52,28 @@ public class UserService
         await _repository.CreateAsync(user);
     }
 
+    public async Task UpdateUser(UpdateUserViewModel viewModel, Guid uniqueId)
+    {
+        if (viewModel is null)
+        {
+            throw new BadRequestException("Update user viewModel cannot be null. Please provide Name, Role and Email");
+        }
+        var user = await _repository.GetByUniqueIdAsync(uniqueId);
+        if (user is null)
+        {
+            throw new NotFoundException($"User with ID '{uniqueId}' not found");
+        }
+        if (await _repository.ExistsRecordExcluded(viewModel.UserName, viewModel.Email, uniqueId))
+        {
+            throw new ConflictException($"User Name or Email is already in use.");
+        }
+        user.RoleId = viewModel.RoleId;
+        user.UserName = viewModel.UserName;
+        user.Email = viewModel.Email;
+        user.UpdatedAt = DateTime.UtcNow;
+        await _repository.UpdateAsync(user);
+    }
+
     public async Task ChangePassword(ChangePasswordViewModel viewModel, Guid uniqueId)
     {
         if (viewModel is null)
@@ -75,14 +98,14 @@ public class UserService
         await _repository.UpdateAsync(user);
     }
 
-    public async Task<Pagination<UserData>> GetAllUsers(PaginationParam param)
+    public async Task<Pagination<UserData>> GetAllUsers(PaginationParam param, SearchFilter filter)
     {
         if (param is null)
         {
             throw new BadRequestException("Please provide 'PageIndex' and 'PageSize'");
         }
         var count = await _repository.CountAsync();
-        var users = await _repository.GetAllDataAsync(param.PageSize, param.PageIndex);
+        var users = await _repository.GetAllDataSortedAsync(param.PageSize, param.PageIndex, filter.SearchString, filter.SortOrder);
         var pagination = new Pagination<UserData>(users, count, param.PageIndex, param.PageSize, _contextAccessor); 
         return pagination;
     }

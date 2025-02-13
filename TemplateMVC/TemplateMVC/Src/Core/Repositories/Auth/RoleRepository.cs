@@ -1,5 +1,4 @@
 using System.Data;
-using Dapper;
 using Microsoft.EntityFrameworkCore;
 using TemplateMVC.Core.Models;
 using TemplateMVC.Core.Models.Auth;
@@ -17,12 +16,6 @@ public class RoleRepository : RepositoryBase<Role>
         _dapper = dapper;
     }
 
-    public async Task<IEnumerable<Role>> GetAllDataAsync(int limit, int offset)
-    {
-        var sql = "SELECT * FROM Roles ORDER BY CreatedAt DESC " + 
-            $"OFFSET {offset} ROWS FETCH NEXT {limit} ROWS ONLY;";
-        return await _dapper.QueryAsync<Role>(sql);
-    }
 
     public async Task<IEnumerable<Role>> GetAllNoLimitAsync()
     {

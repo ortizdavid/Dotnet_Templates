@@ -1,0 +1,17 @@
+@model TemplateMVC.Core.Models.Auth.UserData;
+
+@{
+    Layout = "_Layout";
+    ViewBag.Title = "User Details";
+}
+
+<h4 class="display-4">@ViewBag.Title</h4>
+
+@if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+{
+    <div class="alert alert-danger">
+        @ViewBag.ErrorMessage
+    </div>
+}
+
+@Model

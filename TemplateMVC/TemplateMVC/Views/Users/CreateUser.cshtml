@@ -1,0 +1,55 @@
+@model TemplateMVC.Core.Models.Auth.CreateUserViewModel;
+
+@{
+    Layout = "_Layout";
+    ViewBag.Title = "Create User";
+}
+
+<h4 class="display-4">@ViewBag.Title</h4>
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger">
+        @Html.ValidationSummary(false, "Please fix the following errors:")
+    </div>
+}
+
+<form asp-action="CreateUser" method="post">
+    @Html.AntiForgeryToken()
+    
+    <div class="form-group">
+        <label asp-for="UserName" class="control-label"></label>
+        <input asp-for="UserName" type="text" class="form-control" aria-required="true" autofocus />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="RoleId" class="control-label"></label>
+        <select asp-for="RoleId" class="form-control">
+            @foreach (var role in Model.Roles)
+            {
+                <option value="@role.RoleId">@role.RoleName</option>
+            }
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Email" class="control-label"></label>
+        <input asp-for="Email" type="email" class="form-control" aria-required="true"/>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Password" class="control-label"></label>
+        <input asp-for="Password" type="password" class="form-control" aria-required="true" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="PasswordConfirmation" class="control-label"></label>
+        <input asp-for="PasswordConfirmation" type="password" class="form-control" aria-required="true" />
+    </div>
+
+    <br>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="reset" class="btn btn-secondary">Reset</button>
+    </div>
+</form>

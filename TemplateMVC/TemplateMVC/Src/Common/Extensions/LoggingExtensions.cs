@@ -23,14 +23,14 @@ public static class LoggingExtensions
     public static void LogApplicationStartup(this WebApplication app)
     {
         var hostUrl = app.Configuration["Kestrel:Endpoints:Http:Url"];
-        
-        if (!string.IsNullOrEmpty(hostUrl))
+
+        if (string.IsNullOrEmpty(hostUrl))
         {
-            app.Logger.LogInformation($"Application is running at {hostUrl}");
+            app.Logger.LogWarning("Application URL not found in configuration.");
         }
         else
         {
-            app.Logger.LogWarning("Application URL not found in configuration.");
+            app.Logger.LogInformation($"Application is running at {hostUrl}");
         }
     }
 }
