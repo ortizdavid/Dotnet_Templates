@@ -5,13 +5,12 @@
     ViewBag.Title = "User Details";
 }
 
-<h4 class="display-4">@ViewBag.Title</h4>
-
-@if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
-{
-    <div class="alert alert-danger">
-        @ViewBag.ErrorMessage
+<div class="card">
+    <div class="card-body">
+        <p><strong>User Name:</strong> @Model.UserName</p>
+        <p><strong>Role:</strong> @Model.RoleName</p>
+        <p><strong>Email:</strong> @Model.Email</p>
+        <p><strong>Status:</strong> @(Model.IsActive ? "Active" : "Inactive")</p>
+        <p><strong>Created At:</strong> @Model.CreatedAt</p>
     </div>
-}
-
-@Model
+</div>

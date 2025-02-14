@@ -5,6 +5,7 @@ using TemplateMVC.Core.Services.Auth;
 using TemplateMVC.Common.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using TemplateMVC.Common.Helpers;
+using System.Threading.Tasks;
 
 namespace TemplateMVC.Core.Controllers.Auth;
 
@@ -88,11 +89,6 @@ public class UsersController : Controller
     public async Task<IActionResult> EditUser(Guid uniqueId)
     {
         var user = await _service.GetUserByUniqueId(uniqueId);
-        if (user is null)
-        {
-            ViewBag.ErrorMessage = $"User with ID '{uniqueId}' not found";
-            return View();
-        }
         var model = new UpdateUserViewModel()
         {
             UniqueId = uniqueId,
@@ -134,20 +130,6 @@ public class UsersController : Controller
     {
         var user = await _service.GetUserByUniqueId(uniqueId);
         return View(user);
-    }
-
-    [HttpGet("by-name/{userName}")]
-    public async Task<IActionResult> GetUserByName(string userName)
-    {
-        try
-        {
-            var user = await _service.GetUserByName(userName);
-            return Ok(user);
-        }
-        catch (AppException ex)
-        {
-            return StatusCode(ex.StatusCode, new { Message = ex.Message });
-        }
     }
 
     [HttpPut("{uniqueId}/upload-image")]
@@ -197,36 +179,76 @@ public class UsersController : Controller
         }
     }
 
-    [HttpPut("{uniqueId}/activate")]
+    [HttpGet("{uniqueId}/activate")]
     public async Task<IActionResult> ActivateUser(Guid uniqueId)
+    {
+        var user = await _service.GetUserByUniqueId(uniqueId);
+        var model = new ActivateUserViewModel()
+        {
+            UniqueId = user.UniqueId,
+            UserName = user.UserName,
+            Role = user.RoleName
+        };
+        return View(model);
+    }
+
+
+    [HttpPost("{uniqueId}/activate")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> ActivateUser(ActivateUserViewModel viewModel, Guid uniqueId)
     {
         try
         {
-            await _service.ActivateUser(uniqueId);
-            var msg = $"User with ID '{uniqueId}' was activated.";
-            _logger.LogInformation(msg);
-            return Ok(new { Message = msg });
+            if (!ModelState.IsValid)
+            {
+                return View(viewModel);
+            }
+            var loggedUser = await _authService.GetLoggedUser();
+            await _service.ActivateUser(uniqueId, loggedUser?.UniqueId);
+            _logger.LogInformation($"User with ID '{uniqueId}' was activated.");
+            return Redirect($"/users/{uniqueId}/details");
         }
         catch (AppException ex)
         {
-            return StatusCode(ex.StatusCode, new { Message = ex.Message });
+            _logger.LogError(ex.Message);
+            ModelState.AddModelError("", ex.Message);
+            return View(viewModel);
         }
     }
 
-    [Authorize]
-    [HttpPut("{uniqueId}/deactivate")]
+    [HttpGet("{uniqueId}/deactivate")]
     public async Task<IActionResult> DeactivateUser(Guid uniqueId)
+    {
+        var user = await _service.GetUserByUniqueId(uniqueId);
+        var model = new DectivateUserViewModel()
+        {
+            UniqueId = user.UniqueId,
+            UserName = user.UserName,
+            Role = user.RoleName
+        };
+        return View(model);
+    }
+
+    [HttpPost("{uniqueId}/deactivate")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeactivateUser(DectivateUserViewModel viewModel, Guid uniqueId)
     {
         try
         {
-            await _service.DeactivateUser(uniqueId);
-            var msg = $"User with ID '{uniqueId}' was deactivated.";
-            _logger.LogInformation(msg);
-            return Ok(new { Message = msg });
+            if (!ModelState.IsValid)
+            {
+                return View(viewModel);
+            }
+            var loggedUser = await _authService.GetLoggedUser();
+            await _service.DeactivateUser(uniqueId, loggedUser?.UniqueId);
+            _logger.LogInformation($"User with ID '{uniqueId}' was deactivated.");
+            return Redirect($"/users/{uniqueId}/details");
         }
         catch (AppException ex)
         {
-            return StatusCode(ex.StatusCode, new { Message = ex.Message });
+            _logger.LogError(ex.Message);
+            ModelState.AddModelError("", ex.Message);
+            return View(viewModel);
         }
     }
 

@@ -33,6 +33,10 @@ public class AuthService
         {
             throw new NotFoundException("User not found.");
         }
+        if (!user.IsActive)
+        {
+            throw new UnauthorizedException("Your account is inactive. Please contact support");
+        }
         if (user is null || !PasswordHelper.Verify(viewModel.Password, user.Password))
         {
             throw new UnauthorizedException("Invalid username or password.");

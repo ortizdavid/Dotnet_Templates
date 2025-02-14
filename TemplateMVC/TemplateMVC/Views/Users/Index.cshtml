@@ -8,8 +8,6 @@
     int pageSize = ViewBag.PaginationParam.PageSize; 
 }
 
-<h4 class="display-4">@ViewBag.Title</h4>
-
 <div class="d-flex justify-content-between align-items-center mb-3">
     <form asp-action="Index" method="get" class="d-flex">
         <div class="input-group">
@@ -22,7 +20,6 @@
     
     <a href="/users/create" class="btn btn-primary">Add New</a>
 </div>
-
 
 @if (Model.Metadata.TotalItems > 0)
 {

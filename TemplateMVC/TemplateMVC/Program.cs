@@ -27,6 +27,13 @@ internal class Program
 
         app.LogApplicationStartup();
 
+        // Session
+        app.UseSession();
+
+        // Custom Middlewares
+        app.UseMiddleware<AuthMiddleware>();
+        app.UseMiddleware<ExceptionHandlerMiddleware>();
+
         // Configure the HTTP request pipeline.
         if (!app.Environment.IsDevelopment())
         {
@@ -37,17 +44,8 @@ internal class Program
 
         app.UseHttpsRedirection();
         app.UseRouting();
-
         app.UseAuthorization();
-
         app.MapStaticAssets();
-
-        // Session
-        app.UseSession();
-
-        // Custom Middlewares
-        app.UseMiddleware<AuthMiddleware>();
-        app.UseMiddleware<ExceptionHandlerMiddleware>();
 
         app.MapControllerRoute(
             name: "default",

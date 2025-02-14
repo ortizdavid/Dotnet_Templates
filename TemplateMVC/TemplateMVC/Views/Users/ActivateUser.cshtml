@@ -1,0 +1,33 @@
+@model TemplateMVC.Core.Models.Auth.ActivateUserViewModel;
+
+@{
+    Layout = "_Layout";
+    ViewBag.Title = "Activate User";
+}
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger">
+        @Html.ValidationSummary(false, "Please fix the following errors:")
+    </div>
+}
+
+<form asp-action="ActivateUser" asp-asp-route-uniqueId="@Model.UniqueId" method="post">
+    @Html.AntiForgeryToken()
+
+    <div class="form-group">
+        <label asp-for="UserName" class="control-label"></label>
+        <input asp-for="UserName" type="text" class="form-control" value="@Model.UserName" aria-required="true" readonly />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Role" class="control-label"></label>
+        <input asp-for="Role" type="text" class="form-control" value="@Model.Role" aria-required="true" readonly />
+    </div>
+
+    <br>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Confirm</button>
+        <a href="/users/@Model.UniqueId/details" class="btn btn-danger">Cancel</a>
+    </div>
+</form>

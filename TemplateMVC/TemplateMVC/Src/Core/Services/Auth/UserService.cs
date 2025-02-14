@@ -177,8 +177,12 @@ public class UserService
         await _repository.UpdateAsync(user);
     }
 
-    public async Task ActivateUser(Guid uniqueId)
+    public async Task ActivateUser(Guid uniqueId, Guid? loggedUserId)
     {
+        if (uniqueId == loggedUserId)
+        {
+            throw new ConflictException("Cannot activate your own account");
+        }
         var user = await _repository.GetByUniqueIdAsync(uniqueId);
         if (user is null)
         {
@@ -186,7 +190,7 @@ public class UserService
         }
         if (user.IsActive)
         {
-            throw new ConflictException("User is already active");
+            throw new ConflictException($"User is '{user.UserName}' already active");
         }
         user.IsActive = true;
         user.RecoveryToken = Encryption.GenerateRandomToken(150);
@@ -194,8 +198,12 @@ public class UserService
         await _repository.UpdateAsync(user);
     }
 
-    public async Task DeactivateUser(Guid uniqueId)
+    public async Task DeactivateUser(Guid uniqueId, Guid? loggedUserId)
     {
+        if (uniqueId == loggedUserId)
+        {
+            throw new ConflictException("Cannot activate your own account");
+        }
         var user = await _repository.GetByUniqueIdAsync(uniqueId);
         if (user is null)
         {
