@@ -14,7 +14,7 @@
     </div>
 }
 
-<form asp-action="EditUser" asp-asp-route-uniqueId="@Model.UniqueId" method="post">
+<form asp-controller="Users" asp-action="Edit" asp-route-uniqueId="@Model.UniqueId" method="post">
     @Html.AntiForgeryToken()
 
     <div class="form-group">

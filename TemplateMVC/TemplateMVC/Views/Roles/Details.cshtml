@@ -1,0 +1,19 @@
+@model TemplateMVC.Core.Models.Auth.Role;
+
+@{
+    Layout = "_Layout";
+    ViewBag.Title = "Details";
+}
+
+<div class="card">
+    <div class="card-body">
+        <p><strong>Role ID:</strong> @Model.RoleId</p>
+        <p><strong>Role Name:</strong> @Model.RoleName</p>
+        <p><strong>Code:</strong> @Model.Code</p>
+        <p><strong>Created At:</strong> @Model.CreatedAt</p>
+    </div>
+    <div class="card-footer">
+        <a class="btn btn-primary" href="/roles">Back to List</a>
+        <a class="btn btn-primary" href="/roles/@Model.UniqueId/edit">Edit</a>
+    </div>
+</div>

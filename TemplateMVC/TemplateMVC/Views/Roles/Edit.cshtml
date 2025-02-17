@@ -1,0 +1,32 @@
+@model TemplateMVC.Core.Models.Auth.UpdateRoleViewModel;
+
+@{
+    Layout = "_Layout";
+    ViewBag.Title = "Edit";
+}
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger">
+        @Html.ValidationSummary("", "Please fix the following errors:")
+    </div>
+}
+
+<form asp-controller="Roles" asp-action="Edit" asp-route-uniqueId=@Model.UniqueId method="post">
+    @Html.AntiForgeryToken()
+    
+    <div class="form-group">
+        <label asp-for="RoleName" class="control-label"></label>
+        <input asp-for="RoleName" type="text" class="form-control" aria-required="true" autofocus />
+    </div>
+    <div class="form-group">
+        <label asp-for="Code" class="control-label"></label>
+        <input asp-for="Code" type="text" class="form-control" aria-required="true"/>
+    </div>
+
+    <br>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a href="/roles/@Model.UniqueId/details" class="btn btn-danger">Cancel</a>
+    </div>
+</form>

@@ -12,7 +12,7 @@
     </div>
 }
 
-<form asp-action="ActivateUser" asp-asp-route-uniqueId="@Model.UniqueId" method="post">
+<form asp-controller="Users" asp-action="Activate" asp-asp-route-uniqueId="@Model.UniqueId" method="post">
     @Html.AntiForgeryToken()
 
     <div class="form-group">

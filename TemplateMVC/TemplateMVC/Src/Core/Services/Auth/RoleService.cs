@@ -2,6 +2,7 @@ using TemplateMVC.Common.Exceptions;
 using TemplateMVC.Helpers;
 using TemplateMVC.Core.Models.Auth;
 using TemplateMVC.Core.Repositories.Auth;
+using TemplateMVC.Common.Helpers;
 
 namespace TemplateMVC.Core.Services.Auth;
 
@@ -16,7 +17,7 @@ public class RoleService
         _contextAccessor = contextAccessor;
     }
 
-    public async Task CreateRole(RoleViewModel viewModel)
+    public async Task CreateRole(CreateRoleViewModel viewModel)
     {
         if (viewModel is null)
         {
@@ -38,7 +39,7 @@ public class RoleService
         await _repository.CreateAsync(role);
     }
 
-    public async Task UpdateRole(RoleViewModel viewModel, Guid uniqueId)
+    public async Task UpdateRole(UpdateRoleViewModel viewModel, Guid uniqueId)
     {
         if (viewModel is null)
         {
@@ -49,19 +50,23 @@ public class RoleService
         {
             throw new NotFoundException($"Role with ID '{uniqueId}' not found");
         }
+        if (await _repository.ExistsRecordExcluded(viewModel.RoleName, viewModel.Code, uniqueId))
+        {
+            throw new ConflictException("Role Name or Code already exists");
+        }
         role.RoleName = viewModel.RoleName;
         role.Code = viewModel.Code;
         await _repository.UpdateAsync(role); 
     }
 
-    public async Task<Pagination<Role>> GetAllRoles(PaginationParam param)
+    public async Task<Pagination<Role>> GetAllRoles(PaginationParam param, SearchFilter filter)
     {
         if (param is null)
         {
             throw new BadRequestException("Please provide 'PageIndex' and 'PageSize'");
         }
         var count = await _repository.CountAsync();
-        var roles = await _repository.GetAllAsync(param.PageSize, param.PageIndex);
+        var roles = await _repository.GetAllSortedAsync(param.PageSize, param.PageIndex, filter.SearchString, filter.SortOrder);
         var pagination = new Pagination<Role>(roles, count, param.PageIndex, param.PageSize, _contextAccessor);
         return pagination;
     }

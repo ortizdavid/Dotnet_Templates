@@ -62,7 +62,6 @@ public class UserRepository : RepositoryBase<User>
         } 
 
         var sort = _sortOptions.GetValueOrDefault(sortOrder, "UserId ASC");
-
         var sql = @$"SELECT * FROM ViewUserData 
                     {filter} ORDER BY {sort} 
                     OFFSET @Offset ROWS FETCH NEXT @PageSize ROWS ONLY;";

@@ -1,10 +1,11 @@
 using System.Net;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TemplateMVC.Common.Exceptions;
 using TemplateMVC.Helpers;
 using TemplateMVC.Core.Models.Auth;
 using TemplateMVC.Core.Services.Auth;
+using System.Threading.Tasks;
+using TemplateMVC.Common.Helpers;
 
 namespace TemplateMVC.Core.Controllers.Auth;
 
@@ -13,77 +14,111 @@ public class RolesController : Controller
 {
     private readonly RoleService _service;
     private readonly ILogger<RolesController> _logger;
+    private readonly IHttpContextAccessor _contextAccessor;
+    private HttpContext? _context => _contextAccessor?.HttpContext;
 
-    public RolesController(RoleService service, ILogger<RolesController> logger)
+    public RolesController(RoleService service, ILogger<RolesController> logger, IHttpContextAccessor contextAccessor)
     {
         _service = service;
         _logger = logger;
+        _contextAccessor = contextAccessor;
     }
 
     [HttpGet]
-    public IActionResult Index()
+    public async Task<IActionResult> Index(SearchFilter filter)
+    {
+        try
+        {
+            var param = PaginationParam.GetFromContext(_context);
+            ViewBag.PaginationParam = param;
+            ViewBag.CurrentSearch = filter.SearchString;
+            ViewBag.CurrentSort = filter.SortOrder;
+            ViewBag.NameSort = (filter.SortOrder == "name_desc") ? "name_asc" : "name_desc";
+            ViewBag.CodeSort = (filter.SortOrder == "code_desc") ? "code_asc" : "code_desc";
+
+            var roles = await _service.GetAllRoles(param, filter);
+            return View(roles);
+        }
+        catch (AppException ex)
+        {
+            ModelState.AddModelError("", ex.Message);
+            return View();
+        }
+    }
+
+    [HttpGet("create")]
+    public IActionResult Create()
     {
         return View();
     }
 
-    public async Task<IActionResult> GetAllRoles([FromQuery]PaginationParam param)
+    [HttpPost("create")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Create(CreateRoleViewModel viewModel)
     {
         try
         {
-            var roles = await _service.GetAllRoles(param);
-            return Ok(roles);
-        }
-        catch (AppException ex)
-        {
-            return StatusCode(ex.StatusCode, new { Message = ex.Message });
-        }
-       
-    }
-
-    [HttpPost]
-    [AllowAnonymous]
-    public async Task<IActionResult> CreateRole(RoleViewModel viewModel)
-    {
-        try
-        {
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
             await _service.CreateRole(viewModel);
-            var msg = $"Role '{viewModel.RoleName}' created";
-            _logger.LogInformation(msg);
-            return StatusCode((int)HttpStatusCode.Created, new{ Message = msg });
+            _logger.LogInformation($"Role '{viewModel.RoleName}' created");
+            return Redirect("/roles");
         }
         catch (AppException ex)
         {
-            return StatusCode(ex.StatusCode, new { Message = ex.Message });
+            ModelState.AddModelError("", ex.Message);
+            return View();
         }
     }
 
-    [HttpPut("{uniqueId}")]
-    public async Task<IActionResult> UpdateRole(RoleViewModel viewModel, Guid uniqueId)
+    [HttpGet("{uniqueId}/edit")]
+    public async Task<IActionResult> Edit(Guid uniqueId)
+    {
+        var role = await _service.GetRoleByUniqueId(uniqueId);
+        var model = new UpdateRoleViewModel()
+        {
+            RoleName = role.RoleName,
+            Code = role.Code,
+            UniqueId = role.UniqueId
+        };
+        return View(model);
+    }
+
+    [HttpPost("{uniqueId}/edit")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Edit(UpdateRoleViewModel viewModel, Guid uniqueId)
     {
         try
         {
+            if (!ModelState.IsValid)
+            {
+                return View(viewModel);
+            }
             await _service.UpdateRole(viewModel, uniqueId);
-            var msg = $"Role with ID '{uniqueId}' updated";
-            _logger.LogInformation(msg);
-            return Ok(new{ Message = msg });
+            _logger.LogInformation($"Role with ID '{uniqueId}' updated");
+            return Redirect($"/roles/{uniqueId}/details");
         }
         catch (AppException ex)
         {
-            return StatusCode(ex.StatusCode, new { Message = ex.Message });
+            ModelState.AddModelError("", ex.Message);
+            return View(viewModel);
         }
     }
 
-    [HttpGet("{uniqueId}")]
-    public async Task<IActionResult> GetRoleByUniqueId(Guid uniqueId)
+    [HttpGet("{uniqueId}/details")]
+    public async Task<IActionResult> Details(Guid uniqueId)
     {
         try
         {
             var role = await _service.GetRoleByUniqueId(uniqueId);
-            return Ok(role);
+            return View(role);
         }
         catch (AppException ex)
         {
-            return StatusCode(ex.StatusCode, new { Message = ex.Message });
+            ModelState.AddModelError("", ex.Message);
+            return View();
         }
     }
 
@@ -97,12 +132,13 @@ public class RolesController : Controller
         }
         catch (AppException ex)
         {
+            ModelState.AddModelError("", ex.Message);
             return StatusCode(ex.StatusCode, new { Message = ex.Message });
         }
     }
 
     [HttpDelete("{uniqueId}")]
-    public async Task<IActionResult> DeleteRole(Guid uniqueId)
+    public async Task<IActionResult> Delete(Guid uniqueId)
     {
         try
         {
@@ -112,6 +148,7 @@ public class RolesController : Controller
         }
         catch (AppException ex)
         {
+            ModelState.AddModelError("", ex.Message);
             return StatusCode(ex.StatusCode, new { Message = ex.Message });
         }
     }

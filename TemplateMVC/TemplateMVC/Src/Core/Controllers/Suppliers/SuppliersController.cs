@@ -3,7 +3,6 @@ using TemplateMVC.Core.Services.Suppliers;
 using TemplateMVC.Helpers;
 using TemplateMVC.Common.Exceptions;
 using System.Net;
-using Microsoft.AspNetCore.Authorization;
 
 namespace TemplateMVC.Core.Controllers.Suppliers;
 

@@ -3,9 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using TemplateMVC.Core.Models.Auth;
 using TemplateMVC.Core.Services.Auth;
 using TemplateMVC.Common.Exceptions;
-using Microsoft.AspNetCore.Authorization;
 using TemplateMVC.Common.Helpers;
-using System.Threading.Tasks;
 
 namespace TemplateMVC.Core.Controllers.Auth;
 
@@ -17,7 +15,6 @@ public class UsersController : Controller
     private readonly RoleService _roleService;
     private readonly ILogger<UsersController> _logger;
     private readonly IHttpContextAccessor _contextAccessor;
-
     private HttpContext? _context => _contextAccessor.HttpContext;
 
     public UsersController(UserService service, AuthService authService, RoleService roleService, ILogger<UsersController> logger, IHttpContextAccessor contextAccessor) 
@@ -46,13 +43,13 @@ public class UsersController : Controller
         }
         catch (AppException ex)
         {
-            ViewBag.ErrorMessage =  ex.Message;
+            ModelState.AddModelError("", ex.Message);
             return View();
         }
     }
 
     [HttpGet("create")]
-    public async Task<IActionResult> CreateUser()
+    public async Task<IActionResult> Create()
     {
         var model = new CreateUserViewModel()
         {
@@ -63,7 +60,7 @@ public class UsersController : Controller
 
     [HttpPost("create")]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> CreateUser(CreateUserViewModel viewModel)
+    public async Task<IActionResult> Create(CreateUserViewModel viewModel)
     {
         await PopulateRolesCreateAsync(viewModel);
         try
@@ -86,7 +83,7 @@ public class UsersController : Controller
     }
 
     [HttpGet("{uniqueId}/edit")]
-    public async Task<IActionResult> EditUser(Guid uniqueId)
+    public async Task<IActionResult> Edit(Guid uniqueId)
     {
         var user = await _service.GetUserByUniqueId(uniqueId);
         var model = new UpdateUserViewModel()
@@ -103,7 +100,7 @@ public class UsersController : Controller
 
     [HttpPost("{uniqueId}/edit")]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> EditUser(UpdateUserViewModel viewModel, Guid uniqueId)
+    public async Task<IActionResult> Edit(UpdateUserViewModel viewModel, Guid uniqueId)
     {
         await PopulateRolesUpdateAsync(viewModel);
         try
@@ -132,7 +129,7 @@ public class UsersController : Controller
         return View(user);
     }
 
-    [HttpPut("{uniqueId}/upload-image")]
+    [HttpPost("{uniqueId}/upload-image")]
     public async Task<IActionResult> UploadImage(IFormFile file, Guid uniqueId)
     {
         try
@@ -140,15 +137,16 @@ public class UsersController : Controller
             await _service.UploadUserImage(file, uniqueId);
             var msg = $"User '{uniqueId}' image uploaded.";
             _logger.LogInformation(msg);
-            return Ok(new { Message = msg });
+            return View();
         }
         catch (AppException ex)
         {
-            return StatusCode(ex.StatusCode, new { Message = ex.Message });
+            ModelState.AddModelError("", ex.Message);
+            return View();
         }
     }
 
-    [HttpPut("{uniqueId}/change-password")]
+    [HttpPost("{uniqueId}/change-password")]
     public async Task<IActionResult> ChangePassword(ChangePasswordViewModel viewModel, Guid uniqueId)
     {
         try
@@ -156,15 +154,16 @@ public class UsersController : Controller
             await _service.ChangePassword(viewModel, uniqueId);
             var msg = $"User '{uniqueId}' password was changed";
             _logger.LogInformation(msg);
-            return Ok(new { Message = msg });
+            return View();
         }
         catch (AppException ex)
         {
-            return StatusCode(ex.StatusCode, new { Message = ex.Message });
+            ModelState.AddModelError("", ex.Message);
+            return View();
         }
     }
 
-    [HttpDelete("{uniqueId}")]
+    [HttpPost("{uniqueId}")]
     public async Task<IActionResult> DeleteUser(Guid uniqueId)
     {
         try
@@ -175,7 +174,8 @@ public class UsersController : Controller
         }
         catch (AppException ex)
         {
-            return StatusCode(ex.StatusCode, new { Message = ex.Message });
+            ModelState.AddModelError("", ex.Message);
+            return View();
         }
     }
 
@@ -195,7 +195,7 @@ public class UsersController : Controller
 
     [HttpPost("{uniqueId}/activate")]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> ActivateUser(ActivateUserViewModel viewModel, Guid uniqueId)
+    public async Task<IActionResult> Activate(ActivateUserViewModel viewModel, Guid uniqueId)
     {
         try
         {
@@ -217,7 +217,7 @@ public class UsersController : Controller
     }
 
     [HttpGet("{uniqueId}/deactivate")]
-    public async Task<IActionResult> DeactivateUser(Guid uniqueId)
+    public async Task<IActionResult> Deactivate(Guid uniqueId)
     {
         var user = await _service.GetUserByUniqueId(uniqueId);
         var model = new DectivateUserViewModel()
@@ -231,7 +231,7 @@ public class UsersController : Controller
 
     [HttpPost("{uniqueId}/deactivate")]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> DeactivateUser(DectivateUserViewModel viewModel, Guid uniqueId)
+    public async Task<IActionResult> Deactivate(DectivateUserViewModel viewModel, Guid uniqueId)
     {
         try
         {

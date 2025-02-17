@@ -1,8 +1,8 @@
-@model Pagination<TemplateMVC.Core.Models.Auth.UserData>
+@model Pagination<TemplateMVC.Core.Models.Auth.Role>;
 
 @{
     Layout = "_Layout";
-    ViewBag.Title = "Users";
+    ViewBag.Title = "Roles";    
 
     int pageIndex = ViewBag.PaginationParam.PageIndex;
     int pageSize = ViewBag.PaginationParam.PageSize; 
@@ -17,29 +17,27 @@
         </div>
         <a asp-action="Index" class="btn btn-outline-secondary ms-2">Reset</a>
     </form>
-    
-    <a href="/users/create" class="btn btn-primary">Add New</a>
+
+    <a href="/roles/create" class="btn btn-primary">Add New</a>
 </div>
 
 @if (Model.Metadata.TotalItems > 0)
 {
     <p><strong>Total: </strong>@Model.Metadata.TotalItems records</p>
     <table class="table">
-        <thead class="table-dark">
+        <thead class=" table-dark">
             <tr>
                 <th>ID</th>
-                <th>
-                    <a href="/users?pageIndex=@pageIndex&pageSize=@pageSize&sortOrder=@ViewBag.NameSort">
-                       User Name
+               <th>
+                    <a href="/roles?pageIndex=@pageIndex&pageSize=@pageSize&sortOrder=@ViewBag.NameSort">
+                       Role Name
                     </a>
                 </th>
                 <th>
-                    <a href="/users?pageIndex=@pageIndex&pageSize=@pageSize&sortOrder=@ViewBag.RoleSort">
-                        Role
+                    <a href="/roles?pageIndex=@pageIndex&pageSize=@pageSize&sortOrder=@ViewBag.CodeSort">
+                        Code
                     </a
                 </th>
-                <th>Email</th>
-                <th>Status</th>
                 <th>Created At</th>
                 <th>Options</th>
             </tr>
@@ -47,29 +45,15 @@
         <tbody>
             @foreach (var item in Model.Items)
             {
-                <tr class="@(item.IsActive ? "table-success" : "table-danger")">
-                    <td>@item.UserId</td>
-                    <td>@item.UserName</td>
+                <tr>
+                    <td>@item.RoleId</td>
                     <td>@item.RoleName</td>
-                    <td>@item.Email</td>
-                    <td>
-                        <span class="badge @(item.IsActive ? "bg-success" : "bg-danger")">
-                            @(item.IsActive ? "Active" : "Inactive")
-                        </span>
-                    </td>
+                    <td>@item.Code</td>
                     <td>@item.CreatedAt</td>
                     <td>
                         <div class="btn-group">
-                            <a href="/users/@item.UniqueId/edit" class="btn btn-warning btn-sm">Edit</a>
-                            @if (item.IsActive)
-                            {
-                                <a href="/users/@item.UniqueId/deactivate" class="btn btn-danger btn-sm">Deactivate</a>
-                            }
-                            else
-                            {
-                                <a href="/users/@item.UniqueId/activate" class="btn btn-primary btn-sm">Activate</a>
-                            }
-                            <a href="/users/@item.UniqueId/details" class="btn btn-info btn-sm">Details</a>
+                            <a href="/roles/@item.UniqueId/edit" class="btn btn-warning btn-sm">Edit</a>
+                            <a href="/roles/@item.UniqueId/details" class="btn btn-info btn-sm">Details</a>
                         </div>
                     </td>
                 </tr>

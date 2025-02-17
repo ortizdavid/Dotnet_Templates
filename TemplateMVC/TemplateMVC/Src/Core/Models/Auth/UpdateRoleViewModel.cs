@@ -3,8 +3,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace TemplateMVC.Core.Models.Auth;
 
-public class RoleViewModel
+public class UpdateRoleViewModel
 {
+    public Guid UniqueId { get; set; }
+    
     [Required]
     [StringLength(150)]
     [DisplayName("Role Name")]

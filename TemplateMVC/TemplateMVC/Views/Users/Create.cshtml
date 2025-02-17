@@ -12,7 +12,7 @@
     </div>
 }
 
-<form asp-action="CreateUser" method="post">
+<form asp-controller="Users" asp-action="Create" method="post">
     @Html.AntiForgeryToken()
     
     <div class="form-group">
