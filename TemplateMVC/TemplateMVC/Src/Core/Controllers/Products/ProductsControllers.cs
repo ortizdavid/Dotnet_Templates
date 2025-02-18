@@ -40,7 +40,7 @@ public class ProductsController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateProduct(ProductViewModel viewModel)
+    public async Task<IActionResult> CreateProduct(CreateProductViewModel viewModel)
     {
         try
         {
@@ -56,7 +56,7 @@ public class ProductsController : Controller
     }
 
     [HttpPut("{uniqueId}")]
-    public async Task<IActionResult> UpdateProduct(ProductViewModel viewModel, Guid uniqueId)
+    public async Task<IActionResult> UpdateProduct(UpdateProductViewModel viewModel, Guid uniqueId)
     {
         try
         {

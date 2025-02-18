@@ -27,7 +27,7 @@ public class ProductService
         _imageUploader = new FileUploader(_uploadDirectory, FileExtensions.Images, 5 * CapacityUnit.MEGA_BYTE);;
     }
 
-    public async Task CreateProduct(ProductViewModel viewModel)
+    public async Task CreateProduct(CreateProductViewModel viewModel)
     {
         if (viewModel is null)
         {
@@ -49,7 +49,7 @@ public class ProductService
         await _repository.CreateAsync(product);
     }
 
-    public async Task UpdateProduct(ProductViewModel viewModel, Guid uniqueId)
+    public async Task UpdateProduct(UpdateProductViewModel viewModel, Guid uniqueId)
     {
         if (viewModel is null)
         {

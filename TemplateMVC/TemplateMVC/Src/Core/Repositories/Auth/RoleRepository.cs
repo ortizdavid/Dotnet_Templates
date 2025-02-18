@@ -47,12 +47,12 @@ public class RoleRepository : RepositoryBase<Role>
 
     public async Task<IEnumerable<Role>> GetAllNoLimitAsync()
     {
-        return await _context.Roles.ToListAsync();
+        return await _dbSet.ToListAsync();
     }
 
     public async Task<Role?> GetByCodeAsync(string code)
     {
-        return await _context.Roles
+        return await _dbSet
             .FirstOrDefaultAsync(r => r.Code == code);
     }
 

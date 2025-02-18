@@ -1,0 +1,28 @@
+
+
+@{
+    Layout = "_Layout";
+    ViewBag.Title = "Import CSV"; 
+}
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger">
+        @Html.ValidationSummary("", "Please fix the following errors:")
+    </div>
+}
+
+<form asp-controller="Categories" asp-action="ImportCsv" method="post" enctype="multipart/form-data">
+    @Html.AntiForgeryToken()
+    
+    <div class="form-group">
+        <label for="file" class="control-label">CSV File</label>
+        <input type="file" name="file" id="file" accept=".csv" class="form-control">
+    </div>
+
+    <br>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="reset" class="btn btn-secondary">Reset</button>
+    </div>
+</form>

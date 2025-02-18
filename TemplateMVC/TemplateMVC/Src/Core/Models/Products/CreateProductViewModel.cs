@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace TemplateMVC.Core.Models.Products;
 
-public class ProductViewModel
+public class CreateProductViewModel
 {
     [Required]
     [StringLength(50, MinimumLength = 3)]

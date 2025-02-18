@@ -27,13 +27,13 @@ public class UserRepository : RepositoryBase<User>
 
     public async Task<User?> GetByNameAsync(string? userName)
     {
-        return await _context.Users
+        return await _dbSet
             .FirstOrDefaultAsync(u => u.UserName == userName);
     }
 
     public async Task<User?> GetByEmailAsync(string? email)
     {
-        return await _context.Users
+        return await _dbSet
             .FirstOrDefaultAsync(u => u.Email == email);
     }
 
@@ -104,7 +104,7 @@ public class UserRepository : RepositoryBase<User>
 
     public async Task<User?> GetByRecoveryTokenAsync(string token)
     {
-        return await _context.Users
+        return await _dbSet
             .FirstOrDefaultAsync(u => u.RecoveryToken == token);
     }
 }

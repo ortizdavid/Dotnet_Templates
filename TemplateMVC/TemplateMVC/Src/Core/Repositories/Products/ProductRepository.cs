@@ -20,20 +20,20 @@ public class ProductRepository : RepositoryBase<Product>
     public async Task<IEnumerable<ProductData>> GetAllDataAsync(int pageSize, int pageIndex)
     {
         int offset = pageIndex * pageSize; 
-          var sql = @"SELECT * FROM ViewProductData 
-                    ORDER BY UserId ASC 
-                    OFFSET @Offset ROWS FETCH NEXT @PageSize ROWS ONLY;";
+        var sql = @"SELECT * FROM ViewProductData 
+                ORDER BY UserId ASC 
+                OFFSET @Offset ROWS FETCH NEXT @PageSize ROWS ONLY;";
 
         var parameters = new { Offset = offset, PageSize = pageSize };
         return await _dapper.QueryAsync<ProductData>(sql, parameters);
     }
 
-     public async Task<IEnumerable<ProductData>> GetAllDataSortedAsync(int pageSize, int pageIndex)
+    public async Task<IEnumerable<ProductData>> GetAllDataSortedAsync(int pageSize, int pageIndex)
     {
         int offset = pageIndex * pageSize; 
-          var sql = @"SELECT * FROM ViewProductData 
-                    ORDER BY UserId ASC 
-                    OFFSET @Offset ROWS FETCH NEXT @PageSize ROWS ONLY;";
+        var sql = @"SELECT * FROM ViewProductData 
+                ORDER BY UserId ASC 
+                OFFSET @Offset ROWS FETCH NEXT @PageSize ROWS ONLY;";
 
         var parameters = new { Offset = offset, PageSize = pageSize };
         return await _dapper.QueryAsync<ProductData>(sql, parameters);
@@ -64,5 +64,12 @@ public class ProductRepository : RepositoryBase<Product>
             .Where(s => s.SupplierId == id)
             .AsNoTracking()
             .ToListAsync();
+    }
+
+    public async Task<bool> ExistsRecordExcluded(string? code, Guid excludedId)
+    {
+        return await _dbSet.AnyAsync(p => 
+            p.Code == code && p.UniqueId != excludedId
+        );
     }
 }

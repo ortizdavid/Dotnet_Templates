@@ -2,6 +2,8 @@ using TemplateMVC.Common.Exceptions;
 using TemplateMVC.Helpers;
 using TemplateMVC.Core.Models.Products;
 using TemplateMVC.Core.Repositories.Products;
+using TemplateMVC.Common.Helpers;
+using Azure.Core;
 
 namespace TemplateMVC.Core.Services.Products;
 
@@ -16,7 +18,7 @@ public class CategoryService
         _contextAccessor = contextAccessor;
     }
 
-    public async Task CreateCategory(CategoryViewModel viewModel)
+    public async Task CreateCategory(CreateCategoryViewModel viewModel)
     {
         if (viewModel is null)
         {
@@ -34,7 +36,7 @@ public class CategoryService
         await _repository.CreateAsync(category);
     }
 
-    public async Task UpdateCategory(CategoryViewModel viewModel, Guid uniqueId)
+    public async Task UpdateCategory(UpdateCategoryViewModel viewModel, Guid uniqueId)
     {
         if (viewModel is null)
         {
@@ -45,20 +47,24 @@ public class CategoryService
         {
             throw new NotFoundException("Category not found");
         }
+        if (await _repository.ExistsRecordExcluded(viewModel.CategoryName, uniqueId))
+        {
+            throw new ConflictException($"Category Name '{viewModel.CategoryName}' already used");
+        }
         category.CategoryName = viewModel.CategoryName;
         category.Description = viewModel.Description;
         category.UpdatedAt = DateTime.UtcNow;
         await _repository.UpdateAsync(category);
     }
 
-    public async Task<Pagination<Category>> GetAllCategories(PaginationParam param)
+    public async Task<Pagination<Category>> GetAllCategories(PaginationParam param, SearchFilter filter)
     {
         if (param is null)
         {
             throw new BadRequestException("Please provide 'PageIndex' and 'PageSize'");
         }
         var count = await _repository.CountAsync();
-        var categories = await _repository.GetAllAsync(param.PageSize, param.PageIndex);
+        var categories = await _repository.GetAllStortedAsync(param.PageSize, param.PageIndex, filter.SearchString, filter.SortOrder);
         var pagination = new Pagination<Category>(categories, count, param.PageIndex, param.PageSize, _contextAccessor);  
         return pagination;
     }

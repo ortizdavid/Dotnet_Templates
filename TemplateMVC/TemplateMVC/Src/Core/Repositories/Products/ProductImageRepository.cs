@@ -18,7 +18,7 @@ public class ProductImageRepository : RepositoryBase<ProductImage>
         try
         {
             var images = await GetAllByProductAsync(productId);
-            _context.ProductImages.RemoveRange(images);
+            _dbSet.RemoveRange(images);
             await _context.SaveChangesAsync(); 
         }
         catch (Exception)
@@ -29,7 +29,7 @@ public class ProductImageRepository : RepositoryBase<ProductImage>
 
     public async Task<IEnumerable<ProductImage>> GetAllByProductAsync(int productId)
     {
-        var images = await _context.ProductImages
+        var images = await _dbSet
                 .OrderBy(img => img.ImageId)
                 .Where(img => img.ProductId == productId)
                 .ToListAsync();
