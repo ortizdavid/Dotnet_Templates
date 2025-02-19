@@ -1,6 +1,6 @@
 @{
     Layout = "_Layout";
-    ViewBag.Title = "Import CSV"; 
+    ViewBag.Title = "Upload Image";
 }
 
 @if (!ViewData.ModelState.IsValid)
@@ -10,12 +10,12 @@
     </div>
 }
 
-<form asp-controller="Categories" asp-action="ImportCSV" method="post" enctype="multipart/form-data">
+<form asp-controller="Home" asp-action="UploadImage" method="post" enctype="multipart/form-data">
     @Html.AntiForgeryToken()
     
     <div class="form-group">
-        <label for="file" class="control-label">CSV File</label>
-        <input type="file" name="file" id="file" accept=".csv" class="form-control">
+        <label for="file" class="control-label">Image:</label>
+        <input type="file" name="file" id="file" accept=".jpg,.jpeg,.png" class="form-control">
     </div>
 
     <br>

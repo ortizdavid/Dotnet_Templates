@@ -5,6 +5,7 @@ using TemplateMVC.Common.Exceptions;
 using TemplateMVC.Helpers;
 using TemplateMVC.Core.Models.Products;
 using TemplateMVC.Core.Services.Products;
+using TemplateMVC.Common.Helpers;
 
 namespace TemplateMVC.Core.Controllers.Products;
 
@@ -13,50 +14,67 @@ public class ProductsController : Controller
 {
     private readonly ProductService _service;
     private readonly ILogger<ProductsController> _logger;
+    private readonly IHttpContextAccessor _contextAccessor;
+
+    private HttpContext? _context => _contextAccessor?.HttpContext;
     
-    public ProductsController(ProductService service, ILogger<ProductsController> logger)
+    public ProductsController(ProductService service, ILogger<ProductsController> logger, IHttpContextAccessor contextAccessor)
     {
         _service = service;
         _logger = logger;
+        _contextAccessor = contextAccessor;
     }
 
     [HttpGet]
-    public IActionResult Index()
+    public async Task<IActionResult> GetAllProducts(SearchFilter filter)
+    {
+        try
+        {
+            var param = PaginationParam.GetFromContext(_context);
+            var products = await _service.GetAllProducts(param, filter);
+            return View(products);
+        }
+        catch (AppException ex)
+        {
+            ModelState.AddModelError("", ex.Message);
+            return View();
+        }
+    }
+
+    [HttpGet("create")]
+    public IActionResult Create()
     {
         return View();
     }
 
-    public async Task<IActionResult> GetAllProducts([FromQuery]PaginationParam param)
+    [HttpPost("create")]
+    public async Task<IActionResult> Create(CreateProductViewModel viewModel)
     {
         try
         {
-            var products = await _service.GetAllProducts(param);
-            return Ok(products);
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+            await _service.CreateProduct(viewModel);
+            _logger.LogInformation($"Product '{viewModel.ProductName}' created.");
+            return Redirect("/products");
         }
         catch (AppException ex)
         {
-            return StatusCode(ex.StatusCode, new { Message = ex.Message });
+            ModelState.AddModelError("", ex.Message);
+            return View();
         }
     }
 
-    [HttpPost]
-    public async Task<IActionResult> CreateProduct(CreateProductViewModel viewModel)
+    [HttpGet("{uniqueId}/edit")]
+    public IActionResult Edit(Guid uniqueId)
     {
-        try
-        {
-            await _service.CreateProduct(viewModel);
-            var msg = $"Product '{viewModel.ProductName}' created.";
-            _logger.LogInformation(msg);
-            return StatusCode((int)HttpStatusCode.Created, new { Message = msg });
-        }
-        catch (AppException ex)
-        {
-            return StatusCode(ex.StatusCode, new { Message = ex.Message });
-        }
+        return View();
     }
 
     [HttpPut("{uniqueId}")]
-    public async Task<IActionResult> UpdateProduct(UpdateProductViewModel viewModel, Guid uniqueId)
+    public async Task<IActionResult> Edit(UpdateProductViewModel viewModel, Guid uniqueId)
     {
         try
         {
@@ -67,7 +85,8 @@ public class ProductsController : Controller
         }
         catch (AppException ex)
         {
-            return StatusCode(ex.StatusCode, new { Message = ex.Message });
+            ModelState.AddModelError("", ex.Message);
+            return View();
         }
     }
 
@@ -81,7 +100,8 @@ public class ProductsController : Controller
         }
         catch (AppException ex)
         {
-            return StatusCode(ex.StatusCode, new { Message = ex.Message });
+            ModelState.AddModelError("", ex.Message);
+            return View();
         }
     }
 
@@ -96,7 +116,8 @@ public class ProductsController : Controller
         }
         catch (AppException ex)
         {
-            return StatusCode(ex.StatusCode, new { Message = ex.Message });
+            ModelState.AddModelError("", ex.Message);
+            return View();
         }
     }
 
@@ -112,7 +133,8 @@ public class ProductsController : Controller
         }
         catch (AppException ex)
         {
-            return StatusCode(ex.StatusCode, new { Message = ex.Message });
+            ModelState.AddModelError("", ex.Message);
+            return View();
         }
     }
 
@@ -126,7 +148,8 @@ public class ProductsController : Controller
         }
         catch (AppException ex)
         {
-            return StatusCode(ex.StatusCode, new { Message = ex.Message });
+            ModelState.AddModelError("", ex.Message);
+            return View();
         }
     }
 
@@ -142,7 +165,8 @@ public class ProductsController : Controller
         }
         catch (AppException ex)
         {
-            return StatusCode(ex.StatusCode, new { Message = ex.Message });
+            ModelState.AddModelError("", ex.Message);
+            return View();
         }
     }
 }

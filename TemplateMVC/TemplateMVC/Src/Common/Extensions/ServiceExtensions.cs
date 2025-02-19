@@ -13,7 +13,7 @@ public static class ServiceExtensions
         // Auth
         services.AddTransient<AuthService>();
         services.AddTransient<RoleService>();
-        services.AddTransient<UserService>();
+        services.AddTransient<IUserService, UserService>();
 
         // Products
         services.AddTransient<CategoryService>();

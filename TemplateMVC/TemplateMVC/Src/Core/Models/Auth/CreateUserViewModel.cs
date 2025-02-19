@@ -9,8 +9,6 @@ namespace TemplateMVC.Core.Models.Auth
         [DisplayName("Role")]
         public int RoleId { get; set; }
 
-        public IEnumerable<Role> Roles { get; set; } = Enumerable.Empty<Role>();
-
         [Required]
         [StringLength(150)]
         [DisplayName("User Name")]
@@ -31,5 +29,7 @@ namespace TemplateMVC.Core.Models.Auth
         [StringLength(250)]
         [DisplayName("Password Confirmation")]
         public string? PasswordConfirmation { get; set; }
+        
+        public IEnumerable<Role> Roles { get; set; } = Enumerable.Empty<Role>();
     }
 }

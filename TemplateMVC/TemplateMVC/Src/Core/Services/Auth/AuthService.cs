@@ -8,12 +8,12 @@ namespace TemplateMVC.Core.Services.Auth;
 
 public class AuthService
 {
-    private readonly UserService _userService;
+    private readonly IUserService _userService;
     private readonly EmailService _emailService;
     private readonly UrlHelperService _urlService;
     private readonly IHttpContextAccessor _contextAccessor;
 
-    public AuthService(UserService userService, EmailService emailService, UrlHelperService urlService, IHttpContextAccessor contextAcessor)
+    public AuthService(IUserService userService, EmailService emailService, UrlHelperService urlService, IHttpContextAccessor contextAcessor)
     {
         _userService = userService;
         _emailService = emailService;

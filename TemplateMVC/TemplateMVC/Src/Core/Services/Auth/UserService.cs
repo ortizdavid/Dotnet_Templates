@@ -6,7 +6,7 @@ using TemplateMVC.Common.Helpers;
 
 namespace TemplateMVC.Core.Services.Auth;
 
-public class UserService
+public class UserService : IUserService
 {
     private readonly UserRepository _repository;
     private readonly IHttpContextAccessor _contextAccessor;

@@ -3,6 +3,7 @@ using TemplateMVC.Helpers;
 using TemplateMVC.Core.Models.Products;
 using TemplateMVC.Core.Repositories;
 using TemplateMVC.Core.Repositories.Products;
+using TemplateMVC.Common.Helpers;
 
 namespace TemplateMVC.Core.Services.Products;
 
@@ -70,7 +71,7 @@ public class ProductService
         await _repository.UpdateAsync(product);
     }
 
-    public async Task<Pagination<ProductData>> GetAllProducts(PaginationParam param)
+    public async Task<Pagination<ProductData>> GetAllProducts(PaginationParam param, SearchFilter filter)
     {
         if (param is null)
         {

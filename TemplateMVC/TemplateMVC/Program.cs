@@ -1,3 +1,4 @@
+using Microsoft.Extensions.FileProviders;
 using TemplateMVC.Common.Extensions;
 using TemplateMVC.Common.Helpers;
 using TemplateMVC.Common.Middlewares;
@@ -46,6 +47,13 @@ internal class Program
         app.UseRouting();
         app.UseAuthorization();
         app.MapStaticAssets();
+
+        app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "Resources")),
+    RequestPath = "/Resources"
+});
+
 
         app.MapControllerRoute(
             name: "default",

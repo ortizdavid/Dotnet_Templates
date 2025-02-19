@@ -5,6 +5,7 @@ using TemplateMVC.Core.Models.Products;
 using TemplateMVC.Core.Models.Suppliers;
 using TemplateMVC.Core.Repositories;
 using TemplateMVC.Core.Repositories.Suppliers;
+using TemplateMVC.Common.Helpers;
 
 namespace TemplateMVC.Core.Services.Suppliers;
 
@@ -21,7 +22,7 @@ public class SupplierService
         _contextAccessor = contextAccessor;
     }
 
-    public async Task CreateSupplier(SupplierViewModel viewModel)
+    public async Task CreateSupplier(CreateSupplierViewModel viewModel)
     {
         if (viewModel is null)
         {
@@ -55,7 +56,7 @@ public class SupplierService
         await _repository.CreateAsync(supplier);
     }
 
-    public async Task UpdateSupplier(SupplierViewModel viewModel, Guid uniqueId)
+    public async Task UpdateSupplier(UpdateSupplierViewModel viewModel, Guid uniqueId)
     {
         if (viewModel is null)
         {
@@ -65,6 +66,10 @@ public class SupplierService
         if (supplier is null)
         {
             throw new NotFoundException($"Supplier with ID '{uniqueId}' not found.");
+        }
+        if (await _repository.ExistsRecordExcluded(viewModel.IdentificationNumber, viewModel.Email, viewModel.PrimaryPhone, viewModel.SecondaryPhone, uniqueId))
+        {
+            throw new ConflictException("Identification or Email or Phones is already in use"); 
         }
         supplier.SupplierName = viewModel.SupplierName;
         supplier.IdentificationNumber = viewModel.IdentificationNumber;
@@ -76,14 +81,14 @@ public class SupplierService
         await _repository.UpdateAsync(supplier);
     }
 
-    public async Task<Pagination<Supplier>> GetAllSuppliers(PaginationParam param)
+    public async Task<Pagination<Supplier>> GetAllSuppliers(PaginationParam param, SearchFilter filter)
     {
         if (param is null)
         {
             throw new BadRequestException("Please provide 'PageIndex' and 'PageSize'");
         }
         var count = await _repository.CountAsync();
-        var suppliers = await _repository.GetAllAsync(param.PageSize, param.PageIndex);
+        var suppliers = await _repository.GetAllStortedAsync(param.PageSize, param.PageIndex, filter.SearchString, filter.SortOrder);
         var pagination = new Pagination<Supplier>(suppliers, count, param.PageIndex, param.PageSize, _contextAccessor);
         return pagination;
     }

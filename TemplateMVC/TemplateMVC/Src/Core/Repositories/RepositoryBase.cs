@@ -1,6 +1,7 @@
 
 using Microsoft.EntityFrameworkCore;
 using TemplateMVC.Core.Models;
+using TemplateMVC.Core.Models.Suppliers;
 
 namespace TemplateMVC.Core.Repositories;
 

@@ -9,10 +9,10 @@ namespace TemplateMVC.Core.Controllers.Auth;
 public class AuthController : Controller
 {
     private readonly AuthService _service;
-    private readonly UserService _userService;
+    private readonly IUserService _userService;
     private readonly ILogger<AuthController> _logger;
     
-    public AuthController(AuthService service, UserService userService, ILogger<AuthController> logger)
+    public AuthController(AuthService service, IUserService userService, ILogger<AuthController> logger)
     {
         _service = service;
         _userService = userService;

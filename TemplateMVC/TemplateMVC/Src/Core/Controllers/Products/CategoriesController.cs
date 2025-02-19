@@ -140,6 +140,10 @@ public class CategoriesController : Controller
     {
         try
         {
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
             await _service.DeleteCategory(uniqueId);
             _logger.LogInformation($"Category deleted.");
             return Redirect("/categories");
@@ -147,24 +151,19 @@ public class CategoriesController : Controller
         catch (AppException ex)
         {
             ModelState.AddModelError("", ex.Message);
-            return View();  
+            return View(viewModel);  
         }
     }
 
     [HttpGet("import-csv")]
-    public IActionResult ImportCsv()
+    public IActionResult ImportCSV()
     {
         return View();
     }
 
     [HttpPost("import-csv")]
-    public async Task<IActionResult> ImportCsv(IFormFile file)
+    public async Task<IActionResult> ImportCSV(IFormFile file)
     {
-        if (file == null || file.Length == 0)
-        {
-            ModelState.AddModelError("file", "Please select a CSV file.");
-            return View();
-        }
         try
         {
             if (!ModelState.IsValid)

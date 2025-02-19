@@ -3,9 +3,19 @@
     ViewBag.Title = "Current User";
 }
 
-<p><strong>Use Name: </strong>@ViewBag.LoggedUser.UserName</p>
-<p><strong>Role: </strong>@ViewBag.LoggedUser.RoleName</p>
-<p><strong>Email: </strong>@ViewBag.LoggedUser.Email</p>
-<p><strong>Created At: </strong>@ViewBag.LoggedUser.CreatedAt</p>
-<p><strong>Updated At: </strong>@ViewBag.LoggedUser.UpdatedAt</p>
+@ViewBag.UserImage
+<div class="card">
+    <div class="card-body">
+        <img src="/Resources/Uploads/Users/@ViewBag.LoggedUser.Image" width="100" height="100" class="img img-thumbnail" alt="User Image">
+        <p><strong>Use Name: </strong>@ViewBag.LoggedUser.UserName</p>
+        <p><strong>Role: </strong>@ViewBag.LoggedUser.RoleName</p>
+        <p><strong>Email: </strong>@ViewBag.LoggedUser.Email</p>
+        <p><strong>Created At: </strong>@ViewBag.LoggedUser.CreatedAt</p>
+        <p><strong>Updated At: </strong>@ViewBag.LoggedUser.UpdatedAt</p> 
+    </div>
+    <div class="card-footer">
+        <a href="/home/upload-image" class="btn btn-primary">Upload Image</a>
+        <a href="/home/change-password" class="btn btn-primary">Change Password</a>
+    </div>
+</div>
 
