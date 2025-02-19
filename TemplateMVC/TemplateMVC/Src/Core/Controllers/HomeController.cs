@@ -1,6 +1,7 @@
 using System.Drawing;
 using Microsoft.AspNetCore.Mvc;
 using TemplateMVC.Common.Exceptions;
+using TemplateMVC.Core.Models.Auth;
 using TemplateMVC.Core.Services.Auth;
 
 namespace TemplateMVC.Core.Controllers;
@@ -64,10 +65,29 @@ public class HomeController : Controller
     }
 
     [HttpGet("change-password")]
-    public async Task<IActionResult> ChangePassword()
+    public IActionResult ChangePassword()
     {
-        var loggedUser = await _authService.GetLoggedUser();
-        ViewBag.LoggedUser = loggedUser;
         return View();
+    }
+
+    [HttpPost("change-password")]
+    public async Task<IActionResult> ChangePassword(ChangePasswordViewModel viewModel)
+    {
+        try
+        {
+            if (!ModelState.IsValid)
+            {
+                return View();   
+            }
+            var loggedUser = await _authService.GetLoggedUser();
+            ViewBag.LoggedUser = loggedUser;
+            await _userService.ChangePassword(viewModel, loggedUser.UniqueId);
+            return Redirect("/home/current-user");
+        }
+        catch (AppException ex)
+        {
+            ModelState.AddModelError("", ex.Message);
+            return View();
+        }
     }
 }
