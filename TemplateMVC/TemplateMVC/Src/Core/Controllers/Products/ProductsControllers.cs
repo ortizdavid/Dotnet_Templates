@@ -1,11 +1,10 @@
-using System.Net;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TemplateMVC.Common.Exceptions;
 using TemplateMVC.Helpers;
 using TemplateMVC.Core.Models.Products;
 using TemplateMVC.Core.Services.Products;
 using TemplateMVC.Common.Helpers;
+using TemplateMVC.Core.Services.Suppliers;
 
 namespace TemplateMVC.Core.Controllers.Products;
 
@@ -13,48 +12,69 @@ namespace TemplateMVC.Core.Controllers.Products;
 public class ProductsController : Controller
 {
     private readonly ProductService _service;
+    private readonly CategoryService _categoryService;
+    private readonly SupplierService _supplierService;
     private readonly ILogger<ProductsController> _logger;
     private readonly IHttpContextAccessor _contextAccessor;
 
     private HttpContext? _context => _contextAccessor?.HttpContext;
     
-    public ProductsController(ProductService service, ILogger<ProductsController> logger, IHttpContextAccessor contextAccessor)
+    public ProductsController(ProductService service, CategoryService categoryService, SupplierService supplierService,
+        ILogger<ProductsController> logger, IHttpContextAccessor contextAccessor)
     {
         _service = service;
+        _categoryService = categoryService;
+        _supplierService = supplierService;
         _logger = logger;
         _contextAccessor = contextAccessor;
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAllProducts(SearchFilter filter)
+    public async Task<IActionResult> Index(SearchFilter filter)
     {
         try
         {
             var param = PaginationParam.GetFromContext(_context);
+            ViewBag.PaginationParam = param;
+            ViewBag.CurrentSearch = filter.SearchString;
+            ViewBag.CurrentSort = filter.SortOrder;
+            ViewBag.NameSort = (filter.SortOrder == "name_desc") ? "name_asc" : "name_desc";
+            ViewBag.CodeSort = (filter.SortOrder == "code_desc") ? "code_asc" : "code_desc";
+            ViewBag.CategorySort = (filter.SortOrder == "category_desc") ? "category_asc" : "category_desc";
+            ViewBag.SupplierSort = (filter.SortOrder == "supplier_desc") ? "supplier_asc" : "supplier_desc";
+
             var products = await _service.GetAllProducts(param, filter);
             return View(products);
         }
-        catch (AppException ex)
+         catch (AppException ex)
         {
+            _logger.LogError(ex.Message);
             ModelState.AddModelError("", ex.Message);
             return View();
         }
     }
 
     [HttpGet("create")]
-    public IActionResult Create()
+    public async Task<IActionResult> Create()
     {
-        return View();
+        var model = new CreateProductViewModel()
+        {
+            Categories = await _categoryService.GetAllNotPaginated(),
+            Suppliers = await _supplierService.GetAllNotPaginated()
+        };
+        return View(model);
     }
 
     [HttpPost("create")]
     public async Task<IActionResult> Create(CreateProductViewModel viewModel)
     {
+        await _categoryService.PopulateToCreateProuduct(viewModel);
+        await _supplierService.PopulateToCreateProuduct(viewModel);
         try
         {
             if (!ModelState.IsValid)
             {
-                return View();
+                return View(viewModel);
             }
             await _service.CreateProduct(viewModel);
             _logger.LogInformation($"Product '{viewModel.ProductName}' created.");
@@ -62,62 +82,102 @@ public class ProductsController : Controller
         }
         catch (AppException ex)
         {
+            _logger.LogError(ex.Message);
             ModelState.AddModelError("", ex.Message);
             return View();
         }
     }
 
     [HttpGet("{uniqueId}/edit")]
-    public IActionResult Edit(Guid uniqueId)
+    public async Task<IActionResult> Edit(Guid uniqueId)
     {
-        return View();
+        var product = await _service.GetProductByUniqueId(uniqueId);
+        var model = new UpdateProductViewModel()
+        {
+            ProductName = product.ProductName,
+            Code = product.Code,
+            UnitPrice = product.UnitPrice,
+            Description = product.Description,
+            CategoryId = product.CategoryId,
+            SupplierId = product.SupplierId,
+            UniqueId = product.UniqueId,
+            Categories = await _categoryService.GetAllNotPaginated(),
+            Suppliers = await _supplierService.GetAllNotPaginated()
+        };
+        return View(model);
     }
 
-    [HttpPut("{uniqueId}")]
+    [HttpPost("{uniqueId}/edit")]
     public async Task<IActionResult> Edit(UpdateProductViewModel viewModel, Guid uniqueId)
     {
+        await _categoryService.PopulateToUpdateProduct(viewModel);
+        await _supplierService.PopulateToUpdateProduct(viewModel);
         try
         {
+            if (!ModelState.IsValid)
+            {
+                return View(viewModel);
+            }
             await _service.UpdateProduct(viewModel, uniqueId);
             var msg = $"Product '{uniqueId}' updated.";
             _logger.LogInformation(msg);
-            return Ok(new { Message = msg });
+            return Redirect($"/products/{uniqueId}/details");
         }
         catch (AppException ex)
         {
+            _logger.LogError(ex.Message);
             ModelState.AddModelError("", ex.Message);
-            return View();
+            return View(viewModel);
         }
     }
 
-    [HttpGet("{uniqueId}")]
-    public async Task<IActionResult> GetProductByUniqueId(Guid uniqueId)
+    [HttpGet("{uniqueId}/details")]
+    public async Task<IActionResult> Details(Guid uniqueId)
     {
         try 
         {
             var product = await _service.GetProductByUniqueId(uniqueId);
-            return Ok(product);
+            return View(product);
         }
-        catch (AppException ex)
+         catch (AppException ex)
         {
+            _logger.LogError(ex.Message);
             ModelState.AddModelError("", ex.Message);
             return View();
         }
     }
 
-    [HttpDelete("{uniqueId}")]
-    public async Task<IActionResult> DeleteProduct(Guid uniqueId)
+    [HttpGet("{uniqueId}/delete")]
+    public async Task<IActionResult> Delete(Guid uniqueId)
+    {
+        var product = await _service.GetProductByUniqueId(uniqueId);
+        var model = new DeleteProductViewModel()
+        {
+            ProductName = product.ProductName,
+            Code = product.Code,
+            UnitPrice = product.UnitPrice
+        };
+        return View(model);
+    }
+
+    [HttpPost("{uniqueId}/delete")]
+    public async Task<IActionResult> Delete(DeleteProductViewModel viewModel, Guid uniqueId)
     {
         try
         {
+            if (!ModelState.IsValid)
+            {
+                return View(viewModel);
+            }
             await _service.DeleteProduct(uniqueId);
-            _logger.LogInformation($"Product '{uniqueId}' deleteted.");
-            return NoContent();
+            _logger.LogInformation($"Product with ID '{uniqueId}' deleteted.");
+            return Redirect("/products");
         }
         catch (AppException ex)
         {
+            _logger.LogError(ex.Message);
             ModelState.AddModelError("", ex.Message);
-            return View();
+            return View(viewModel);
         }
     }
 
@@ -133,6 +193,7 @@ public class ProductsController : Controller
         }
         catch (AppException ex)
         {
+            _logger.LogError(ex.Message);
             ModelState.AddModelError("", ex.Message);
             return View();
         }
@@ -148,26 +209,36 @@ public class ProductsController : Controller
         }
         catch (AppException ex)
         {
+            _logger.LogError(ex.Message);
             ModelState.AddModelError("", ex.Message);
             return View();
         }
     }
 
+    [HttpGet("import-csv")]
+    public IActionResult ImportCSV()
+    {
+        return View();
+    }
+
     [HttpPost("import-csv")]
-    public async Task<IActionResult> ImportProducts(IFormFile file)
+    public async Task<IActionResult> ImportCSV(IFormFile file)
     {
         try
         {
+            if (!ModelState.IsValid)
+            {
+                return View();   
+            }
             await _service.ImportProductsCSV(file);
-            var msg = $"Products imported by CSV successfully";
-            _logger.LogInformation(msg);
-            return StatusCode((int)HttpStatusCode.Created, new { Message = msg });
+            _logger.LogInformation($"Products imported by CSV successfully");
+            return Redirect("/products");
         }
         catch (AppException ex)
         {
+            _logger.LogError(ex.Message);
             ModelState.AddModelError("", ex.Message);
             return View();
         }
     }
 }
-

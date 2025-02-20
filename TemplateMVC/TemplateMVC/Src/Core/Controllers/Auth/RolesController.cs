@@ -39,8 +39,9 @@ public class RolesController : Controller
             var roles = await _service.GetAllRoles(param, filter);
             return View(roles);
         }
-        catch (AppException ex)
+         catch (AppException ex)
         {
+            _logger.LogError(ex.Message);
             ModelState.AddModelError("", ex.Message);
             return View();
         }
@@ -66,8 +67,9 @@ public class RolesController : Controller
             _logger.LogInformation($"Role '{viewModel.RoleName}' created");
             return Redirect("/roles");
         }
-        catch (AppException ex)
+         catch (AppException ex)
         {
+            _logger.LogError(ex.Message);
             ModelState.AddModelError("", ex.Message);
             return View();
         }
@@ -115,8 +117,9 @@ public class RolesController : Controller
             var role = await _service.GetRoleByUniqueId(uniqueId);
             return View(role);
         }
-        catch (AppException ex)
+         catch (AppException ex)
         {
+            _logger.LogError(ex.Message);
             ModelState.AddModelError("", ex.Message);
             return View();
         }

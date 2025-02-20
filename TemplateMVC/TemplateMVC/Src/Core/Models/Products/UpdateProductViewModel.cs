@@ -6,8 +6,6 @@ namespace TemplateMVC.Core.Models.Products;
 
 public class UpdateProductViewModel
 {
-    public Guid UniqueId { get; set; }
-
     [Required]
     [DisplayName("Product Name")]
     [StringLength(50, MinimumLength = 3)]
@@ -20,7 +18,7 @@ public class UpdateProductViewModel
 
     [Required]
     [DisplayName("Unit Price")]
-    [Range(0, 1_000_000)]
+    [Range(0.01, double.MaxValue)]
     public decimal UnitPrice { get; set; }
 
     [StringLength(100, MinimumLength = 3)]
@@ -34,6 +32,8 @@ public class UpdateProductViewModel
     [Required]
     [DisplayName("Supplier")]
     public int SupplierId { get; set; }
+
+    public Guid UniqueId { get; set; }
     
     public IEnumerable<Category> Categories { get; set; } = Enumerable.Empty<Category>();
     

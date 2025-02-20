@@ -38,8 +38,9 @@ public class AuthController : Controller
             _logger.LogInformation($"User '{viewModel.UserName}' logged in sucessully");
             return Redirect("/home/index");
         }
-        catch (AppException ex)
+         catch (AppException ex)
         {
+            _logger.LogError(ex.Message);
             ModelState.AddModelError("", ex.Message);
             return View();
         }

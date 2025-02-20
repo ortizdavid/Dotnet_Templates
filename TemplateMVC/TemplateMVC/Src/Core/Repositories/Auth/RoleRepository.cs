@@ -45,11 +45,6 @@ public class RoleRepository : RepositoryBase<Role>
         return await _dapper.QueryAsync<Role>(sql, parameters);
     }
 
-    public async Task<IEnumerable<Role>> GetAllNoLimitAsync()
-    {
-        return await _dbSet.ToListAsync();
-    }
-
     public async Task<Role?> GetByCodeAsync(string code)
     {
         return await _dbSet

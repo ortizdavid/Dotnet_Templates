@@ -191,4 +191,19 @@ public class SupplierService
         var products = await _productRepository.GetAllBySupplierAsync(supplier.SupplierId);
         return products;
     }
+
+    public async Task<IEnumerable<Supplier>> GetAllNotPaginated()
+    {
+        return await _repository.GetAllNotPaginatedAsync();
+    }
+
+    public async Task PopulateToCreateProuduct(CreateProductViewModel viewModel)
+    {
+        viewModel.Suppliers = await _repository.GetAllNotPaginatedAsync();
+    }
+
+    public async Task PopulateToUpdateProduct(UpdateProductViewModel viewModel)
+    {
+        viewModel.Suppliers = await _repository.GetAllNotPaginatedAsync();
+    }
 }

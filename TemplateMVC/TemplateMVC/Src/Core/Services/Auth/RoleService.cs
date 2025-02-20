@@ -71,12 +71,6 @@ public class RoleService
         return pagination;
     }
 
-    public async Task<IEnumerable<Role>> GetRolesNotPaginated()
-    {
-        var roles = await _repository.GetAllNoLimitAsync();
-        return roles;
-    }
-
     public async Task<Role> GetRoleByUniqueId(Guid uniqueId)
     {
         var role = await _repository.GetByUniqueIdAsync(uniqueId);
@@ -105,5 +99,20 @@ public class RoleService
             throw new NotFoundException($"Role with ID '{uniqueId}' not found");
         } 
         await _repository.DeleteAsync(role);
+    }
+    
+    public async Task<IEnumerable<Role>> GetRolesNotPaginated()
+    {
+        return await _repository.GetAllNotPaginatedAsync();
+    }
+
+    public async Task PopulateToCreateUserAsync(CreateUserViewModel viewModel)
+    {
+        viewModel.Roles = await _repository.GetAllNotPaginatedAsync();
+    }
+
+    public async Task PopulateToUpdateUserAsync(UpdateUserViewModel viewModel)
+    {
+        viewModel.Roles = await _repository.GetAllNotPaginatedAsync();
     }
 }

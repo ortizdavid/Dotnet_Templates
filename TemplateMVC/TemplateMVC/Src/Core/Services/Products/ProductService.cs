@@ -78,7 +78,7 @@ public class ProductService
             throw new BadRequestException("Please provide 'PageIndex' and 'PageSize'");
         }
         var count = await _repository.CountAsync();
-        var products = await _repository.GetAllDataAsync(param.PageSize, param.PageIndex);
+        var products = await _repository.GetAllDataSortedAsync(param.PageSize, param.PageIndex, filter.SearchString, filter.SortOrder);
         var pagination = new Pagination<ProductData>(products, count, param.PageIndex, param.PageSize, _contextAccessor);
         return pagination;
     }

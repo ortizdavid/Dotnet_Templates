@@ -11,12 +11,14 @@ public class HomeController : Controller
 {
     private readonly AuthService _authService;
     private readonly IUserService _userService;
+    private readonly ILogger<HomeController> _logger;
     private readonly IConfiguration _configuration;
 
-    public HomeController(AuthService authService, IUserService userService, IConfiguration configuration)
+    public HomeController(AuthService authService, IUserService userService, ILogger<HomeController> logger, IConfiguration configuration)
     {
         _authService = authService;
         _userService = userService;
+        _logger = logger;
         _configuration = configuration;
     }
 
@@ -57,8 +59,9 @@ public class HomeController : Controller
             await _userService.UploadUserImage(file, loggedUser.UniqueId);
             return Redirect("/home/current-user");
         }
-        catch (AppException ex)
+         catch (AppException ex)
         {
+            _logger.LogError(ex.Message);
             ModelState.AddModelError("", ex.Message);
             return View();
         }
@@ -84,8 +87,9 @@ public class HomeController : Controller
             await _userService.ChangePassword(viewModel, loggedUser.UniqueId);
             return Redirect("/home/current-user");
         }
-        catch (AppException ex)
+         catch (AppException ex)
         {
+            _logger.LogError(ex.Message);
             ModelState.AddModelError("", ex.Message);
             return View();
         }

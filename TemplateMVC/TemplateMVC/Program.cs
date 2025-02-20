@@ -49,17 +49,15 @@ internal class Program
         app.MapStaticAssets();
 
         app.UseStaticFiles(new StaticFileOptions
-{
-    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "Resources")),
-    RequestPath = "/Resources"
-});
-
+        {
+            FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "Resources")),
+            RequestPath = "/Resources"
+        });
 
         app.MapControllerRoute(
             name: "default",
             pattern: "{controller=home}/{action=index}/{id?}")
             .WithStaticAssets();
-
 
         app.Run();
     }

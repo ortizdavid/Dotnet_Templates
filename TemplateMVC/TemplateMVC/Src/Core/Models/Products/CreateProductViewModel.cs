@@ -18,11 +18,11 @@ public class CreateProductViewModel
 
     [Required]
     [DisplayName("Unit Price")]
-    [Range(0, 1_000_000)]
+    [Range(0.01, double.MaxValue)]
     public decimal UnitPrice { get; set; }
 
     [StringLength(100, MinimumLength = 3)]
-    [DisplayName("Descrição")]
+    [DisplayName("Description")]
     public string? Description { get; set; }
     
     [Required]

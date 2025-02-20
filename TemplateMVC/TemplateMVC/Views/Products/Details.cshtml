@@ -1,0 +1,24 @@
+@model TemplateMVC.Core.Models.Products.ProductData;
+
+@{
+    Layout = "_Layout";
+    ViewBag.Title = "Product Details";
+}
+
+<div class="card">
+    <div class="card-body">
+        <p><strong>Product ID:</strong> @Model.ProductId</p>
+        <p><strong>Product Name:</strong> @Model.ProductName</p>
+        <p><strong>Code:</strong> @Model.Code</p>
+        <p><strong>Price:</strong> @Model.UnitPrice.ToString("C")</p>
+        <p><strong>Category:</strong> @Model.CategoryName</p>
+        <p><strong>Supplier:</strong> @Model.SupplierName</p>
+        <p><strong>Description:</strong> @Model.Description</p>
+        <p><strong>Created At:</strong> @Model.CreatedAt</p>
+        <p><strong>Updated At:</strong> @Model.UpdatedAt</p>
+    </div>
+    <div class="card-footer">
+        <a class="btn btn-primary" href="/products">Back to List</a>
+        <a class="btn btn-primary" href="/products/@Model.UniqueId/edit">Edit</a>
+    </div>
+</div>

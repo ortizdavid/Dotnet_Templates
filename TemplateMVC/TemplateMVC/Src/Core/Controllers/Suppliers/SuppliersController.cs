@@ -39,8 +39,9 @@ public class SuppliersController : Controller
             var suppliers = await _service.GetAllSuppliers(param, filter);
             return View(suppliers);
         }
-        catch (AppException ex)
+         catch (AppException ex)
         {
+            _logger.LogError(ex.Message);
             ModelState.AddModelError("", ex.Message);
             return View();
         }
@@ -66,8 +67,9 @@ public class SuppliersController : Controller
             _logger.LogInformation($"Supplier '{viewModel.SupplierName}' created.");
             return Redirect("/suppliers");
         }
-        catch (AppException ex)
+         catch (AppException ex)
         {
+            _logger.LogError(ex.Message);
             ModelState.AddModelError("", ex.Message);
             return View();
         }
@@ -81,8 +83,9 @@ public class SuppliersController : Controller
             var supplier = await _service.GetSupplierByUniqueId(uniqueId);
             return View(supplier);
         }
-        catch (AppException ex)
+         catch (AppException ex)
         {
+            _logger.LogError(ex.Message);
             ModelState.AddModelError("", ex.Message);
             return View();
         }
@@ -169,8 +172,9 @@ public class SuppliersController : Controller
             var products = await _service.GetSupplierProducts(uniqueId);
             return Ok(products);
         }
-        catch (AppException ex)
+         catch (AppException ex)
         {
+            _logger.LogError(ex.Message);
             ModelState.AddModelError("", ex.Message);
             return View();
         }
@@ -195,8 +199,9 @@ public class SuppliersController : Controller
             _logger.LogInformation($"Suppliers imported by CSV successfully");
             return Redirect("/suppliers");
         }
-        catch (AppException ex)
+         catch (AppException ex)
         {
+            _logger.LogError(ex.Message);
             ModelState.AddModelError("", ex.Message);
             return View();
         }

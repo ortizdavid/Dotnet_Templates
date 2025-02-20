@@ -1,0 +1,29 @@
+@model TemplateMVC.Core.Models.Products.DeleteProductViewModel;
+
+@{
+    Layout = "_Layout";
+    ViewBag.Title = "Delete Product";
+}
+
+<form asp-controller="Products" asp-action="Delete" asp-route-uniqueid="@Model.UniqueId" method="post">
+    @Html.AntiForgeryToken()
+    
+    <div class="form-group">
+        <label asp-for="ProductName" class="control-label"></label>
+        <input asp-for="ProductName" type="text" class="form-control" aria-required="true" readonly />
+    </div>
+    <div class="form-group">
+        <label asp-for="Code" class="control-label"></label>
+        <input asp-for="Code" type="text" class="form-control" aria-required="true" readonly />
+    </div>
+    <div class="form-group">
+        <label asp-for="UnitPrice" class="control-label"></label>
+        <input asp-for="UnitPrice" type="text" class="form-control" aria-required="true" readonly />
+    </div>
+
+    <br>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Confirm</button>
+        <a href="/suppliers/@Model.UniqueId/details" class="btn btn-secondary">Cancel</a>
+    </div>
+</form>

@@ -137,4 +137,18 @@ public class CategoryService
         return categories;
     }
 
+    public async Task<IEnumerable<Category>> GetAllNotPaginated()
+    {
+        return await _repository.GetAllNotPaginatedAsync();
+    }
+
+    public async Task PopulateToCreateProuduct(CreateProductViewModel viewModel)
+    {
+        viewModel.Categories = await _repository.GetAllNotPaginatedAsync();
+    }
+
+    public async Task PopulateToUpdateProduct(UpdateProductViewModel viewModel)
+    {
+        viewModel.Categories = await _repository.GetAllNotPaginatedAsync();
+    }
 }

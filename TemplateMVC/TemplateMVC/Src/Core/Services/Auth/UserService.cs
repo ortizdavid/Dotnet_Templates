@@ -227,5 +227,4 @@ public class UserService : IUserService
         }
         await _repository.DeleteAsync(user);
     }   
-   
 }

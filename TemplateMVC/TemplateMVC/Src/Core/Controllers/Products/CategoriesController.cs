@@ -100,10 +100,11 @@ public class CategoriesController : Controller
             _logger.LogInformation($"Category '{viewModel.CategoryName}' was updated.");
             return Redirect($"/categories/{uniqueId}/details");
         }
-        catch (AppException ex)
+         catch (AppException ex)
         {
+            _logger.LogError(ex.Message);
             ModelState.AddModelError("", ex.Message);
-            return View(viewModel);  
+            return View();
         }
     }
 
@@ -142,16 +143,17 @@ public class CategoriesController : Controller
         {
             if (!ModelState.IsValid)
             {
-                return View();
+                return View(viewModel);
             }
             await _service.DeleteCategory(uniqueId);
-            _logger.LogInformation($"Category deleted.");
+            _logger.LogInformation($"Category with ID '{uniqueId}' deleted.");
             return Redirect("/categories");
         }
         catch (AppException ex)
         {
+            _logger.LogError(ex.Message);
             ModelState.AddModelError("", ex.Message);
-            return View(viewModel);  
+            return View();
         }
     }
 

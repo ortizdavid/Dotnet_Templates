@@ -1,4 +1,117 @@
+@model Pagination<TemplateMVC.Core.Models.Products.ProductData>
+
 @{
     Layout = "_Layout";
     ViewBag.Title = "Products";
+
+    int pageIndex = ViewBag.PaginationParam.PageIndex;
+    int pageSize = ViewBag.PaginationParam.PageSize; 
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <form asp-action="Index" method="get" class="d-flex">
+        <div class="input-group">
+            <input type="text" name="SearchString" value="@ViewBag.CurrentSearch" 
+                   class="form-control" placeholder="Name,Code,Category or Supplier" />
+            <button type="submit" class="btn btn-primary">Search</button>
+        </div>
+        <a asp-action="Index" class="btn btn-outline-secondary ms-2">Reset</a>
+    </form>
+    
+    <div>
+        <a href="/products/create" class="btn btn-primary">Add New</a>
+        <a href="/products/import-csv" class="btn btn-primary">Import CSV</a>
+    </div>
+</div>
+
+@if (Model.Metadata.TotalItems > 0)
+{
+    <p><strong>Total: </strong>@Model.Metadata.TotalItems records</p>
+    <table class="table">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>
+                    <a href="/products?pageIndex=@pageIndex&pageSize=@pageSize&sortOrder=@ViewBag.NameSort">
+                       Product Name
+                    </a>
+                </th>
+                <th>
+                    <a href="/products?pageIndex=@pageIndex&pageSize=@pageSize&sortOrder=@ViewBag.CodeSort">
+                        Code
+                    </a
+                </th>
+                <th>
+                    <a href="/products?pageIndex=@pageIndex&pageSize=@pageSize&sortOrder=@ViewBag.CategorySort">
+                       Category
+                    </a>
+                </th>
+                <th>
+                    <a href="/products?pageIndex=@pageIndex&pageSize=@pageSize&sortOrder=@ViewBag.SupplierSort">
+                        Supplier
+                    </a
+                </th>
+                <th>Price</th>
+                <th>Created At</th>
+                <th>Options</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Items)
+            {
+                <tr>
+                    <td>@item.ProductId</td>
+                    <td>@item.ProductName</td>
+                    <td>@item.Code</td>
+                    <td>@item.CategoryName</td>
+                    <td>@item.SupplierName</td>
+                    <td>@item.UnitPrice.ToString("C")</td>
+                    <td>@item.CreatedAt</td>
+                    <td>
+                        <div class="btn-group">
+                            <a href="/products/@item.UniqueId/edit" class="btn btn-warning btn-sm">Edit</a>
+                            <a href="/products/@item.UniqueId/delete" class="btn btn-danger btn-sm">Delete</a>
+                            <a href="/products/@item.UniqueId/details" class="btn btn-info btn-sm">Details</a>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    @if (Model.HasNextPage())
+    {
+        <nav>
+            <ul class="pagination">
+                <li class="page-item @(Model.HasPreviousPage() ? "" : "disabled")">
+                    <a class="page-link" href="@(Model.HasPreviousPage() ? Model.Metadata.FirstPageUrl : "#")">First</a>
+                </li>
+                <li class="page-item @(Model.HasPreviousPage() ? "" : "disabled")">
+                    <a class="page-link" href="@(Model.HasPreviousPage() ? Model.Metadata.PreviousPageUrl : "#")">
+                        <i class="bi bi-chevron-left"></i> Previous
+                    </a>
+                </li>
+                <li class="page-item disabled">
+                    <span class="page-link">Page @(Model.Metadata.PageIndex+1) of @(Model.Metadata.TotalPages+1)</span>
+                </li>
+                <li class="page-item @(Model.HasNextPage() ? "" : "disabled")">
+                    <a class="page-link" href="@(Model.HasNextPage() ? Model.Metadata.NextPageUrl : "#")">
+                        Next <i class="bi bi-chevron-right"></i>
+                    </a>
+                </li>
+                <li class="page-item @(Model.HasNextPage() ? "" : "disabled")">
+                    <a class="page-link" href="@(Model.HasNextPage() ? Model.Metadata.LastPageUrl : "#")">Last</a>
+                </li>
+            </ul>
+        </nav>
+    }
+    else
+    {
+        <div class="alert alert-warning">No results found</div>
+    }
+}
+else
+{
+    <div class="alert alert-warning">
+        No records found
+    </div>
 }

@@ -84,6 +84,11 @@ public class RepositoryBase<T> : IRepository<T> where T : class
             .ToListAsync();
     }
 
+    public async Task<IEnumerable<T>> GetAllNotPaginatedAsync()
+    {
+        return await _dbSet.ToListAsync();
+    }
+
     public async Task<T?> GetByIdAsync(int id)
     {
         return await _dbSet.FindAsync(id);

@@ -10,14 +10,14 @@ namespace TemplateMVC.Core.Controllers.Auth;
 [Route("users")]
 public class UsersController : Controller
 {
-    private readonly UserService _service;
+    private readonly IUserService _service;
     private readonly AuthService _authService;
     private readonly RoleService _roleService;
     private readonly ILogger<UsersController> _logger;
     private readonly IHttpContextAccessor _contextAccessor;
     private HttpContext? _context => _contextAccessor.HttpContext;
 
-    public UsersController(UserService service, AuthService authService, RoleService roleService, ILogger<UsersController> logger, IHttpContextAccessor contextAccessor) 
+    public UsersController(IUserService service, AuthService authService, RoleService roleService, ILogger<UsersController> logger, IHttpContextAccessor contextAccessor) 
     {
         _service = service;
         _authService = authService;
@@ -41,8 +41,9 @@ public class UsersController : Controller
             var users = await _service.GetAllUsers(param, filter);
             return View(users);
         }
-        catch (AppException ex)
+         catch (AppException ex)
         {
+            _logger.LogError(ex.Message);
             ModelState.AddModelError("", ex.Message);
             return View();
         }
@@ -62,7 +63,7 @@ public class UsersController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(CreateUserViewModel viewModel)
     {
-        await PopulateRolesCreateAsync(viewModel);
+        await _roleService.PopulateToCreateUserAsync(viewModel);
         try
         {
             if (!ModelState.IsValid)
@@ -77,7 +78,6 @@ public class UsersController : Controller
         {
             _logger.LogError(ex.Message);
             ModelState.AddModelError("", ex.Message);
-            await PopulateRolesCreateAsync(viewModel);
             return View(viewModel);
         }
     }
@@ -102,7 +102,7 @@ public class UsersController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(UpdateUserViewModel viewModel, Guid uniqueId)
     {
-        await PopulateRolesUpdateAsync(viewModel);
+        await _roleService.PopulateToUpdateUserAsync(viewModel);
         try
         {
             if (!ModelState.IsValid)
@@ -117,7 +117,6 @@ public class UsersController : Controller
         {
             _logger.LogError(ex.Message);
             ModelState.AddModelError("", ex.Message);
-            await PopulateRolesUpdateAsync(viewModel);
             return View(viewModel);
         }
     }
@@ -139,8 +138,9 @@ public class UsersController : Controller
             _logger.LogInformation(msg);
             return View();
         }
-        catch (AppException ex)
+         catch (AppException ex)
         {
+            _logger.LogError(ex.Message);
             ModelState.AddModelError("", ex.Message);
             return View();
         }
@@ -156,8 +156,9 @@ public class UsersController : Controller
             _logger.LogInformation(msg);
             return View();
         }
-        catch (AppException ex)
+         catch (AppException ex)
         {
+            _logger.LogError(ex.Message);
             ModelState.AddModelError("", ex.Message);
             return View();
         }
@@ -172,8 +173,9 @@ public class UsersController : Controller
             _logger.LogInformation($"User with ID '{uniqueId}' was deleted");
             return NoContent();
         }
-        catch (AppException ex)
+         catch (AppException ex)
         {
+            _logger.LogError(ex.Message);
             ModelState.AddModelError("", ex.Message);
             return View();
         }
@@ -250,15 +252,5 @@ public class UsersController : Controller
             ModelState.AddModelError("", ex.Message);
             return View(viewModel);
         }
-    }
-
-    private async Task PopulateRolesCreateAsync(CreateUserViewModel viewModel)
-    {
-        viewModel.Roles = await _roleService.GetRolesNotPaginated();
-    }
-
-    private async Task PopulateRolesUpdateAsync(UpdateUserViewModel viewModel)
-    {
-        viewModel.Roles = await _roleService.GetRolesNotPaginated();
     }
 }
