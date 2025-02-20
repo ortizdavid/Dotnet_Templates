@@ -1,4 +1,4 @@
-@model TemplateMVC.Core.Models.Products.ProductData;
+@model TemplateMVC.Core.Models.Products.ProductDetailsViewModel;
 
 @{
     Layout = "_Layout";
@@ -7,18 +7,41 @@
 
 <div class="card">
     <div class="card-body">
-        <p><strong>Product ID:</strong> @Model.ProductId</p>
-        <p><strong>Product Name:</strong> @Model.ProductName</p>
-        <p><strong>Code:</strong> @Model.Code</p>
-        <p><strong>Price:</strong> @Model.UnitPrice.ToString("C")</p>
-        <p><strong>Category:</strong> @Model.CategoryName</p>
-        <p><strong>Supplier:</strong> @Model.SupplierName</p>
-        <p><strong>Description:</strong> @Model.Description</p>
-        <p><strong>Created At:</strong> @Model.CreatedAt</p>
-        <p><strong>Updated At:</strong> @Model.UpdatedAt</p>
+        <p><strong>Product ID:</strong> @Model.Product.ProductId</p>
+        <p><strong>Product Name:</strong> @Model.Product.ProductName</p>
+        <p><strong>Code:</strong> @Model.Product.Code</p>
+        <p><strong>Price:</strong> @Model.Product.UnitPrice.ToString("C")</p>
+        <p><strong>Category:</strong> @Model.Product.CategoryName</p>
+        <p><strong>Supplier:</strong> @Model.Product.SupplierName</p>
+        <p><strong>Description:</strong> @Model.Product.Description</p>
+        <p><strong>Created At:</strong> @Model.Product.CreatedAt</p>
+        <p><strong>Updated At:</strong> @Model.Product.UpdatedAt</p>
+
+        <p><strong>Images:</strong></p>
+        <a class="btn btn-primary btn-sm" href="/products/@Model.Product.UniqueId/upload-images">Uploaded Images</a>
+        @if(Model.Images.Any())
+        {
+            <div class="row">
+                @foreach (var image in Model.Images)
+                {
+                    <div class="col-md-3 mb-3">
+                        <div class="card">
+                            <img src="/Resources/Uploads/Products/@image.FileName" class="card-img-top" alt="Product Image">
+                            <div class="card-body text-center">
+                                <p class="card-text">Uploaded on: @image.CreatedAt.ToString("yyyy-MM-dd")</p>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <p class="text-muted">No images available.</p>
+        }
     </div>
     <div class="card-footer">
         <a class="btn btn-primary" href="/products">Back to List</a>
-        <a class="btn btn-primary" href="/products/@Model.UniqueId/edit">Edit</a>
+        <a class="btn btn-primary" href="/products/@Model.Product.UniqueId/edit">Edit</a>
     </div>
 </div>

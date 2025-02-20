@@ -5,6 +5,7 @@ using TemplateMVC.Core.Models.Products;
 using TemplateMVC.Core.Services.Products;
 using TemplateMVC.Common.Helpers;
 using TemplateMVC.Core.Services.Suppliers;
+using System.Threading.Tasks;
 
 namespace TemplateMVC.Core.Controllers.Products;
 
@@ -66,6 +67,7 @@ public class ProductsController : Controller
     }
 
     [HttpPost("create")]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(CreateProductViewModel viewModel)
     {
         await _categoryService.PopulateToCreateProuduct(viewModel);
@@ -108,6 +110,7 @@ public class ProductsController : Controller
     }
 
     [HttpPost("{uniqueId}/edit")]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(UpdateProductViewModel viewModel, Guid uniqueId)
     {
         await _categoryService.PopulateToUpdateProduct(viewModel);
@@ -136,8 +139,12 @@ public class ProductsController : Controller
     {
         try 
         {
-            var product = await _service.GetProductByUniqueId(uniqueId);
-            return View(product);
+            var detailsViewModel = new ProductDetailsViewModel()
+            {
+                Product = await _service.GetProductByUniqueId(uniqueId),
+                Images = await _service.GetProductImages(uniqueId)
+            };
+            return View(detailsViewModel);
         }
          catch (AppException ex)
         {
@@ -155,12 +162,14 @@ public class ProductsController : Controller
         {
             ProductName = product.ProductName,
             Code = product.Code,
-            UnitPrice = product.UnitPrice
+            UnitPrice = product.UnitPrice,
+            UniqueId = product.UniqueId
         };
         return View(model);
     }
 
     [HttpPost("{uniqueId}/delete")]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> Delete(DeleteProductViewModel viewModel, Guid uniqueId)
     {
         try
@@ -170,7 +179,7 @@ public class ProductsController : Controller
                 return View(viewModel);
             }
             await _service.DeleteProduct(uniqueId);
-            _logger.LogInformation($"Product with ID '{uniqueId}' deleteted.");
+            _logger.LogInformation($"Product with ID '{uniqueId}' deleted.");
             return Redirect("/products");
         }
         catch (AppException ex)
@@ -181,37 +190,37 @@ public class ProductsController : Controller
         }
     }
 
-    [HttpPost("{uniqueId}/images")]
-    public async Task<IActionResult> UploadProductImages(Guid uniqueId, IFormFileCollection files)
+    [HttpGet("{uniqueId}/upload-images")]
+    public async Task<IActionResult> UploadImage(Guid uniqueId)
     {
-        try
+        var product = await _service.GetProductByUniqueId(uniqueId);
+        var model = new UploadProductImageViewModel()
         {
-            await _service.UploadProductImages(uniqueId, files);
-            var msg = $"Product '{uniqueId}' images uploaded.";
-            _logger.LogInformation(msg);
-            return Ok(new { Message = msg });
-        }
-        catch (AppException ex)
-        {
-            _logger.LogError(ex.Message);
-            ModelState.AddModelError("", ex.Message);
-            return View();
-        }
+            ProductName = product.ProductName,
+            UniqueId = product.UniqueId
+        };
+        return View(model);
     }
 
-    [HttpGet("{uniqueId}/images")]
-    public async Task<IActionResult> GetProductImages(Guid uniqueId)
+    [HttpPost("{uniqueId}/upload-images")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> UploadImage(UploadProductImageViewModel viewModel, Guid uniqueId, IFormFileCollection files)
     {
         try
         {
-            var images = await _service.GetProductImages(uniqueId);
-            return Ok(images);
+            if(!ModelState.IsValid)
+            {
+                return View(viewModel);
+            }
+            await _service.UploadProductImages(uniqueId, files);
+            _logger.LogInformation($"Product '{uniqueId}' images uploaded.");
+            return Redirect($"/products/{uniqueId}/details");
         }
         catch (AppException ex)
         {
             _logger.LogError(ex.Message);
             ModelState.AddModelError("", ex.Message);
-            return View();
+            return View(viewModel);
         }
     }
 
