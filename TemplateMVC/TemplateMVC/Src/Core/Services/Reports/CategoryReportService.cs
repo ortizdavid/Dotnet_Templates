@@ -1,4 +1,5 @@
 using TemplateMVC.Common.Exceptions;
+using TemplateMVC.Common.Helpers;
 using TemplateMVC.Core.Models.Reports;
 using TemplateMVC.Core.Repositories.Reports;
 
@@ -18,6 +19,10 @@ public class CategoryReportService
         if (filter is null)
         {
             throw new BadRequestException("The report filter is required and must include valid dates and format.");
+        }
+        if (!filter.HasValidDateRange)
+        {
+            throw new BadRequestException("StartDate must be earlier than or equal to EndDate.");
         }
         var categories = await _repository.GetAllAsync(filter);
         return new ReportResponse<CategoryReport>

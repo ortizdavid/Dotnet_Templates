@@ -1,10 +1,8 @@
-using System.Net;
 using Microsoft.AspNetCore.Mvc;
 using TemplateMVC.Common.Exceptions;
 using TemplateMVC.Helpers;
 using TemplateMVC.Core.Models.Auth;
 using TemplateMVC.Core.Services.Auth;
-using System.Threading.Tasks;
 using TemplateMVC.Common.Helpers;
 
 namespace TemplateMVC.Core.Controllers.Auth;

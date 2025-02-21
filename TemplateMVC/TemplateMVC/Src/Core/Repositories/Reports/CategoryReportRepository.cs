@@ -1,5 +1,6 @@
 using System.Data;
 using Dapper;
+using TemplateMVC.Common.Helpers;
 using TemplateMVC.Core.Models.Reports;
 
 namespace TemplateMVC.Core.Repositories.Reports;

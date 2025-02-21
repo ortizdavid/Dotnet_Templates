@@ -38,9 +38,11 @@ public class ReportFormat
             default:
                 return new BadRequestObjectResult($"Unsupported format '{format}'. Supported formats are: json, excel, pdf, csv.");  
         }
+        var timestamp = DateTime.Now.ToString("dd-MM-yyyy-HHmmss");
+        var fullFileName = $"{fileName}_Report_{timestamp}.{extension}";
         return new FileContentResult(data, contentType)
         {
-            FileDownloadName = $"{fileName}_Report.{extension}"
+            FileDownloadName = fullFileName
         };
     }
 }

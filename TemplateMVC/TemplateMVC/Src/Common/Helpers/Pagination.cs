@@ -38,15 +38,19 @@ public class Pagination<T>
     {
         var httpContext = _contextAccessor?.HttpContext;
         Metadata.FirstPageUrl = GetPageUrl(httpContext, pageSize, 0);
-        if (pageIndex < Metadata.TotalPages)
-        {
-            Metadata.NextPageUrl = GetPageUrl(httpContext, pageSize, pageIndex + 1);
-        }
         if (pageIndex > 0)
         {
             Metadata.PreviousPageUrl = GetPageUrl(httpContext, pageSize, pageIndex - 1);
         }
-        Metadata.LastPageUrl = GetPageUrl(httpContext, pageSize, Metadata.TotalPages);
+        if (pageIndex + 1 < Metadata.TotalPages)
+        {
+            Metadata.NextPageUrl = GetPageUrl(httpContext, pageSize, pageIndex + 1);
+        }
+       
+        if (Metadata.TotalPages > 0)
+        {
+            Metadata.LastPageUrl = GetPageUrl(httpContext, pageSize, Metadata.TotalPages - 1); 
+        }
     }
 
     private string GetPageUrl(HttpContext? httpContext, int pageSize, int pageNumber)
@@ -58,12 +62,12 @@ public class Pagination<T>
 
     public bool HasPreviousPage()
     {
-        return Metadata.PageIndex > 1;
+        return Metadata.PageIndex > 0;
     }
 
     public bool HasNextPage()
     {
-        return Metadata.PageIndex < Metadata.TotalPages;
+        return Metadata.PageIndex + 1 < Metadata.TotalPages;
     }
 }
 

@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Mvc;
 using TemplateMVC.Core.Services.Products;
 using TemplateMVC.Helpers;
 using TemplateMVC.Common.Exceptions;
-using System.Net;
 using TemplateMVC.Core.Models.Products;
 using TemplateMVC.Common.Helpers;
 
@@ -15,7 +14,6 @@ public class CategoriesController : Controller
     private readonly ILogger<CategoriesController> _logger;
     private readonly IHttpContextAccessor _contextAcessor;
     private HttpContext? _context => _contextAcessor?.HttpContext;
-
     
     public CategoriesController(CategoryService service, ILogger<CategoriesController> logger, IHttpContextAccessor contextAccessor)
     {

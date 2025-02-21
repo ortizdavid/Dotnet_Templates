@@ -26,6 +26,7 @@
 
     <!-- API and OpenAPI -->
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="7.2.0" />
 
     <!-- Utility Libraries -->
     <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />

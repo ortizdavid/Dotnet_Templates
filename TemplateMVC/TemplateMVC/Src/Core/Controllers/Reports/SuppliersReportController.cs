@@ -1,5 +1,3 @@
-using System.Net;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TemplateMVC.Common.Exceptions;
 using TemplateMVC.Core.Models.Reports;
@@ -8,27 +6,34 @@ using TemplateMVC.Core.Services.Reports;
 
 namespace TemplateMVC.Core.Controllers.Reports;
 
-[Authorize]
-[Route("api/suppliers-report")]
-
-public class SupplierReportController : Controller
+[Route("reports/suppliers")]
+public class SuppliersReportController : Controller
 {
     private readonly SupplierReportService _service;
     private readonly IGenerator<SupplierReport> _generator;
+    private readonly ILogger<SuppliersReportController> _logger;
 
-    public SupplierReportController(SupplierReportService service)
+    public SuppliersReportController(SupplierReportService service, ILogger<SuppliersReportController> logger)
     {
         _service = service;
         _generator = new SupplierGenerator();
+        _logger = logger;
     }
 
+    [HttpGet]
     public IActionResult Index()
     {
-        return View();
+        return View("~/Views/Reports/Suppliers/Index.cshtml");
     }
 
     [HttpGet("all-suppliers")]
-    public async Task<IActionResult> GetAllSuppliers([FromQuery]ReportFilter filter)
+    public IActionResult AllSuppliers()
+    {
+        return View("~/Views/Reports/Suppliers/AllSuppliers.cshtml");
+    }
+
+    [HttpPost("all-suppliers")]
+    public async Task<IActionResult> AllSuppliers(ReportFilter filter)
     {
         try
         {
@@ -37,7 +42,9 @@ public class SupplierReportController : Controller
         }
         catch (AppException ex) 
         {
-            return StatusCode(ex.StatusCode, new { Message = ex.Message });
+            _logger.LogError(ex.Message);
+            ModelState.AddModelError("", ex.Message);
+            return View();
         }
     }
 }

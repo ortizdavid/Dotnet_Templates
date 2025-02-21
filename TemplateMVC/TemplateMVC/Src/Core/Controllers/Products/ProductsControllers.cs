@@ -5,7 +5,6 @@ using TemplateMVC.Core.Models.Products;
 using TemplateMVC.Core.Services.Products;
 using TemplateMVC.Common.Helpers;
 using TemplateMVC.Core.Services.Suppliers;
-using System.Threading.Tasks;
 
 namespace TemplateMVC.Core.Controllers.Products;
 

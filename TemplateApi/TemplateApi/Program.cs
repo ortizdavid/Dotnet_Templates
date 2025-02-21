@@ -8,9 +8,15 @@ internal class Program
         var builder = WebApplication.CreateBuilder(args);
         var configuration = builder.Configuration;
 
+          // Swagger
+        builder.Services.AddEndpointsApiExplorer();
+        builder.Services.AddSwaggerGen();
+
         // Default Framework Services
         builder.Services.AddControllers();
         builder.Services.AddHttpContextAccessor();
+
+      
 
         // Application-Specific Services via Extensions
         builder.Host.AddSerilogConfiguration();
@@ -28,13 +34,14 @@ internal class Program
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
         {
-            app.UseDeveloperExceptionPage();
+            app.UseSwagger();
+            app.UseSwaggerUI();
         }
 
         // Use custom middlewares
         app.UseMiddleware<ExceptionHandlerMiddleware>();
 
-        //app.UseHttpsRedirection();
+        app.UseHttpsRedirection();
 
         app.UseAuthorization();
 

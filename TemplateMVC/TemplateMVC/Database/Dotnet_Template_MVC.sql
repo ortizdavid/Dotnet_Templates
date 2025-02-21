@@ -155,8 +155,8 @@ SELECT
     Su.SupplierId,
     Su.SupplierName
 FROM Products Pr
-JOIN Categories Ca ON Ca.CategoryId = Pr.CategoryId
-JOIN Suppliers Su ON Su.SupplierId = Pr.SupplierId;
+LEFT JOIN Categories Ca ON Ca.CategoryId = Pr.CategoryId
+LEFT JOIN Suppliers Su ON Su.SupplierId = Pr.SupplierId;
 GO
 
 -- Reports
@@ -170,11 +170,15 @@ SELECT
     Pr.ProductName, 
     Pr.Code, 
     Pr.UnitPrice, 
-    Ca.CategoryName,
     Pr.Description,
-    Pr.CreatedAt
+    Pr.CreatedAt,
+    Ca.CategoryId,
+    Ca.CategoryName,
+    Su.SupplierId,
+    Su.SupplierName
 FROM Products Pr
-JOIN Categories Ca ON Ca.CategoryId = Pr.CategoryId;
+JOIN Categories Ca ON Ca.CategoryId = Pr.CategoryId
+JOIN Suppliers Su ON Su.SupplierId = Pr.SupplierId;
 GO
 
 -- ViewSupplierReportData
