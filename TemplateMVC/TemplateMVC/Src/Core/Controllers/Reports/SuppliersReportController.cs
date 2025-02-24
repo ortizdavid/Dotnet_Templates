@@ -23,13 +23,13 @@ public class SuppliersReportController : Controller
     [HttpGet]
     public IActionResult Index()
     {
-        return View("~/Views/Reports/Suppliers/Index.cshtml");
+        return View(ReportViewPath.Get("Suppliers", "AllSuppliers"));
     }
 
     [HttpGet("all-suppliers")]
     public IActionResult AllSuppliers()
     {
-        return View("~/Views/Reports/Suppliers/AllSuppliers.cshtml");
+        return View(ReportViewPath.Get("Suppliers", "AllSuppliers"));
     }
 
     [HttpPost("all-suppliers")]

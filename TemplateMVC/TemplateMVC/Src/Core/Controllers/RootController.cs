@@ -5,10 +5,6 @@ namespace Controllers;
 [Route("")]
 public class RootController : Controller
 {
-    public RootController()
-    {
-    }
-
     [HttpGet]
     public IActionResult Index()
     {

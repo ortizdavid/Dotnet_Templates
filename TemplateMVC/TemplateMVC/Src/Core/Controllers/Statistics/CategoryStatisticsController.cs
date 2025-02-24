@@ -1,11 +1,9 @@
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TemplateMVC.Core.Services.Statistics;
 
 namespace TemplateMVC.Core.Controllers.Statistics;
 
-[Authorize]
-[Route("api/category-statistics")]
+[Route("statistics/categories")]
 public class CategoryStatisticsController : Controller
 {
     private readonly CategoryStatisticsService _service;
@@ -17,13 +15,13 @@ public class CategoryStatisticsController : Controller
     
     public IActionResult Index()
     {
-        return View();
+        return View(StatisticsViewPath.Get("Categories", "Index"));
     }
 
     [HttpGet("top-categories")]
     public async Task<IActionResult> GetTopCategories()
     {
         var statistics = await _service.GetCategoryTopCategories();
-        return Ok(statistics);
+        return View(StatisticsViewPath.Get("Categories", "TopCategories"), statistics);
     }
 }

@@ -22,13 +22,13 @@ public class CategoriesReportController : Controller
     [HttpGet]
     public IActionResult Index()
     {
-        return View("~/Views/Reports/Categories/Index.cshtml");
+        return View(ReportViewPath.Get("Categories", "Index"));
     }
 
     [HttpGet("all-categories")]
     public IActionResult AllCategories()
     {
-        return View("~/Views/Reports/Categories/AllCategories.cshtml");
+        return View(ReportViewPath.Get("Categories", "AllCategories"));
     }
 
     [HttpPost("all-categories")]
@@ -44,7 +44,7 @@ public class CategoriesReportController : Controller
         {
             _logger.LogError(ex.Message);
             ModelState.AddModelError("", ex.Message);
-            return View("~/Views/Reports/Categories/AllCategories.cshtml");
+            return View(ReportViewPath.Get("Categories", "AllCategories"));
         }
     }
 }

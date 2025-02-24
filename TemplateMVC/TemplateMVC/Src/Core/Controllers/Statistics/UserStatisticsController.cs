@@ -1,12 +1,9 @@
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TemplateMVC.Core.Services.Statistics;
 
 namespace TemplateMVC.Core.Controllers.Statistics;
 
-[Authorize]
-[Route("api/user-statistics")]
-
+[Route("statistics/users")]
 public class UserStatisticsController : Controller
 {
     private readonly UserStatisticsService _service;
@@ -18,21 +15,20 @@ public class UserStatisticsController : Controller
 
     public IActionResult Index()
     {
-        return View();
+        return View(StatisticsViewPath.Get("Users", "Index"));
     }
 
-    [HttpGet("active-inactive")]
+    [HttpGet("actives-and-inactives")]
     public async Task<IActionResult> TotalActiveAndInactive()
     {
         var statistics = await _service.GetUserActivesAndInactives();
-        return Ok(statistics);
+        return View(StatisticsViewPath.Get("Users", "TotalActivesAndInactives"), statistics);
     }
-
     
-    [HttpGet("percent-active-inactive")]
+    [HttpGet("percentage-actives-and-inactives")]
     public async Task<IActionResult> PercentageOfActiveAndInactive()
     {
         var statistics = await _service.GetUserPercentageActivesAndInactives();
-        return Ok(statistics);
+        return View(StatisticsViewPath.Get("Users", "PercentageActivesAndInactives"), statistics);
     }
 }

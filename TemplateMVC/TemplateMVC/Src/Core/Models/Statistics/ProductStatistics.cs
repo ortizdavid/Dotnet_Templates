@@ -9,5 +9,5 @@ public class ProductTotalPriceByCategories
 public class ProductTotalPriceBySuppliers
 {
     public string? SupplierName { get; set; }
-    public decimal? TotalPrice { get; set; }
+    public decimal TotalPrice { get; set; }
 }

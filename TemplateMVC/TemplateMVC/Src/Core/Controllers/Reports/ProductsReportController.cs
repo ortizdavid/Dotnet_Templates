@@ -28,13 +28,13 @@ public class ProductsReportController : Controller
     [HttpGet]
     public IActionResult Index()
     {
-        return View("~/Views/Reports/Products/Index.cshtml");
+        return View(ReportViewPath.Get("Products", "Index"));
     }
 
     [HttpGet("all-products")]
     public IActionResult AllProducts()
     {
-        return View("~/Views/Reports/Products/AllProducts.cshtml");
+        return View(ReportViewPath.Get("Products", "AllProducts"));
     }
 
     [HttpPost("all-products")]
@@ -60,7 +60,7 @@ public class ProductsReportController : Controller
         {
             Categories = await _categoryService.GetAllNotPaginated()
         };
-        return View("~/Views/Reports/Products/ProductsByCategories.cshtml", filter);
+        return View(ReportViewPath.Get("Products", "ProductsByCategories"), filter);
     }
 
     [HttpPost("by-categories")]
@@ -86,7 +86,7 @@ public class ProductsReportController : Controller
         {
             Suppliers = await _supplierService.GetAllNotPaginated()
         };
-        return View("~/Views/Reports/Products/ProductsBySuppliers.cshtml", filter);
+        return View(ReportViewPath.Get("Products", "ProductsBySuppliers"), filter);
     }
 
     [HttpPost("by-suppliers")]

@@ -1,0 +1,29 @@
+@model TemplateMVC.Core.Models.Statistics.UserActivesAndInactives;
+
+@{
+    Layout = "_Layout";
+    ViewBag.Title = "Total Active and Inactive Users";
+}
+
+<a href="/statistics/users" class="btn btn-link mt-3">
+    <i class="bi bi-arrow-left"></i> Back to Statistics
+</a>
+
+<table class="table">
+    <thead class="table-dark">
+        <tr>
+            <th>Item</th>
+            <th>Total</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Active Users</td>
+            <td>@Model.ActiveUsers</td>
+        </tr>
+        <tr>
+            <td>Inactive Users</td>
+            <td>@Model.InactiveUsers</td>
+        </tr>
+    </tbody>
+</table>

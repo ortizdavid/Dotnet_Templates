@@ -1,11 +1,9 @@
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TemplateMVC.Core.Services.Statistics;
 
 namespace TemplateMVC.Core.Controllers.Statistics;
 
-[Authorize]
-[Route("api/supplier-statistics")]    
+[Route("statistics/suppliers")]    
 public class SupplierStatisticsController : Controller
 {
     private readonly SupplierStatisticsService _service;
@@ -14,15 +12,16 @@ public class SupplierStatisticsController : Controller
     {
         _service = service;
     }
+
     public IActionResult Index()
     {
-        return View();
+        return View(StatisticsViewPath.Get("Suppliers", "Index"));
     }
 
     [HttpGet("top-suppliers")]
     public async Task<IActionResult> GetTopSuppliers()
     {
         var statistics = await _service.GetTopSuppliers();
-        return Ok(statistics);
+        return View(StatisticsViewPath.Get("Suppliers", "TopSuppliers"), statistics);
     }
 }

@@ -235,6 +235,18 @@ SELECT
 FROM Users;
 GO
 
+-- ViewProductTotalPriceByCategories
+IF OBJECT_ID('ViewProductTotalPriceByCategories', 'V') IS NOT NULL
+    DROP VIEW ViewProductTotalPriceByCategories;
+GO
+CREATE VIEW ViewProductTotalPriceByCategories AS
+SELECT 
+    Ca.CategoryName, 
+    SUM(Pr.UnitPrice) AS TotalPrice
+FROM Products Pr
+JOIN Categories Ca ON Ca.CategoryId = Pr.CategoryId
+GROUP BY Ca.CategoryName;
+GO
 
 -- ViewProductTotalPriceBySuppliers
 IF OBJECT_ID('ViewProductTotalPriceBySuppliers', 'V') IS NOT NULL
@@ -254,9 +266,13 @@ IF OBJECT_ID('ViewSupplierTopSuppliers', 'V') IS NOT NULL
     DROP VIEW ViewSupplierTopSuppliers;
 GO
 CREATE VIEW ViewSupplierTopSuppliers AS
+WITH TotalProducts AS (
+    SELECT COUNT(ProductId) AS TotalProductCount FROM Products
+)
 SELECT 
     Su.SupplierName, 
-    COUNT(Pr.ProductId) AS ProductCount
+    COUNT(Pr.ProductId) AS ProductCount,
+    COUNT(Pr.ProductId) * 100.0 / (SELECT TotalProductCount FROM TotalProducts) AS Percentage
 FROM Products Pr
 JOIN Suppliers Su ON Su.SupplierId = Pr.SupplierId
 GROUP BY Su.SupplierName;
@@ -267,9 +283,13 @@ IF OBJECT_ID('ViewCategoryTopCategories', 'V') IS NOT NULL
     DROP VIEW ViewCategoryTopCategories;
 GO
 CREATE VIEW ViewCategoryTopCategories AS
+WITH TotalProducts AS (
+    SELECT COUNT(ProductId) AS TotalProductCount FROM Products
+)
 SELECT 
     Ca.CategoryName, 
-    COUNT(Pr.ProductId) AS ProductCount
+    COUNT(Pr.ProductId) AS ProductCount,
+    COUNT(Pr.ProductId) * 100.0 / (SELECT TotalProductCount FROM TotalProducts) AS Percentage
 FROM Products Pr
 JOIN Categories Ca ON Ca.CategoryId = Pr.CategoryId
 GROUP BY Ca.CategoryName;
