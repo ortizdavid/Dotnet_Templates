@@ -3,7 +3,6 @@ using TemplateMVC.Helpers;
 using TemplateMVC.Core.Models.Products;
 using TemplateMVC.Core.Repositories.Products;
 using TemplateMVC.Common.Helpers;
-using Azure.Core;
 
 namespace TemplateMVC.Core.Services.Products;
 

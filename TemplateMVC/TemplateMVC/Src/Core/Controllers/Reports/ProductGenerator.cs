@@ -51,7 +51,7 @@ public class ProductGenerator : IGenerator<ProductReport>
                 foreach (var product in response.Items)
                 {
                     streamWriter.WriteLine(string.Format(
-                        "{0},{1},{2},{3},{4},{5},{6},{7}",
+                        "{0},{1},{2},{3},{4},{5},{6}",
                         product.ProductId,
                         product.ProductName,
                         product.Code,
