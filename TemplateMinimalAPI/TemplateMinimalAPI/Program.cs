@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using TemplateMinimalAPI.Models;
 
@@ -19,9 +20,9 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-// Test
-app.MapGet("/", () => "Template for Minimal API");
-app.MapGet("/api", () => "Template for Minimal API");
+// Root
+app.MapGet("/", () => "Template Minimal API");
+app.MapGet("/api", () => "Template Minimal API");
 
 // Get All
 app.MapGet("/api/products", async (AppDbContext db) =>
@@ -31,7 +32,7 @@ app.MapGet("/api/products", async (AppDbContext db) =>
 });
 
 // Get by Id
-app.MapGet("/api/products/{id}", async (int id, AppDbContext db) =>
+app.MapGet("/api/products/{id}", async (AppDbContext db, int id) =>
 {
     var product = await db.Products.FindAsync(id);
     if (product is null)
@@ -42,13 +43,13 @@ app.MapGet("/api/products/{id}", async (int id, AppDbContext db) =>
 });
 
 // Create
-app.MapPost("/api/products", async (Product product, AppDbContext db) =>
+app.MapPost("/api/products", async (AppDbContext db, Product product) =>
 {
     if (product is null)
     {
-        return Results.BadRequest("Product cannot be null");
+        return Results.BadRequest("Product request cannot be null");
     }
-    var exists = db.Products.Any(p => p.Code == product.Code);
+    var exists = await db.Products.AnyAsync(p => p.Code == product.Code);
     if (exists)
     {
         return Results.Conflict($"Product with code '{product.Code}' already exists");
@@ -59,7 +60,7 @@ app.MapPost("/api/products", async (Product product, AppDbContext db) =>
 });
 
 // Update
-app.MapPut("/api/products/{id}", async (Product productReq, int id, AppDbContext db) =>
+app.MapPut("/api/products/{id}", async (AppDbContext db, int id, Product productReq) =>
 {
     var product = await db.Products.FindAsync(id);
     if (product is null)
@@ -75,7 +76,7 @@ app.MapPut("/api/products/{id}", async (Product productReq, int id, AppDbContext
 });
 
 // Delete
-app.MapDelete("/api/products/{id}", async (int id, AppDbContext db) => 
+app.MapDelete("/api/products/{id}", async (AppDbContext db, int id) => 
 {
     var product = await db.Products.FindAsync(id);
     if (product is null)
@@ -86,7 +87,6 @@ app.MapDelete("/api/products/{id}", async (int id, AppDbContext db) =>
     await db.SaveChangesAsync();
     return Results.NoContent();
 });
-
 
 app.Run();
 

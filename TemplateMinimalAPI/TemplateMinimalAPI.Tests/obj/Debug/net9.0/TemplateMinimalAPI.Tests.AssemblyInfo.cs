@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("TemplateMinimalAPI.Tests")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+fc63a669aebb1fa24cea7428a37119ea6894e101")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e256f5facfdef890fd6fec1728e5abc4eb0e9e1e")]
 [assembly: System.Reflection.AssemblyProductAttribute("TemplateMinimalAPI.Tests")]
 [assembly: System.Reflection.AssemblyTitleAttribute("TemplateMinimalAPI.Tests")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
