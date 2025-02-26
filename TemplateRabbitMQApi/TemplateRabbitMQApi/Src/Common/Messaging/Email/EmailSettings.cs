@@ -1,4 +1,4 @@
-namespace TemplateMVC.Common.Messaging;
+namespace TemplateRabbitMQApi.Common.Messaging.Email;
 
 public class EmailSettings
 {

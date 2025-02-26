@@ -1,0 +1,6 @@
+@TemplateRabbitMQApi_HostAddress = http://localhost:5048
+
+GET {{TemplateRabbitMQApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

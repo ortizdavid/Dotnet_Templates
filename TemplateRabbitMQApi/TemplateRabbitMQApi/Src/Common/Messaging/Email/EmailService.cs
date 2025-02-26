@@ -2,7 +2,7 @@ using System.Net;
 using System.Net.Mail;
 using Microsoft.Extensions.Options;
 
-namespace TemplateMVC.Common.Messaging;
+namespace TemplateRabbitMQApi.Common.Messaging.Email;
 
 public class EmailService
 {
@@ -54,13 +54,4 @@ public class EmailService
             throw new InvalidOperationException("Error sending email", ex);
         }
     }
-}
-
-public class EmailSettings
-{
-    public string? Host { get; set; }
-    public int? Port { get; set; }
-    public string? User { get; set; }
-    public string? Password { get; set; }
-    public bool EnableSsl { get; set; }
 }
