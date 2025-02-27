@@ -1,55 +1,46 @@
 using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
 
-namespace TemplateRabbitMQApi.Core.Messaging.RabbitMQ;
+namespace TemplateRabbitMQApi.Common.Messaging.RabbitMQ;
 
-public class RabbitMQProducer
+public class RabbitMQProducer : RabbitMQClientBase
 {
-    private readonly RabbitMQSettings _settings;
-
-    public RabbitMQProducer(IOptions<RabbitMQSettings> settings)
-    {
-        _settings = settings.Value;
-    }
+    public RabbitMQProducer(IOptions<RabbitMQSettings> settings) : base(settings) {}
 
     public async Task PublishToQueue<T>(string queueName, T message)
     {
-        var factory = new ConnectionFactory
-        {
-            HostName = _settings.HostName,
-            UserName = _settings.UserName,
-            Password = _settings.Password,
-            VirtualHost = _settings.VirtualHost
-        };
-
-        using var connection = await factory.CreateConnectionAsync();
-        using var channel = await connection.CreateChannelAsync();
-
-        await channel.QueueDeclareAsync(
-            queue: queueName, 
-            durable: true, 
-            exclusive: false,
-            autoDelete: false, 
-            arguments: null
-        );
+        await EnsureConnectionAsync();
+        await DeclareQueueAsync(queueName);
 
         var body = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(message));
-
         var properties = new BasicProperties {Persistent = true};
-        
 
+        await _channel!.BasicPublishAsync(
+            exchange: string.Empty, 
+            routingKey: queueName, 
+            mandatory: true,
+            basicProperties: properties, 
+            body: body
+        );
     }
 
-    public void PublishToExchange<T>(string exchangeName, string routingKey, T message)
+    public async Task PublishToExchange<T>(string exchangeName, T message, string routingKey, ExchangeType exchangeType = ExchangeType.Direct)
     {
-        
+        await EnsureConnectionAsync();
+        await DeclareExchangeAsync(exchangeName, exchangeType);
+
+        var body = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(message));
+        var properties = new BasicProperties {Persistent = true};
+
+        await _channel!.BasicPublishAsync(
+            exchange: exchangeName, 
+            routingKey: routingKey, 
+            mandatory: true,
+            basicProperties: properties, 
+            body: body
+        );
     }
 
-    public void Close()
-    {
-
-    }
 }

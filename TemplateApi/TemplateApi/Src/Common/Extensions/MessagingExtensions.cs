@@ -2,7 +2,7 @@ using TemplateApi.Common.Messaging;
 
 namespace TemplateApi.Common.Extensions;
 
-public static class MessageExtensions
+public static class MessagingExtensions
 {
     public static void AddEmailConfigurations(this IServiceCollection services, IConfiguration configuration)
     {

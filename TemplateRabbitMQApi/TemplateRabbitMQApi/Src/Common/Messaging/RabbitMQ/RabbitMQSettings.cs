@@ -1,4 +1,4 @@
-namespace TemplateRabbitMQApi.Core.Messaging.RabbitMQ;
+namespace TemplateRabbitMQApi.Common.Messaging.RabbitMQ;
 
 public class RabbitMQSettings
 {

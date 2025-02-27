@@ -8,16 +8,14 @@ internal class Program
         var builder = WebApplication.CreateBuilder(args);
         var configuration = builder.Configuration;
 
-          // Swagger
+        // Swagger
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
 
         // Default Framework Services
         builder.Services.AddControllers();
         builder.Services.AddHttpContextAccessor();
-
-      
-
+    
         // Application-Specific Services via Extensions
         builder.Host.AddSerilogConfiguration();
         builder.Services.AddJwtAuthentication(configuration);
