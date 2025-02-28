@@ -42,5 +42,4 @@ public class RabbitMQProducer : RabbitMQClientBase
             body: body
         );
     }
-
 }

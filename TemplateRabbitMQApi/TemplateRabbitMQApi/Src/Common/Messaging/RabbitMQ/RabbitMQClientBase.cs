@@ -30,13 +30,18 @@ public class RabbitMQClientBase
         }
     }
 
-    protected async Task DeclareQueueAsync(string queueName)
+    protected void CheckChannel(IChannel? channel)
     {
-        if (_channel is null)
+        if (channel is null)
         {
             throw new InvalidOperationException("RabbitMQ channel is not initalizated.");
         }
-        await _channel.QueueDeclareAsync(
+    }
+
+    protected async Task DeclareQueueAsync(string queueName)
+    {
+        CheckChannel(_channel);
+        await _channel!.QueueDeclareAsync(
             queue: queueName, 
             durable: true, 
             exclusive: false, 
@@ -47,14 +52,43 @@ public class RabbitMQClientBase
 
     protected async Task DeclareExchangeAsync(string exchangeName, ExchangeType exchangeType)
     {
-        if (_channel is null)
-        {
-            throw new InvalidOperationException("RabbitMQ channel is not initalizated.");
-        }
-        await _channel.ExchangeDeclareAsync(
+        CheckChannel(_channel);
+        await _channel!.ExchangeDeclareAsync(
             exchange: exchangeName, 
             type: exchangeType.ToString().ToLower()
         );
+    }
+
+    public async Task DeclareExchangeAsync(string exchangeName)
+    {
+        CheckChannel(_channel);
+        
+        await _channel!.ExchangeDeclareAsync(
+            exchange: exchangeName,
+            type: ExchangeType.Direct.ToString().ToLower(), 
+            durable: true,
+            autoDelete: true
+        );
+    }
+
+    public async Task<QueueDeclareOk> DeclareAndBindQueueAsync(string exchangeName, string routingKey)
+    {
+        CheckChannel(_channel);
+
+        var queueDeclareOk = await _channel!.QueueDeclareAsync(
+            queue: string.Empty, 
+            durable: true,
+            exclusive: true,
+            autoDelete: true
+        );
+
+        await _channel.QueueBindAsync(
+            queue: queueDeclareOk.QueueName,
+            exchange: exchangeName,
+            routingKey: routingKey
+        );
+
+        return queueDeclareOk;
     }
 
     public async Task CloseAsync()

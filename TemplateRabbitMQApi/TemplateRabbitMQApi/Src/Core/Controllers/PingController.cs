@@ -1,6 +1,6 @@
-using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using TemplateRabbitMQApi.Common.Messaging.RabbitMQ;
+using TemplateRabbitMQApi.Core.Models;
 
 namespace TemplateRabbitMQApi.Core.Controllers;
 
@@ -23,19 +23,9 @@ public class PingController : Controller
         var jsonMessage = request;
         await _producer.PublishToQueue("dotnet_queue", jsonMessage);
 
-        _logger.LogInformation($"Message Sent: '{request.ToString()}'");
-        return Ok(request);
+        var responseMessage = $"Message successfully sent to queue: {request.Name}";
+        _logger.LogInformation("Message sent: {Message}", request);
+        return Ok(new { message = responseMessage });
     }
 }
 
-public class MessageRequest
-{
-    public string Name { get; set; } = string.Empty;
-    public string Gender { get; set; } = string.Empty;
-    public string Identification { get; set; } = string.Empty;
-
-    public override string ToString()
-    {
-        return $"Name: {Name}\nGender: {Gender}\nIdentification: {Identification}";
-    }
-}
