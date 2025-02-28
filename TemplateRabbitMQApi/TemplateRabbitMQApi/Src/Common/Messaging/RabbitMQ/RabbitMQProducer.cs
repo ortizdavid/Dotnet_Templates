@@ -26,10 +26,10 @@ public class RabbitMQProducer : RabbitMQClientBase
         );
     }
 
-    public async Task PublishToExchange<T>(string exchangeName, T message, string routingKey, ExchangeType exchangeType = ExchangeType.Direct)
+    public async Task PublishToExchange<T>(string exchangeName, T message, string routingKey)
     {
         await EnsureConnectionAsync();
-        await DeclareExchangeAsync(exchangeName, exchangeType);
+        await DeclareExchangeAsync(exchangeName);
 
         var body = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(message));
         var properties = new BasicProperties {Persistent = true};
