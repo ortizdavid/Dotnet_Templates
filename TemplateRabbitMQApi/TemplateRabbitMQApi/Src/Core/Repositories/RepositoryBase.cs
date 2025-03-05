@@ -1,4 +1,3 @@
-
 using Microsoft.EntityFrameworkCore;
 using TemplateRabbitMQApi.Core.Models;
 

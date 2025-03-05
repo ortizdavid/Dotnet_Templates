@@ -8,7 +8,7 @@ namespace TemplateRabbitMQApi.Core.Repositories.Reports;
 public class SupplierReportRepository
 {
     private readonly IDbConnection _dapper;
-
+    
     public SupplierReportRepository(IDbConnection dapper)
     {
         _dapper = dapper;

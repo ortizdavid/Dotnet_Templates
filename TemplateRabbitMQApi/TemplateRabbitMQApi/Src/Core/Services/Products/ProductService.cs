@@ -242,7 +242,7 @@ public class ProductService
             throw new NotFoundException($"Product with ID '{uniqueId}' not found");
         }
         
-        var images = await _imageRepository.GetAllAsync(product.ProductId);
+        var images = await _imageRepository.GetAllByProductAsync(product.ProductId);
         return images;
     }
 }

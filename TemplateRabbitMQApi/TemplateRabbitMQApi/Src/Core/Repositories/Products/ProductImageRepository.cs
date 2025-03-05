@@ -4,54 +4,21 @@ using TemplateRabbitMQApi.Core.Models.Products;
 
 namespace TemplateRabbitMQApi.Core.Repositories.Products;
 
-public class ProductImageRepository
+public class ProductImageRepository : RepositoryBase<ProductImage>
 {
     protected readonly AppDbContext _context;
 
-    public ProductImageRepository(AppDbContext context)
+    public ProductImageRepository(AppDbContext context) : base(context) 
     {
         _context = context;
     }
 
-    public async Task CreateAsync(ProductImage image)
+    public async Task DeleteByProductAsync(int productId)
     {
         try
         {
-            await _context.ProductImages.AddAsync(image);
-            await _context.SaveChangesAsync();
-        }
-        catch (Exception)
-        {   
-            throw;
-        }
-    }
-
-    public async Task CreateBatchAsync(IEnumerable<ProductImage> entities)
-    {
-        using (var transaction = _context.Database.BeginTransaction())
-        {
-            try
-            {
-                await _context.ProductImages.AddRangeAsync(entities);
-                await _context.SaveChangesAsync();
-                await transaction.CommitAsync();
-            }
-            catch (Exception)
-            {   
-                await transaction.RollbackAsync();
-                throw;
-            }
-        }
-    }
-
-    public async Task DeleteAsync(int productId)
-    {
-        try
-        {
-            var images = await _context.ProductImages
-                    .Where(img => img.ProductId == productId)
-                    .ToListAsync();
-            _context.ProductImages.RemoveRange(images);
+            var images = await GetAllByProductAsync(productId);
+            _dbSet.RemoveRange(images);
             await _context.SaveChangesAsync(); 
         }
         catch (Exception)
@@ -60,9 +27,9 @@ public class ProductImageRepository
         }
     }
 
-    public async Task<IEnumerable<ProductImage>> GetAllAsync(int productId)
+    public async Task<IEnumerable<ProductImage>> GetAllByProductAsync(int productId)
     {
-        var images = await _context.ProductImages
+        var images = await _dbSet
                 .OrderBy(img => img.ImageId)
                 .Where(img => img.ProductId == productId)
                 .ToListAsync();

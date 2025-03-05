@@ -6,117 +6,46 @@ using Dapper;
 
 namespace TemplateRabbitMQApi.Core.Repositories.Auth;
 
-public class UserRepository : IRepository<User>
+public class UserRepository : RepositoryBase<User>
 {
     private readonly AppDbContext _context;
     private readonly IDbConnection _dapper;
 
-    public UserRepository(AppDbContext context, IDbConnection dapper)
+    public UserRepository(AppDbContext context, IDbConnection dapper) : base(context)
     {
         _context = context;
         _dapper = dapper;
     }
 
-    public async Task CreateAsync(User entity)
-    {
-       try
-       {
-            await _context.Users.AddAsync(entity);
-            await _context.SaveChangesAsync();
-       }
-       catch (Exception)
-       {
-            throw;
-       }
-    }
-
-    public async Task CreateBatchAsync(IEnumerable<User> entities)
-    {
-        using (var transaction = _context.Database.BeginTransaction())
-        {
-            try
-            {
-                await _context.Users.AddRangeAsync(entities);
-                await _context.SaveChangesAsync();
-                await transaction.CommitAsync();
-            }
-            catch (Exception)
-            {
-                await transaction.RollbackAsync();
-                throw;
-            }
-        }
-    }
-
-    public async Task DeleteAsync(User entity)
-    {
-        try
-        {
-            _context.Users.Remove(entity);
-            await _context.SaveChangesAsync();
-        }
-        catch (Exception)
-        {
-            throw;
-        }
-    }
-
-    public async Task<bool> ExistsRecord(string? fieldName, string? value)
-    {
-        var sql = $"SELECT 1 FROM Users WHERE {fieldName} = @Value";
-        var count = await _dapper.ExecuteScalarAsync<int>(sql, new { Value = value });
-        return count > 0;
-    }
-
-    public async Task<IEnumerable<User>> GetAllAsync(int limit, int offset)
-    {
-        return await _context.Users
-            .OrderBy(u => u.UserId)
-            .Skip(limit)
-            .Take(offset)
-            .ToListAsync();
-    }
-
-    public async Task<User?> GetByIdAsync(int id)
-    {
-        return await _context.Users.FindAsync(id);
-    }
-
     public async Task<User?> GetByNameAsync(string? userName)
     {
-        return await _context.Users
+        return await _dbSet
             .FirstOrDefaultAsync(u => u.UserName == userName);
     }
 
-    public async Task<User?> GetByUniqueIdAsync(Guid uniqueId)
+    public async Task<User?> GetByEmailAsync(string? email)
     {
-        return await _context.Users
-            .FirstOrDefaultAsync(u => u.UniqueId == uniqueId);
+        return await _dbSet
+            .FirstOrDefaultAsync(u => u.Email == email);
     }
 
-    public async Task UpdateAsync(User entity)
+    public async Task<IEnumerable<UserData>> GetAllDataAsync(int pageSize, int pageIndex)
     {
-        try
-        {
-            _context.Users.Update(entity);
-            await _context.SaveChangesAsync();
-        }
-        catch (Exception)
-        {
-            throw;
-        }
+        int offset = pageIndex * pageSize; 
+
+        var sql = @"SELECT * FROM ViewUserData 
+                    ORDER BY UserId ASC 
+                    OFFSET @Offset ROWS FETCH NEXT @PageSize ROWS ONLY;";
+
+        var parameters = new { Offset = offset, PageSize = pageSize };
+        return await _dapper.QueryAsync<UserData>(sql, parameters);
     }
 
-    public async Task<int> CountAsync()
+    public async Task<bool> ExistsRecordExcluded(string? userName, string? email, Guid excludedId)
     {
-        return await _context.Users.CountAsync();
-    }
-
-    public async Task<IEnumerable<UserData>> GetAllDataAsync(int limit, int offset)
-    {
-        var sql = "SELECT * FROM ViewUserData ORDER BY CreatedAt DESC " + 
-            $"OFFSET {offset} ROWS FETCH NEXT {limit} ROWS ONLY;";
-        return await _dapper.QueryAsync<UserData>(sql);
+        return await _dbSet.AnyAsync(u => 
+            (u.UserName == userName || u.Email == email) && u.UniqueId != excludedId
+        );
     }
 
     public async Task<UserData?> GetDataByIdAsync(int id)
@@ -145,7 +74,7 @@ public class UserRepository : IRepository<User>
 
     public async Task<User?> GetByRecoveryTokenAsync(string token)
     {
-        return await _context.Users
+        return await _dbSet
             .FirstOrDefaultAsync(u => u.RecoveryToken == token);
     }
 }
