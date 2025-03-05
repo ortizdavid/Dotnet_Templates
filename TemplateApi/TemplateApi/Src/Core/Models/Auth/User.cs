@@ -1,5 +1,5 @@
 using System.ComponentModel.DataAnnotations;
-using TemplateApi.Helpers;
+using TemplateApi.Coommon.Helpers;
 
 namespace TemplateApi.Core.Models.Auth;
 

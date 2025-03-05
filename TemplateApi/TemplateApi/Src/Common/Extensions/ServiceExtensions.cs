@@ -11,25 +11,25 @@ public static class ServiceExtensions
     public static void AddServices(this IServiceCollection services)
     {
         // Auth
-        services.AddTransient<JwtService>();
-        services.AddTransient<AuthService>();
-        services.AddTransient<RoleService>();
-        services.AddTransient<UserService>();
+        services.AddScoped<JwtService>();
+        services.AddScoped<AuthService>();
+        services.AddScoped<RoleService>();
+        services.AddScoped<UserService>();
 
         // Products
-        services.AddTransient<CategoryService>();
-        services.AddTransient<SupplierService>();
-        services.AddTransient<ProductService>();
+        services.AddScoped<CategoryService>();
+        services.AddScoped<SupplierService>();
+        services.AddScoped<ProductService>();
         
         // Reports
-        services.AddTransient<CategoryReportService>();
-        services.AddTransient<SupplierReportService>();
-        services.AddTransient<ProductReportService>();
+        services.AddScoped<CategoryReportService>();
+        services.AddScoped<SupplierReportService>();
+        services.AddScoped<ProductReportService>();
 
         // Statistics
-        services.AddTransient<UserStatisticsService>();
-        services.AddTransient<CategoryStatisticsService>();
-        services.AddSingleton<SupplierStatisticsService>();
-        services.AddTransient<ProductStatisticsService>();
+        services.AddScoped<UserStatisticsService>();
+        services.AddScoped<CategoryStatisticsService>();
+        services.AddScoped<SupplierStatisticsService>();
+        services.AddScoped<ProductStatisticsService>();
     }
 }

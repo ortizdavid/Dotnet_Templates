@@ -1,7 +1,7 @@
 using System.Text;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Controllers;
+namespace TemplateApi.Core.Controllers;
 
 [Route("")]
 [Route("/api")]

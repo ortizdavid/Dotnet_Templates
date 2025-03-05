@@ -50,22 +50,12 @@ public class RabbitMQClientBase
         );
     }
 
-    protected async Task DeclareExchangeAsync(string exchangeName, ExchangeType exchangeType)
+    protected async Task DeclareExchangeAsync(string exchangeName, ExchangeType exchangeType = ExchangeType.Topic)
     {
         CheckChannel(_channel);
         await _channel!.ExchangeDeclareAsync(
             exchange: exchangeName, 
-            type: exchangeType.ToString().ToLower()
-        );
-    }
-
-    public async Task DeclareExchangeAsync(string exchangeName)
-    {
-        CheckChannel(_channel);
-        
-        await _channel!.ExchangeDeclareAsync(
-            exchange: exchangeName,
-            type: ExchangeType.Direct.ToString().ToLower(), 
+            type: exchangeType.ToString().ToLower(),
             durable: true,
             autoDelete: true
         );
@@ -74,12 +64,11 @@ public class RabbitMQClientBase
     public async Task<QueueDeclareOk> DeclareAndBindQueueAsync(string exchangeName, string routingKey)
     {
         CheckChannel(_channel);
-
         var queueDeclareOk = await _channel!.QueueDeclareAsync(
             queue: string.Empty, 
             durable: true,
-            exclusive: true,
-            autoDelete: true
+            exclusive: false,
+            autoDelete: false
         );
 
         await _channel.QueueBindAsync(

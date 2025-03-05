@@ -1,4 +1,5 @@
 using TemplateRabbitMQApi.Common.Extensions;
+using TemplateRabbitMQApi.Common.Middlewares;
 
 internal class Program
 {
@@ -15,9 +16,17 @@ internal class Program
         builder.Services.AddOpenApi();
 
         // Add Custom Services
+        builder.Host.AddSerilogConfiguration();
+        builder.Services.AddJwtAuthentication(configuration);
         builder.Services.AddRabbitMQConfiguration(configuration);
+        builder.Services.AddEmailConfigurations(configuration);
+        builder.Services.AddDatabaseConfiguration(configuration);
+        builder.Services.AddRepositories();
+        builder.Services.AddServices();
 
         var app = builder.Build();
+
+        //app.LogApplicationStartup();
 
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
@@ -25,7 +34,12 @@ internal class Program
             app.MapOpenApi();
         }
 
+        // Use custom middlewares
+        app.UseMiddleware<ExceptionHandlerMiddleware>();
+
         app.UseHttpsRedirection();
+
+        app.UseAuthorization();
 
         app.MapControllers();
 

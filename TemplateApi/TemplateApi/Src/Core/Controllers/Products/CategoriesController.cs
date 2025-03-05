@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using TemplateApi.Core.Services.Products;
 using TemplateApi.Core.Models.Products;
 using Microsoft.AspNetCore.Authorization;
-using TemplateApi.Helpers;
+using TemplateApi.Coommon.Helpers;
 using System.Net;
 
 namespace TemplateApi.Core.Controllers.Products;

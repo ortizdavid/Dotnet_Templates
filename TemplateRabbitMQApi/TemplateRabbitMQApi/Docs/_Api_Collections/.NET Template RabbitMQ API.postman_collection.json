@@ -1,0 +1,56 @@
+{
+	"info": {
+		"_postman_id": "6a0a2572-19c2-43b8-adc9-438a53cc03e3",
+		"name": ".NET Template RabbitMQ API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "13144775"
+	},
+	"item": [
+		{
+			"name": "Root",
+			"item": [
+				{
+					"name": "Send Message",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Anna Mary\",\r\n    \"identification\": \"X00BB\",\r\n    \"gender\": \"Female\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{TEMPLATE_RABBITMQ_API}}/ping/send",
+							"host": [
+								"{{TEMPLATE_RABBITMQ_API}}"
+							],
+							"path": [
+								"ping",
+								"send"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Index Root",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{TEMPLATE_RABBITMQ_API}}",
+							"host": [
+								"{{TEMPLATE_RABBITMQ_API}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

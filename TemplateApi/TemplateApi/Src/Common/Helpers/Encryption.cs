@@ -1,7 +1,7 @@
 using System;
 using System.Security.Cryptography;
 
-namespace TemplateApi.Helpers;
+namespace TemplateApi.Coommon.Helpers;
 
 public class Encryption
 {

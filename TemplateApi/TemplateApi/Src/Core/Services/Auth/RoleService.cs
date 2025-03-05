@@ -1,5 +1,5 @@
 using TemplateApi.Common.Exceptions;
-using TemplateApi.Helpers;
+using TemplateApi.Coommon.Helpers;
 using TemplateApi.Core.Models.Auth;
 using TemplateApi.Core.Repositories.Auth;
 

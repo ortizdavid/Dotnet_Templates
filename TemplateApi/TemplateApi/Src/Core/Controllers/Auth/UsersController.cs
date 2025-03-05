@@ -1,4 +1,4 @@
-using TemplateApi.Helpers;
+using TemplateApi.Coommon.Helpers;
 using Microsoft.AspNetCore.Mvc;
 using TemplateApi.Core.Models.Auth;
 using TemplateApi.Core.Services.Auth;

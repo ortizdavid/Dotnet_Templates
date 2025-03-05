@@ -1,4 +1,4 @@
-namespace TemplateApi.Helpers;
+namespace TemplateApi.Coommon.Helpers;
 
 public class CapacityUnit
 {

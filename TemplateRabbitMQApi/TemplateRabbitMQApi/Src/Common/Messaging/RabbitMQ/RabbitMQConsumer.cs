@@ -18,14 +18,26 @@ public class RabbitMQConsumer : RabbitMQClientBase
         Console.WriteLine($" [*] Waiting for messages from queue '{queueName}'.");
 
         var consumer = new AsyncEventingBasicConsumer(_channel!);
-        Func<T, Task>? processMessage = null;
         consumer.ReceivedAsync += async (model, eventArgs) =>
         {
-            await HandleMessage(queueName, eventArgs, processMessage);
+            try
+            {
+                var body = eventArgs.Body.ToArray();
+                var message = JsonSerializer.Deserialize<T>(Encoding.UTF8.GetString(body));
+
+                Console.WriteLine($" [x] Received message from queue '{queueName}': {message}");
+                await _channel!.BasicAckAsync(eventArgs.DeliveryTag, multiple: false);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($" [!] Error processing message from queue '{queueName}': {ex.Message}");
+                await _channel!.BasicNackAsync(eventArgs.DeliveryTag, false, true);
+            }
         };
 
         await _channel!.BasicConsumeAsync(queue: queueName, autoAck: false, consumer: consumer);
     }
+
 
     public async Task ConsumeFromExchange<T>(string exchangeName, string routingKey)
     {
@@ -36,10 +48,21 @@ public class RabbitMQConsumer : RabbitMQClientBase
         Console.WriteLine($" [*] Waiting for messages from exchange '{exchangeName}' with routing key '{routingKey}'.");
 
         var consumer = new AsyncEventingBasicConsumer(_channel!);
-        Func<T, Task>? processMessage = null;
         consumer.ReceivedAsync += async (model, eventArgs) =>
         {
-            await HandleMessage(queueDeclareOk.QueueName, eventArgs, processMessage);
+            try
+            {
+                var body = eventArgs.Body.ToArray();
+                var message = JsonSerializer.Deserialize<T>(Encoding.UTF8.GetString(body));
+
+                Console.WriteLine($" [x] Received message from exchange '{exchangeName}': {message}");
+                await _channel!.BasicAckAsync(eventArgs.DeliveryTag, multiple: false);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($" [!] Error processing message from exchange '{exchangeName}': {ex.Message}");
+                await _channel!.BasicNackAsync(eventArgs.DeliveryTag, false, true);
+            }
         };
 
         await _channel!.BasicConsumeAsync(queue: queueDeclareOk.QueueName, autoAck: false, consumer: consumer);
@@ -95,13 +118,12 @@ public class RabbitMQConsumer : RabbitMQClientBase
                 return;
             }
 
-            Console.WriteLine($" [x] Processing message from '{source}': {message}");
-
             if (processMessage is not null)
             {
+                Console.WriteLine($" [x] Processing message from '{source}': {message}");
                 await processMessage(message);
             }
-
+        
             await _channel!.BasicAckAsync(eventArgs.DeliveryTag, false);
         }
         catch (JsonException jsonEx)

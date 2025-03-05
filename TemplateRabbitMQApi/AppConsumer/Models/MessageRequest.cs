@@ -2,7 +2,7 @@ using System.Text.Json;
 
 namespace AppConsumer.Models;
 
-public class MessageRequest
+public class MessageRequest 
 {
     public string Name { get; set; } = string.Empty;
     public string Gender { get; set; } = string.Empty;
