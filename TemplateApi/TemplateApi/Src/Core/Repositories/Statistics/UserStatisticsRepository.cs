@@ -1,6 +1,4 @@
 using System.Data;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Dapper;
 using TemplateApi.Core.Models.Statistics;
 
