@@ -1,5 +1,5 @@
-using TemplateRabbitMQApi.Common.Extensions;
-using TemplateRabbitMQApi.Common.Middlewares;
+using TemplateNatsApi.Common.Extensions;
+using TemplateNatsApi.Common.Middlewares;
 
 internal class Program
 {
@@ -18,7 +18,7 @@ internal class Program
         // Add Custom Services
         builder.Host.AddSerilogConfiguration();
         builder.Services.AddJwtAuthentication(configuration);
-        builder.Services.AddRabbitMQConfiguration(configuration);
+        builder.Services.AddNatsConfiguration(configuration);
         builder.Services.AddEmailConfigurations(configuration);
         builder.Services.AddDatabaseConfiguration(configuration);
         builder.Services.AddRepositories();

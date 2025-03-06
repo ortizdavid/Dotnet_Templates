@@ -7,8 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-
-    <!-- Database Packages -->
+   <!-- Database Packages -->
     <PackageReference Include="Dapper" Version="2.1.35" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.0" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="6.0.0-preview2.24304.8" />
@@ -42,8 +41,7 @@
     <PackageReference Include="CsvHelper" Version="33.0.1" />
     <PackageReference Include="EPPlus" Version="7.5.1" />
    
-    <PackageReference Include="RabbitMQ.Client" Version="7.1.0" />
-
+    <PackageReference Include="NATS.Client" Version="1.1.7" />
   </ItemGroup>
 
 </Project>

@@ -1,0 +1,29 @@
+using Microsoft.EntityFrameworkCore;
+using TemplateNatsApi.Core.Models.Auth;
+using TemplateNatsApi.Core.Models.Products;
+using TemplateNatsApi.Core.Models.Suppliers;
+
+namespace TemplateNatsApi.Core.Models;
+
+public class AppDbContext : DbContext
+{
+    public required DbSet<Role> Roles { get; set; }
+    public required DbSet<User> Users { get; set; }
+    public required DbSet<UserRefreshToken> UserRefreshTokens { get; set; }
+    public required DbSet<Category> Categories { get; set; }
+    public required DbSet<Supplier> Suppliers { get; set; }
+    public required DbSet<Product> Products { get; set; }
+    public required DbSet<ProductImage> ProductImages { get; set; }
+
+    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)  
+    {}
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Product>()
+            .Property(p => p.UnitPrice)
+            .HasColumnType("decimal(18, 2)");
+
+        base.OnModelCreating(modelBuilder);
+    }
+}
