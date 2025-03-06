@@ -10,7 +10,8 @@ This repository contains a collection of .NET project templates. From architectu
 - [X] **MVC App**: A template for creating a Model-View-Controller web application.
 - [X] **Simple MVC App**: A basic version of the MVC app template for rapid prototyping.
 - [X] **Minimal API**: A Minimal basic API
-- [ ] **API RabbitMQ**: 
+- [X] **RabbitMQ API**: A RabbitMQ Producer and Consumer REST API
+- [X] **NATS API**:  A RabbitMQ Publisher and Subscriber REST API
 - [ ] **Event Driven**: A template for implementing an event-driven architecture in .NET applications.
 - [ ] **Simple Event Driven**: A simplified version of the event-driven architecture template.
 - [ ] **CQRS**: A template for implementing the Command Query Responsibility Segregation (CQRS) pattern.
