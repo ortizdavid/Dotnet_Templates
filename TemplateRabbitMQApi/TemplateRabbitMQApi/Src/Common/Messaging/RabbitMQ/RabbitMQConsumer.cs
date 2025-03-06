@@ -8,7 +8,11 @@ namespace TemplateRabbitMQApi.Common.Messaging.RabbitMQ;
 
 public class RabbitMQConsumer : RabbitMQClientBase
 {
-    public RabbitMQConsumer(IOptions<RabbitMQSettings> settings) : base(settings) {}
+    private readonly ILogger<RabbitMQConsumer> _logger;
+    public RabbitMQConsumer(IOptions<RabbitMQSettings> settings, ILogger<RabbitMQConsumer> logger) : base(settings) 
+    {
+        _logger = logger;
+    }
 
     public async Task ConsumeFromQueue<T>(string queueName)
     {
@@ -16,6 +20,7 @@ public class RabbitMQConsumer : RabbitMQClientBase
         await DeclareQueueAsync(queueName);
 
         Console.WriteLine($" [*] Waiting for messages to consume from queue '{queueName}'.");
+        _logger.LogInformation($" [*] Waiting for messages to consume from queue '{queueName}'.");
 
         var consumer = new AsyncEventingBasicConsumer(_channel!);
         consumer.ReceivedAsync += async (model, eventArgs) =>
@@ -26,11 +31,13 @@ public class RabbitMQConsumer : RabbitMQClientBase
                 var message = JsonSerializer.Deserialize<T>(Encoding.UTF8.GetString(body));
 
                 Console.WriteLine($" [x] Received message from queue '{queueName}': {message}");
+                _logger.LogInformation($" [x] Received message from queue '{queueName}': {message}");
                 await _channel!.BasicAckAsync(deliveryTag: eventArgs.DeliveryTag, multiple: false);
             }
             catch (Exception ex)
             {
                 Console.WriteLine($" [!] Error consuming message from queue '{queueName}': {ex.Message}");
+                _logger.LogError($" [!] Error consuming message from queue '{queueName}': {ex.Message}");
                 await _channel!.BasicRejectAsync(deliveryTag: eventArgs.DeliveryTag, requeue: true);
             }
         };
@@ -47,6 +54,7 @@ public class RabbitMQConsumer : RabbitMQClientBase
         var queueDeclareOk = await DeclareAndBindQueueAsync(exchangeName, routingKey);
 
         Console.WriteLine($" [*] Waiting for messages to consume from exchange '{exchangeName}' with routing key '{routingKey}'.");
+        _logger.LogInformation($" [*] Waiting for messages to consume from exchange '{exchangeName}' with routing key '{routingKey}'.");
 
         var consumer = new AsyncEventingBasicConsumer(_channel!);
         consumer.ReceivedAsync += async (model, eventArgs) =>
@@ -57,11 +65,13 @@ public class RabbitMQConsumer : RabbitMQClientBase
                 var message = JsonSerializer.Deserialize<T>(Encoding.UTF8.GetString(body));
 
                 Console.WriteLine($" [x] Received message from exchange '{exchangeName}': {message}");
+                _logger.LogInformation($" [x] Received message from exchange '{exchangeName}': {message}");
                 await _channel!.BasicAckAsync(deliveryTag: eventArgs.DeliveryTag, multiple: false);
             }
             catch (Exception ex)
             {
                 Console.WriteLine($" [!] Error consuming message from exchange '{exchangeName}': {ex.Message}");
+                _logger.LogError($" [!] Error consuming message from exchange '{exchangeName}': {ex.Message}");
                 await _channel!.BasicRejectAsync(deliveryTag: eventArgs.DeliveryTag, requeue: true);
             }
         };
@@ -76,8 +86,6 @@ public class RabbitMQConsumer : RabbitMQClientBase
         await EnsureConnectionAsync();
         await DeclareQueueAsync(queueName);
 
-        Console.WriteLine($" [*] Waiting for messages to Process from queue '{queueName}'.");
-
         var consumer = new AsyncEventingBasicConsumer(_channel!);
         consumer.ReceivedAsync += async (model, eventArgs) =>
         {
@@ -90,18 +98,17 @@ public class RabbitMQConsumer : RabbitMQClientBase
                 {
                     await funcProcessMessage(message);
                     await _channel!.BasicAckAsync(deliveryTag: eventArgs.DeliveryTag, multiple: false);
-                    Console.WriteLine($" [x] Message processed successfully: {message} via '{funcProcessMessage.Method.Name}'");
+                    _logger.LogInformation($" [x] Message processed successfully: {message} via '{funcProcessMessage.Method.Name}'");
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($" [!] Error processing message from queue '{queueName}': {ex.Message}");
+                _logger.LogError($" [!] Error processing message from queue '{queueName}': {ex.Message}");
                 await _channel!.BasicRejectAsync(deliveryTag: eventArgs.DeliveryTag, requeue: true);
             }
         };
 
         await _channel!.BasicConsumeAsync(queue: queueName, autoAck: false, consumer: consumer);
-        Console.ReadKey();
     }
 
 
@@ -110,8 +117,6 @@ public class RabbitMQConsumer : RabbitMQClientBase
         await EnsureConnectionAsync();
         await DeclareExchangeAsync(exchangeName);
         var queueDeclareOk = await DeclareAndBindQueueAsync(exchangeName, routingKey);
-
-        Console.WriteLine($" [*] Waiting for messages to Process from exchange '{exchangeName}' with routing key '{routingKey}'.");
 
         var consumer = new AsyncEventingBasicConsumer(_channel!);
         consumer.ReceivedAsync += async (model, eventArgs) =>
@@ -124,17 +129,16 @@ public class RabbitMQConsumer : RabbitMQClientBase
                 {
                     await funcProcessMessage(message);
                     await _channel!.BasicAckAsync(deliveryTag: eventArgs.DeliveryTag, multiple: false);
-                    Console.WriteLine($" [x] Message processed successfully: {message} via '{funcProcessMessage.Method.Name}'");
+                    _logger.LogInformation($" [x] Message processed successfully: {message} via '{funcProcessMessage.Method.Name}'");
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($" [!] Error processing message from exchange '{exchangeName}': {ex.Message}");
+                _logger.LogError($" [!] Error processing message from exchange '{exchangeName}': {ex.Message}");
                 await _channel!.BasicRejectAsync(deliveryTag: eventArgs.DeliveryTag, requeue: true);
             }
         };
 
         await _channel!.BasicConsumeAsync(queue: queueDeclareOk.QueueName, autoAck: false, consumer: consumer);
-        //Console.ReadKey();
     }
 }

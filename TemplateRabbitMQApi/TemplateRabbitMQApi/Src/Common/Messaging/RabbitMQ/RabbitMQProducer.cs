@@ -7,7 +7,12 @@ namespace TemplateRabbitMQApi.Common.Messaging.RabbitMQ;
 
 public class RabbitMQProducer : RabbitMQClientBase
 {
-    public RabbitMQProducer(IOptions<RabbitMQSettings> settings) : base(settings) {}
+    private readonly ILogger<RabbitMQProducer> _logger;
+
+    public RabbitMQProducer(IOptions<RabbitMQSettings> settings, ILogger<RabbitMQProducer> logger) : base(settings) 
+    {
+        _logger = logger;
+    }
 
     public async Task PublishToQueue<T>(string queueName, T message)
     {
@@ -26,9 +31,11 @@ public class RabbitMQProducer : RabbitMQClientBase
                 basicProperties: properties, 
                 body: body
             );
+            _logger.LogInformation($"Message published successfully to queue: {queueName}");
         }
-        catch (System.Exception)
+        catch (Exception ex)
         {
+            _logger.LogError($"[!] Failed to publish to queue '{queueName}': ", ex.Message);
             throw;
         }
     }
@@ -50,9 +57,11 @@ public class RabbitMQProducer : RabbitMQClientBase
                 basicProperties: properties, 
                 body: body
             );
+            _logger.LogInformation($"Message published successfully to exchange: {exchangeName} with routing key: {routingKey}");
         }
-        catch (System.Exception)
+        catch (Exception ex)
         {
+            _logger.LogError($"[!] Failed to publish to exchange '{exchangeName}' with routing key: {routingKey}: ", ex.Message);
             throw;
         }
     }

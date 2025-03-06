@@ -43,7 +43,6 @@ public class NatsSubscriber : NatsClientBase
     public async Task ProcessMessageAsync<T>(string subject, Func<T, Task> funcProcessMessage)
     {
         EnsureConnection();
-        Console.WriteLine($" [*] Subscribed to subject '{subject}' waiting to messages...");
         
         var subscription = _connection!.SubscribeAsync(subject);
         subscription.MessageHandler += async (sender, args) =>
