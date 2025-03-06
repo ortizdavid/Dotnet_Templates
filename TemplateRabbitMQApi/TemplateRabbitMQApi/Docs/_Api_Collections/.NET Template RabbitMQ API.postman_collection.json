@@ -271,9 +271,9 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{TEMPLATE_API}}/roles?pageIndex=0&pageSize=2",
+									"raw": "{{TEMPLATE_RABBITMQ_API}}/roles?pageIndex=0&pageSize=2",
 									"host": [
-										"{{TEMPLATE_API}}"
+										"{{TEMPLATE_RABBITMQ_API}}"
 									],
 									"path": [
 										"roles"
@@ -308,9 +308,9 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{TEMPLATE_API}}/roles/not-paginated",
+									"raw": "{{TEMPLATE_RABBITMQ_API}}/roles/not-paginated",
 									"host": [
-										"{{TEMPLATE_API}}"
+										"{{TEMPLATE_RABBITMQ_API}}"
 									],
 									"path": [
 										"roles",
@@ -336,9 +336,9 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{TEMPLATE_API}}/roles/by-code/role_admin",
+									"raw": "{{TEMPLATE_RABBITMQ_API}}/roles/by-code/role_admin",
 									"host": [
-										"{{TEMPLATE_API}}"
+										"{{TEMPLATE_RABBITMQ_API}}"
 									],
 									"path": [
 										"roles",
@@ -365,9 +365,9 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{TEMPLATE_API}}/roles/046d11e2-5a4e-4eb4-8d6d-c32f050583a2",
+									"raw": "{{TEMPLATE_RABBITMQ_API}}/roles/046d11e2-5a4e-4eb4-8d6d-c32f050583a2",
 									"host": [
-										"{{TEMPLATE_API}}"
+										"{{TEMPLATE_RABBITMQ_API}}"
 									],
 									"path": [
 										"roles",
@@ -402,9 +402,9 @@
 									}
 								},
 								"url": {
-									"raw": "{{TEMPLATE_API}}/roles",
+									"raw": "{{TEMPLATE_RABBITMQ_API}}/roles",
 									"host": [
-										"{{TEMPLATE_API}}"
+										"{{TEMPLATE_RABBITMQ_API}}"
 									],
 									"path": [
 										"roles"
@@ -438,9 +438,9 @@
 									}
 								},
 								"url": {
-									"raw": "{{TEMPLATE_API}}/roles/046d11e2-5a4e-4eb4-8d6d-c32f050583a2",
+									"raw": "{{TEMPLATE_RABBITMQ_API}}/roles/046d11e2-5a4e-4eb4-8d6d-c32f050583a2",
 									"host": [
-										"{{TEMPLATE_API}}"
+										"{{TEMPLATE_RABBITMQ_API}}"
 									],
 									"path": [
 										"roles",
@@ -466,9 +466,9 @@
 								"method": "DELETE",
 								"header": [],
 								"url": {
-									"raw": "{{TEMPLATE_API}}/roles/989d1781-0bbe-4a32-a1d1-a6a68158c5c5",
+									"raw": "{{TEMPLATE_RABBITMQ_API}}/roles/989d1781-0bbe-4a32-a1d1-a6a68158c5c5",
 									"host": [
-										"{{TEMPLATE_API}}"
+										"{{TEMPLATE_RABBITMQ_API}}"
 									],
 									"path": [
 										"roles",
@@ -499,9 +499,9 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{TEMPLATE_API}}/users?pageIndex=0&pageSize=10",
+									"raw": "{{TEMPLATE_RABBITMQ_API}}/users?pageIndex=0&pageSize=10",
 									"host": [
-										"{{TEMPLATE_API}}"
+										"{{TEMPLATE_RABBITMQ_API}}"
 									],
 									"path": [
 										"users"
@@ -536,9 +536,9 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{TEMPLATE_API}}/users/eecd0044-4fac-4105-b6e7-e5e2e53490b3",
+									"raw": "{{TEMPLATE_RABBITMQ_API}}/users/eecd0044-4fac-4105-b6e7-e5e2e53490b3",
 									"host": [
-										"{{TEMPLATE_API}}"
+										"{{TEMPLATE_RABBITMQ_API}}"
 									],
 									"path": [
 										"users",
@@ -602,9 +602,9 @@
 									}
 								},
 								"url": {
-									"raw": "{{TEMPLATE_API}}/users",
+									"raw": "{{TEMPLATE_RABBITMQ_API}}/users",
 									"host": [
-										"{{TEMPLATE_API}}"
+										"{{TEMPLATE_RABBITMQ_API}}"
 									],
 									"path": [
 										"users"
@@ -639,9 +639,9 @@
 									]
 								},
 								"url": {
-									"raw": "{{TEMPLATE_API}}/users/eecd0044-4fac-4105-b6e7-e5e2e53490b3/upload-image",
+									"raw": "{{TEMPLATE_RABBITMQ_API}}/users/eecd0044-4fac-4105-b6e7-e5e2e53490b3/upload-image",
 									"host": [
-										"{{TEMPLATE_API}}"
+										"{{TEMPLATE_RABBITMQ_API}}"
 									],
 									"path": [
 										"users",
@@ -677,9 +677,9 @@
 									}
 								},
 								"url": {
-									"raw": "{{TEMPLATE_API}}/users/a9060d6a-86c7-462b-8f89-0d1a0a6e8918/change-password",
+									"raw": "{{TEMPLATE_RABBITMQ_API}}/users/a9060d6a-86c7-462b-8f89-0d1a0a6e8918/change-password",
 									"host": [
-										"{{TEMPLATE_API}}"
+										"{{TEMPLATE_RABBITMQ_API}}"
 									],
 									"path": [
 										"users",
@@ -715,9 +715,9 @@
 									}
 								},
 								"url": {
-									"raw": "{{TEMPLATE_API}}/users/a9060d6a-86c7-462b-8f89-0d1a0a6e8918/activate",
+									"raw": "{{TEMPLATE_RABBITMQ_API}}/users/a9060d6a-86c7-462b-8f89-0d1a0a6e8918/activate",
 									"host": [
-										"{{TEMPLATE_API}}"
+										"{{TEMPLATE_RABBITMQ_API}}"
 									],
 									"path": [
 										"users",
@@ -753,9 +753,9 @@
 									}
 								},
 								"url": {
-									"raw": "{{TEMPLATE_API}}/users/a9060d6a-86c7-462b-8f89-0d1a0a6e8918/deactivate",
+									"raw": "{{TEMPLATE_RABBITMQ_API}}/users/a9060d6a-86c7-462b-8f89-0d1a0a6e8918/deactivate",
 									"host": [
-										"{{TEMPLATE_API}}"
+										"{{TEMPLATE_RABBITMQ_API}}"
 									],
 									"path": [
 										"users",
@@ -782,9 +782,9 @@
 								"method": "DELETE",
 								"header": [],
 								"url": {
-									"raw": "{{TEMPLATE_API}}/users/7725cd5f-df4b-4f13-b6c3-eaf7801fe1a3",
+									"raw": "{{TEMPLATE_RABBITMQ_API}}/users/7725cd5f-df4b-4f13-b6c3-eaf7801fe1a3",
 									"host": [
-										"{{TEMPLATE_API}}"
+										"{{TEMPLATE_RABBITMQ_API}}"
 									],
 									"path": [
 										"users",
@@ -810,9 +810,9 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{TEMPLATE_API}}/users/current",
+									"raw": "{{TEMPLATE_RABBITMQ_API}}/users/current",
 									"host": [
-										"{{TEMPLATE_API}}"
+										"{{TEMPLATE_RABBITMQ_API}}"
 									],
 									"path": [
 										"users",

@@ -28,11 +28,14 @@ class Program
         // Start Consuming Messages 
 
         // queue: dotnet_queue
-        //await ConsumeDotnetQueue(rabbitConsumer);
+        // await ConsumeDotnetQueue(rabbitConsumer);
+
+        // Process Messages
+        await ProcessDotnetQueue(rabbitConsumer);
 
         // exchage: Category Created
         //await ConsumeCategoriesCreated(rabbitConsumer);
-        await ConsumeCategoriesUpdated(rabbitConsumer);
+        //await ConsumeCategoriesUpdated(rabbitConsumer);
     }
 
     public static void ConfigureServices(IServiceCollection services, IConfiguration configuration)
@@ -47,7 +50,6 @@ class Program
         {
             await consumer.ConsumeFromQueue<MessageRequest>("dotnet_queue");
             Console.WriteLine(" [*] Consumers are running...");
-            Console.ReadKey();
         }
         catch (Exception ex)
         {
@@ -55,13 +57,30 @@ class Program
         }
     }
 
+    public static async Task ProcessDotnetQueue(RabbitMQConsumer consumer)
+    {
+        //Console.WriteLine(" [*] Processing Message from 'dotnet_queue' ...");
+        try
+        {
+            await consumer.ProcessMessageFromQueue<MessageRequest>("dotnet_queue", PrintMessageAsync);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Consumer error: {ex.Message}");
+        }
+    }
+
+    public static async Task PrintMessageAsync(MessageRequest message)
+    {
+        await Task.Run(() => Console.WriteLine(message));
+    }
+
+
     public static async Task ConsumeCategoriesCreated(RabbitMQConsumer consumer)
     {
         try
         {
             await consumer.ConsumeFromExchange<Category>(Exchanges.CategoryExchange, RoutingKeys.Category.Created);
-            Console.WriteLine(" [*] Consumers are running...");
-            Console.ReadKey();
         }
         catch (Exception ex)
         {
@@ -74,8 +93,6 @@ class Program
         try
         {
             await consumer.ConsumeFromExchange<Category>(Exchanges.CategoryExchange, RoutingKeys.Category.Updated);
-            Console.WriteLine(" [*] Consumers are running...");
-            Console.ReadKey();
         }
         catch (Exception ex)
         {
