@@ -125,6 +125,87 @@ CREATE TABLE ProductImages (
 );
 GO
 
+-- EventTypes
+IF OBJECT_ID('EventTypes', 'U') IS NOT NULL
+    DROP TABLE EventTypes;
+GO
+CREATE TABLE EventTypes(
+    TypeId INT IDENTITY PRIMARY KEY,
+    Name VARCHAR(50) UNIQUE NOT NULL,
+    Description VARCHAR(150)
+);
+
+INSERT INTO EventTypes (Name, Description) VALUES
+('Created', 'When a new record is created'),
+('Updated', 'When a record is updated'),
+('Deleted', 'When a record is deleted'),
+('Imported', 'When data is imported (CSV, JSON, Excel)'),
+('Processed', 'When an imported file is processed'),
+('FailedProcessing', 'When a general process fails due to business rules or errors'),
+('FailedImport', 'When an import fails due to validation errors'),
+('Exported', 'When data is exported'),
+('Published', 'When an event/message is sent to another service'),
+('Consumed', 'When an event/message is processed by a consumer');
+
+
+-- UserEvents
+IF OBJECT_ID('UserEvents') IS NOT NULL
+    DROP TABLE UserEvents;
+GO
+CREATE TABLE UserEvents (
+    EventId INT IDENTITY PRIMARY KEY,
+    UserId INT,
+    EventType INT NOT NULL,
+    EventData NVARCHAR(MAX),
+    CreatedAt DATETIME DEFAULT GETDATE(),
+    CONSTRAINT FK_User_Evt FOREIGN KEY(UserId) REFERENCES Users(UserId),
+    CONSTRAINT FK_EventType_User FOREIGN KEY(EventType) REFERENCES EventTypes(TypeId)
+);
+
+-- ProductEvents
+IF OBJECT_ID('ProductEvents') IS NOT NULL
+    DROP TABLE ProductEvents;
+GO
+CREATE TABLE ProductEvents (
+    EventId INT IDENTITY PRIMARY KEY,
+    ProductId INT,
+    EventType INT NOT NULL,
+    EventData NVARCHAR(MAX),
+    CreatedAt DATETIME DEFAULT GETDATE(),
+    CONSTRAINT FK_Product_Evt FOREIGN KEY(ProductId) REFERENCES Products(ProductId),
+    CONSTRAINT FK_EventType_Product FOREIGN KEY(EventType) REFERENCES EventTypes(TypeId)
+);
+
+-- CategoryEvents
+IF OBJECT_ID('CategoryEvents') IS NOT NULL
+    DROP TABLE CategoryEvents;
+GO
+CREATE TABLE CategoryEvents (
+    EventId INT IDENTITY PRIMARY KEY,
+    CategoryId INT,
+    EventType INT NOT NULL,
+    EventData NVARCHAR(MAX),
+    CreatedAt DATETIME DEFAULT GETDATE(),
+    CONSTRAINT FK_Categpry_Evt FOREIGN KEY(CategoryId) REFERENCES Categories(CategoryId),
+    CONSTRAINT FK_EventType_Category FOREIGN KEY(EventType) REFERENCES EventTypes(TypeId)
+);
+
+-- SupplierEvents
+IF OBJECT_ID('SupplierEvents') IS NOT NULL
+    DROP TABLE SupplierEvents;
+GO
+CREATE TABLE SupplierEvents (
+    EventId INT IDENTITY PRIMARY KEY,
+    SupplierId INT,
+    EventType INT NOT NULL,
+    EventData NVARCHAR(MAX),
+    CreatedAt DATETIME DEFAULT GETDATE(),
+    CONSTRAINT FK_Supplier_Evt FOREIGN KEY(SupplierId) REFERENCES Suppliers(SupplierId),
+    CONSTRAINT FK_EventType_Supplier FOREIGN KEY(EventType) REFERENCES EventTypes(TypeId)
+);
+
+
+
 -- VIEWS
 
 -- ViewUserData

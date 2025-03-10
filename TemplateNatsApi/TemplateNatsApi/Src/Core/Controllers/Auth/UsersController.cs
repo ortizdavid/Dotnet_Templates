@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace TemplateNatsApi.Core.Controllers.Auth;
 
-[Authorize]
+//[Authorize]
 [Route("api/[controller]")]
 [ApiController]
 public class UsersController : ControllerBase

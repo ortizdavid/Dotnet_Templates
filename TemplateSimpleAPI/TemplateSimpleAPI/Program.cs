@@ -7,6 +7,7 @@ internal class Program
     private static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
+        builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 
         // Add services to the container.
         // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi

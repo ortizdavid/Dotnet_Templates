@@ -1,9 +1,12 @@
+using System.Text.Json;
 using TemplateEventDriven.Common.Exceptions;
 using TemplateEventDriven.Common.Helpers;
 using TemplateEventDriven.Common.Messaging.RabbitMQ;
 using TemplateEventDriven.Core.Models.Auth;
+using TemplateEventDriven.Core.Models.Events;
 using TemplateEventDriven.Core.Models.Messaging;
 using TemplateEventDriven.Core.Repositories.Auth;
+using TemplateEventDriven.Core.Repositories.Events;
 
 namespace TemplateEventDriven.Core.Services.Auth;
 
@@ -12,6 +15,7 @@ public class UserService
     private readonly UserRepository _repository;
     private readonly UserRefreshTokenRepository _refreshTokenRepository;
     private readonly RoleRepository _roleRepository;
+    private readonly UserEventRepository _eventRepositoy;
     private readonly RabbitMQProducer _rabbitMQProducer;
     private readonly IHttpContextAccessor _contextAccessor;
     private readonly FileUploader _imageUploader;
@@ -19,11 +23,12 @@ public class UserService
     private readonly string _uploadDirectory;
 
     public UserService(UserRepository repository, UserRefreshTokenRepository refreshTokenRepository, RoleRepository roleRepository,
-        RabbitMQProducer rabbitMQProducer, IHttpContextAccessor contextAccessor, IConfiguration configuration)
+        UserEventRepository eventRepository, RabbitMQProducer rabbitMQProducer, IHttpContextAccessor contextAccessor, IConfiguration configuration)
     {
         _repository = repository;
         _refreshTokenRepository = refreshTokenRepository;
         _roleRepository = roleRepository;
+        _eventRepositoy = eventRepository;
         _rabbitMQProducer = rabbitMQProducer;
         _contextAccessor = contextAccessor;
         _configuration = configuration;
@@ -58,7 +63,7 @@ public class UserService
             Email = request.Email,
         };
         await _repository.CreateAsync(user);
-        
+
         // message
         var role = await _roleRepository.GetByIdAsync(user.RoleId);
         var userMessage = new UserMessage()
@@ -71,6 +76,16 @@ public class UserService
             IsActive = user.IsActive,
             CreatedAt = user.CreatedAt,
         };
+
+        var userEvent = new UserEvent()
+        {
+            UserId = user.UserId,
+            EventType = EventTypeEnum.Created,
+            EventData = JsonSerializer.Serialize(userMessage),
+            CreatedAt = DateTime.UtcNow
+        };
+        
+        await _eventRepositoy.CreateAsync(userEvent);
         await _rabbitMQProducer.PublishToExchange(Exchanges.UserExchange, userMessage, RoutingKeys.User.Created);
     }
 
@@ -93,13 +108,10 @@ public class UserService
         {
             throw new NotFoundException($"User with ID '{uniqueId}' not found.");
         }
-        user.Password = PasswordHelper.Hash(request.NewPassword);
-        user.UpdatedAt = DateTime.UtcNow;
-        await _repository.UpdateAsync(user);
-
-        // message
         var role = await _roleRepository.GetByIdAsync(user.RoleId);
-        var userMessage = new UserMessage()
+
+        // user before update
+        var userBefore = new
         {
             UniqueId = user.UniqueId,
             UserName = user.UserName,
@@ -107,7 +119,32 @@ public class UserService
             Password = user.Password,
             UpdatedAt = user.UpdatedAt
         };
-        await _rabbitMQProducer.PublishToExchange(Exchanges.UserExchange, userMessage, RoutingKeys.User.Updated);
+       
+        user.Password = PasswordHelper.Hash(request.NewPassword);
+        user.UpdatedAt = DateTime.UtcNow;
+        await _repository.UpdateAsync(user);
+
+        // user after update
+        var userAfter = new
+        {
+            UniqueId = user.UniqueId,
+            UserName = user.UserName,
+            Role = role?.RoleName,
+            IsActive = user.IsActive,
+            Password = user.Password,
+            UpdatedAt = user.UpdatedAt
+        };
+
+        var userEvent = new UserEvent()
+        {
+            UserId = user.UserId,
+            EventType = EventTypeEnum.Updated,
+            EventData = JsonSerializer.Serialize(new{ Before = userBefore, After = userAfter}),
+            CreatedAt = DateTime.UtcNow
+        };
+
+        await _eventRepositoy.CreateAsync(userEvent);
+        await _rabbitMQProducer.PublishToExchange(Exchanges.UserExchange, userAfter, RoutingKeys.User.Updated);
     }
 
     public async Task<Pagination<UserData>> GetAllUsers(PaginationParam param)

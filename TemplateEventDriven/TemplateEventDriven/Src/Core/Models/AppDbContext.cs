@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using TemplateEventDriven.Core.Models.Auth;
+using TemplateEventDriven.Core.Models.Events;
 using TemplateEventDriven.Core.Models.Products;
 using TemplateEventDriven.Core.Models.Suppliers;
 
@@ -14,6 +15,10 @@ public class AppDbContext : DbContext
     public required DbSet<Supplier> Suppliers { get; set; }
     public required DbSet<Product> Products { get; set; }
     public required DbSet<ProductImage> ProductImages { get; set; }
+    public required DbSet<UserEvent> UserEvents { get; set; }
+    public required DbSet<ProductEvent> ProductEvents { get; set; }
+    public required DbSet<CategoryEvent> CategoryEvents { get; set; }
+    public required DbSet<SupplierEvent> SupplierEvents { get; set; }
 
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)  
     {}

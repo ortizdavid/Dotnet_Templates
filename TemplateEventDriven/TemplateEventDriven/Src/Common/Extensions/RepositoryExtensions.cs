@@ -1,5 +1,6 @@
 using TemplateEventDriven.Core.Repositories;
 using TemplateEventDriven.Core.Repositories.Auth;
+using TemplateEventDriven.Core.Repositories.Events;
 using TemplateEventDriven.Core.Repositories.Products;
 using TemplateEventDriven.Core.Repositories.Reports;
 using TemplateEventDriven.Core.Repositories.Statistics;
@@ -32,5 +33,11 @@ public static class RepositoryExtensions
         services.AddScoped<CategoryStatisticsRepository>();
         services.AddScoped<SupplierStatisticsRepository>();
         services.AddScoped<ProductStatisticsRepository>();
+
+        // Events
+        services.AddScoped<UserEventRepository>();
+        services.AddScoped<ProductEventRepository>();
+        services.AddScoped<CategoryEventRepository>();
+        services.AddScoped<SupplierEventRepository>();
     }
 }

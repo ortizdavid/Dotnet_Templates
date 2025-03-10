@@ -9,6 +9,7 @@ internal class Program
     private static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
+        builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 
         // Add sessions service
         builder.Services.AddSession();

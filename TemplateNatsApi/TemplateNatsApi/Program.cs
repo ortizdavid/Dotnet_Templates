@@ -7,6 +7,7 @@ internal class Program
     {
         var builder = WebApplication.CreateBuilder(args);
         var configuration = builder.Configuration;
+        configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 
         // Default Framework Services
         builder.Services.AddControllers();
@@ -19,7 +20,7 @@ internal class Program
         builder.Host.AddSerilogConfiguration();
         builder.Services.AddJwtAuthentication(configuration);
         builder.Services.AddNatsConfiguration(configuration);
-        builder.Services.AddEmailConfigurations(configuration);
+        builder.Services.AddEmailConfiguration(configuration);
         builder.Services.AddDatabaseConfiguration(configuration);
         builder.Services.AddRepositories();
         builder.Services.AddServices();

@@ -12,7 +12,7 @@ public static class MessagingExtensions
         services.AddSingleton<NatsSubscriber>();
     }
 
-    public static void AddEmailConfigurations(this IServiceCollection services, IConfiguration configuration)
+    public static void AddEmailConfiguration(this IServiceCollection services, IConfiguration configuration)
     {
         services.Configure<EmailSettings>(configuration.GetSection("EmailSettings"));
         services.AddSingleton<EmailService>();
