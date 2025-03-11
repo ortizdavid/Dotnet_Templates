@@ -89,7 +89,6 @@ public class UsersController : ControllerBase
         return Ok(new { Message = msg }); 
     }
 
-    [Authorize]
     [HttpPut("{uniqueId}/deactivate")]
     public async Task<IActionResult> DeactivateUser(Guid uniqueId)
     {
@@ -99,7 +98,6 @@ public class UsersController : ControllerBase
         return Ok(new { Message = msg });  
     }
 
-    [Authorize]
     [HttpGet("current")]
     public async Task<IActionResult> GetCurrentUser()
     {

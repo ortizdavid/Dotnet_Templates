@@ -12,6 +12,7 @@ public static class RepositoryExtensions
 {
     public static void AddRepositories(this IServiceCollection services)
     {
+        services.AddScoped(typeof(RepositoryBase<>));
         // Auth
         services.AddScoped<RoleRepository>();
         services.AddScoped<UserRepository>();

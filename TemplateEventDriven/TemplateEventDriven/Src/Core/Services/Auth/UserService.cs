@@ -1,12 +1,11 @@
 using System.Text.Json;
 using TemplateEventDriven.Common.Exceptions;
 using TemplateEventDriven.Common.Helpers;
-using TemplateEventDriven.Common.Messaging.RabbitMQ;
 using TemplateEventDriven.Core.Models.Auth;
 using TemplateEventDriven.Core.Models.Events;
 using TemplateEventDriven.Core.Models.Messaging;
 using TemplateEventDriven.Core.Repositories.Auth;
-using TemplateEventDriven.Core.Repositories.Events;
+using TemplateEventDriven.Core.Services.Events;
 
 namespace TemplateEventDriven.Core.Services.Auth;
 
@@ -15,21 +14,19 @@ public class UserService
     private readonly UserRepository _repository;
     private readonly UserRefreshTokenRepository _refreshTokenRepository;
     private readonly RoleRepository _roleRepository;
-    private readonly UserEventRepository _eventRepositoy;
-    private readonly RabbitMQProducer _rabbitMQProducer;
+    private readonly EventService<UserEvent> _eventService;
     private readonly IHttpContextAccessor _contextAccessor;
     private readonly FileUploader _imageUploader;
     private readonly IConfiguration _configuration;
     private readonly string _uploadDirectory;
 
     public UserService(UserRepository repository, UserRefreshTokenRepository refreshTokenRepository, RoleRepository roleRepository,
-        UserEventRepository eventRepository, RabbitMQProducer rabbitMQProducer, IHttpContextAccessor contextAccessor, IConfiguration configuration)
+        EventService<UserEvent> eventService, IHttpContextAccessor contextAccessor, IConfiguration configuration)
     {
         _repository = repository;
         _refreshTokenRepository = refreshTokenRepository;
         _roleRepository = roleRepository;
-        _eventRepositoy = eventRepository;
-        _rabbitMQProducer = rabbitMQProducer;
+        _eventService = eventService;
         _contextAccessor = contextAccessor;
         _configuration = configuration;
 
@@ -66,7 +63,7 @@ public class UserService
 
         // message
         var role = await _roleRepository.GetByIdAsync(user.RoleId);
-        var userMessage = new UserMessage()
+        var userCreated = new
         {
             UniqueId = user.UniqueId,
             UserName = user.UserName,
@@ -76,17 +73,8 @@ public class UserService
             IsActive = user.IsActive,
             CreatedAt = user.CreatedAt,
         };
-
-        var userEvent = new UserEvent()
-        {
-            UserId = user.UserId,
-            EventType = EventTypeEnum.Created,
-            EventData = JsonSerializer.Serialize(userMessage),
-            CreatedAt = DateTime.UtcNow
-        };
         
-        await _eventRepositoy.CreateAsync(userEvent);
-        await _rabbitMQProducer.PublishToExchange(Exchanges.UserExchange, userMessage, RoutingKeys.User.Created);
+        await _eventService.PublishCreatedEvent(user.UserId, Exchanges.UserExchange, userCreated, RoutingKeys.User.Created);
     }
 
     public async Task ChangePassword(ChangePasswordRequest request, Guid uniqueId)
@@ -108,18 +96,17 @@ public class UserService
         {
             throw new NotFoundException($"User with ID '{uniqueId}' not found.");
         }
-        var role = await _roleRepository.GetByIdAsync(user.RoleId);
 
         // user before update
         var userBefore = new
         {
             UniqueId = user.UniqueId,
             UserName = user.UserName,
-            Role = role?.RoleName,
             Password = user.Password,
             UpdatedAt = user.UpdatedAt
         };
        
+        // update
         user.Password = PasswordHelper.Hash(request.NewPassword);
         user.UpdatedAt = DateTime.UtcNow;
         await _repository.UpdateAsync(user);
@@ -129,22 +116,11 @@ public class UserService
         {
             UniqueId = user.UniqueId,
             UserName = user.UserName,
-            Role = role?.RoleName,
-            IsActive = user.IsActive,
             Password = user.Password,
             UpdatedAt = user.UpdatedAt
         };
 
-        var userEvent = new UserEvent()
-        {
-            UserId = user.UserId,
-            EventType = EventTypeEnum.Updated,
-            EventData = JsonSerializer.Serialize(new{ Before = userBefore, After = userAfter}),
-            CreatedAt = DateTime.UtcNow
-        };
-
-        await _eventRepositoy.CreateAsync(userEvent);
-        await _rabbitMQProducer.PublishToExchange(Exchanges.UserExchange, userAfter, RoutingKeys.User.Updated);
+        await _eventService.PublishUpdatedEvent(user.UserId, Exchanges.UserExchange, userBefore, userAfter, RoutingKeys.User.Updated);
     }
 
     public async Task<Pagination<UserData>> GetAllUsers(PaginationParam param)
@@ -220,22 +196,32 @@ public class UserService
         {
             throw new BadRequestException("No file selected.");
         }
+
+        var userBefore = new
+        {
+            UniqueId = user.UniqueId,
+            UserName = user.UserName,  
+            Image = user.Image,
+            UploadDir = _uploadDirectory, 
+            UpdatedAt = user.UpdatedAt
+        };
+
         var imageInfo = await _imageUploader.UploadSingleFile(file);
         user.Image = imageInfo.FinalName;
         user.UpdatedAt = DateTime.Now;
         await _repository.UpdateAsync(user);
 
         // message
-        var role = await _roleRepository.GetByIdAsync(user.RoleId);
-        var userMessage = new UserMessage()
+        var userAfter = new
         {
             UniqueId = user.UniqueId,
             UserName = user.UserName,  
-            Role = role?.RoleName,
             Image = user.Image,
+            UploadDir = _uploadDirectory, 
             UpdatedAt = user.UpdatedAt
         };
-        await _rabbitMQProducer.PublishToExchange(Exchanges.UserExchange, userMessage, RoutingKeys.User.Updated);
+
+        await _eventService.PublishUpdatedEvent(user.UserId, Exchanges.UserExchange, userBefore, userAfter, RoutingKeys.User.Updated);
     }
 
     public async Task ActivateUser(Guid uniqueId)
@@ -249,22 +235,30 @@ public class UserService
         {
             throw new ConflictException("User is already active");
         }
+
+        var userBefore = new 
+        {
+            UniqueId = user.UniqueId,
+            UserName = user.UserName,  
+            IsActive = user.IsActive,
+            UpdatedAt = user.UpdatedAt
+        };
+
         user.IsActive = true;
         user.RecoveryToken = Encryption.GenerateRandomToken(150);
         user.UpdatedAt = DateTime.UtcNow;
         await _repository.UpdateAsync(user);
 
         // message
-        var role = await _roleRepository.GetByIdAsync(user.RoleId);
-        var userMessage = new UserMessage()
+        var userAfter = new 
         {
             UniqueId = user.UniqueId,
             UserName = user.UserName,  
-            Role = role?.RoleName,
             IsActive = user.IsActive,
             UpdatedAt = user.UpdatedAt
         };
-        await _rabbitMQProducer.PublishToExchange(Exchanges.UserExchange, userMessage, RoutingKeys.User.Updated);
+
+        await _eventService.PublishUpdatedEvent(user.UserId, Exchanges.UserExchange, userBefore, userAfter, RoutingKeys.User.Updated);
     }
 
     public async Task DeactivateUser(Guid uniqueId)
@@ -278,13 +272,21 @@ public class UserService
         {
             throw new ConflictException("User is already inactive");
         }
+        var userBefore = new 
+        {
+            UniqueId = user.UniqueId,
+            UserName = user.UserName,  
+            IsActive = user.IsActive,
+            UpdatedAt = user.UpdatedAt
+        };
+
         user.IsActive = false;
         user.UpdatedAt = DateTime.UtcNow;
         await _repository.UpdateAsync(user);
 
         // message
         var role = await _roleRepository.GetByIdAsync(user.RoleId);
-        var userMessage = new UserMessage()
+        var userAfter = new
         {
             UniqueId = user.UniqueId,
             UserName = user.UserName,  
@@ -292,7 +294,8 @@ public class UserService
             IsActive = user.IsActive,
             UpdatedAt = user.UpdatedAt
         };
-        await _rabbitMQProducer.PublishToExchange(Exchanges.UserExchange, userMessage, RoutingKeys.User.Updated);
+
+        await _eventService.PublishUpdatedEvent(user.UserId, Exchanges.UserExchange, userBefore, userAfter, RoutingKeys.User.Updated);
     }
 
     public async Task DeleteUser(Guid uniqueId)
@@ -306,7 +309,7 @@ public class UserService
 
         // message
         var role = await _roleRepository.GetByIdAsync(user.RoleId);
-        var userMessage = new UserMessage()
+        var userDeleted = new
         {
             UniqueId = user.UniqueId,
             UserName = user.UserName,
@@ -316,7 +319,7 @@ public class UserService
             IsActive = user.IsActive,
             CreatedAt = user.CreatedAt,
         };
-        await _rabbitMQProducer.PublishToExchange(Exchanges.UserExchange, userMessage, RoutingKeys.User.Deleted); 
+        await _eventService.PublishDeletedEvent(user.UserId, Exchanges.UserExchange, userDeleted, RoutingKeys.User.Deleted); 
     }   
 
     public async Task<UserData> GetUserByNameAndPassword(string? userName, string? password)

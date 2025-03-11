@@ -168,11 +168,11 @@ IF OBJECT_ID('ProductEvents') IS NOT NULL
 GO
 CREATE TABLE ProductEvents (
     EventId INT IDENTITY PRIMARY KEY,
-    ProductId INT,
+    EntityId INT,
     EventType INT NOT NULL,
     EventData NVARCHAR(MAX),
     CreatedAt DATETIME DEFAULT GETDATE(),
-    CONSTRAINT FK_Product_Evt FOREIGN KEY(ProductId) REFERENCES Products(ProductId),
+    CONSTRAINT FK_Product_Evt FOREIGN KEY(EntityId) REFERENCES Products(ProductId),
     CONSTRAINT FK_EventType_Product FOREIGN KEY(EventType) REFERENCES EventTypes(TypeId)
 );
 
@@ -182,11 +182,11 @@ IF OBJECT_ID('CategoryEvents') IS NOT NULL
 GO
 CREATE TABLE CategoryEvents (
     EventId INT IDENTITY PRIMARY KEY,
-    CategoryId INT,
+    EntityId INT,
     EventType INT NOT NULL,
     EventData NVARCHAR(MAX),
     CreatedAt DATETIME DEFAULT GETDATE(),
-    CONSTRAINT FK_Categpry_Evt FOREIGN KEY(CategoryId) REFERENCES Categories(CategoryId),
+    CONSTRAINT FK_Categpry_Evt FOREIGN KEY(EntityId) REFERENCES Categories(CategoryId),
     CONSTRAINT FK_EventType_Category FOREIGN KEY(EventType) REFERENCES EventTypes(TypeId)
 );
 
@@ -196,11 +196,11 @@ IF OBJECT_ID('SupplierEvents') IS NOT NULL
 GO
 CREATE TABLE SupplierEvents (
     EventId INT IDENTITY PRIMARY KEY,
-    SupplierId INT,
+    EntityId INT,
     EventType INT NOT NULL,
     EventData NVARCHAR(MAX),
     CreatedAt DATETIME DEFAULT GETDATE(),
-    CONSTRAINT FK_Supplier_Evt FOREIGN KEY(SupplierId) REFERENCES Suppliers(SupplierId),
+    CONSTRAINT FK_Supplier_Evt FOREIGN KEY(EntityId) REFERENCES Suppliers(SupplierId),
     CONSTRAINT FK_EventType_Supplier FOREIGN KEY(EventType) REFERENCES EventTypes(TypeId)
 );
 

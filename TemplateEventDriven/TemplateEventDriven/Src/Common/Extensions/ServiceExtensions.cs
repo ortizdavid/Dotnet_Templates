@@ -1,4 +1,5 @@
 using TemplateEventDriven.Core.Services.Auth;
+using TemplateEventDriven.Core.Services.Events;
 using TemplateEventDriven.Core.Services.Products;
 using TemplateEventDriven.Core.Services.Reports;
 using TemplateEventDriven.Core.Services.Statistics;
@@ -31,5 +32,8 @@ public static class ServiceExtensions
         services.AddScoped<CategoryStatisticsService>();
         services.AddScoped<SupplierStatisticsService>();
         services.AddScoped<ProductStatisticsService>();
+
+        // Events
+        services.AddScoped(typeof(EventService<>));
     }
 }
