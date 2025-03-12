@@ -1,12 +1,12 @@
-using Microsoft.AspNetCore.Http;
 using TemplateEventDriven.Common.Exceptions;
 using TemplateEventDriven.Common.Helpers;
-using TemplateEventDriven.Common.Messaging.RabbitMQ;
+using TemplateEventDriven.Core.Models.Events;
 using TemplateEventDriven.Core.Models.Messaging;
 using TemplateEventDriven.Core.Models.Products;
 using TemplateEventDriven.Core.Models.Suppliers;
 using TemplateEventDriven.Core.Repositories;
 using TemplateEventDriven.Core.Repositories.Suppliers;
+using TemplateEventDriven.Core.Services.Events;
 
 namespace TemplateEventDriven.Core.Services.Suppliers;
 
@@ -14,15 +14,15 @@ public class SupplierService
 {
     private readonly SupplierRepository _repository;
     private readonly ProductRepository _productRepository;
-    private readonly RabbitMQProducer _rabbitMQProducer;
+    private readonly EventService<SupplierEvent> _eventService;
     private readonly IHttpContextAccessor _contextAccessor;
 
     public SupplierService(SupplierRepository repository, ProductRepository productRepository, 
-        RabbitMQProducer rabbitMQProducer, IHttpContextAccessor contextAccessor)
+        EventService<SupplierEvent> eventService, IHttpContextAccessor contextAccessor)
     {
         _repository = repository;
         _productRepository = productRepository;
-        _rabbitMQProducer = rabbitMQProducer;
+        _eventService = eventService;
         _contextAccessor = contextAccessor;
     }
 
@@ -58,7 +58,25 @@ public class SupplierService
             Address = request.Address
         };
         await _repository.CreateAsync(supplier);
-        await _rabbitMQProducer.PublishToExchange(Exchanges.SupplierExchange, supplier, RoutingKeys.Supplier.Created);
+
+        var newSupplier = new
+        {
+            SupplierName = request.SupplierName,
+            IdentificationNumber = request.IdentificationNumber,
+            PrimaryPhone = request.PrimaryPhone,
+            SecondaryPhone = request.SecondaryPhone,
+            Email = request.Email,
+            Address = request.Address,
+            CreatedAt = supplier.CreatedAt
+        };
+
+        await _eventService.PublishCreatedEvent(~
+            supplier.SupplierId,
+            Exchanges.SupplierExchange, 
+            RoutingKeys.Supplier.Created,
+            EventActions.Supplier.Create,
+            newSupplier
+        );
     }
 
     public async Task UpdateSupplier(SupplierRequest request, Guid uniqueId)
@@ -72,6 +90,18 @@ public class SupplierService
         {
             throw new NotFoundException($"Supplier with ID '{uniqueId}' not found.");
         }
+
+        var supplierAfter = new
+        {
+            SupplierName = request.SupplierName,
+            IdentificationNumber = request.IdentificationNumber,
+            PrimaryPhone = request.PrimaryPhone,
+            SecondaryPhone = request.SecondaryPhone,
+            Email = request.Email,
+            Address = request.Address,
+            UpdatedAt = supplier.UpdatedAt
+        };
+
         supplier.SupplierName = request.SupplierName;
         supplier.IdentificationNumber = request.IdentificationNumber;
         supplier.PrimaryPhone = request.PrimaryPhone;
@@ -80,7 +110,26 @@ public class SupplierService
         supplier.Address = request.Address;
         supplier.UpdatedAt = DateTime.UtcNow;
         await _repository.UpdateAsync(supplier);
-        await _rabbitMQProducer.PublishToExchange(Exchanges.SupplierExchange, supplier, RoutingKeys.Supplier.Updated);
+
+        var supplierBefore = new
+        {
+            SupplierName = supplier.SupplierName,
+            IdentificationNumber = supplier.IdentificationNumber,
+            PrimaryPhone = supplier.PrimaryPhone,
+            SecondaryPhone = supplier.SecondaryPhone,
+            Email = supplier.Email,
+            Address = supplier.Address,
+            UpdatedAt = supplier.UpdatedAt
+        };
+
+        await _eventService.PublishUpdatedEvent(
+            supplier.SupplierId,
+            Exchanges.SupplierExchange, 
+            RoutingKeys.Supplier.Updated,
+            EventActions.Supplier.Update,
+            supplierBefore,
+            supplierAfter
+        );
     }
 
     public async Task<Pagination<Supplier>> GetAllSuppliers(PaginationParam param)
@@ -112,9 +161,26 @@ public class SupplierService
         {
             throw new NotFoundException($"Supplier with ID '{uniqueId}' not found.");
         }
-        var supplierDeleted = supplier;
+        var supplierDeleted = new
+        {
+            SupplierName = supplier.SupplierName,
+            IdentificationNumber = supplier.IdentificationNumber,
+            PrimaryPhone = supplier.PrimaryPhone,
+            SecondaryPhone = supplier.SecondaryPhone,
+            Email = supplier.Email,
+            Address = supplier.Address,
+            CreatedAt = supplier.CreatedAt
+        };
+
         await _repository.DeleteAsync(supplier);
-        await _rabbitMQProducer.PublishToExchange(Exchanges.SupplierExchange, supplierDeleted, RoutingKeys.Supplier.Deleted);
+
+        await _eventService.PublishDeletedEvent(
+            supplier.SupplierId,
+            Exchanges.SupplierExchange, 
+            RoutingKeys.Supplier.Deleted,
+            EventActions.Supplier.Delete,
+            supplierDeleted
+        );
     }
 
     public async Task ImportSuppliersCSV(IFormFile formFile)
@@ -129,7 +195,15 @@ public class SupplierService
         }
         var suppliers = await ParseCSV(formFile);
         await _repository.CreateBatchAsync(suppliers);
-        await _rabbitMQProducer.PublishToExchange(Exchanges.SupplierExchange, suppliers, RoutingKeys.Supplier.Imported);
+
+        var supplierImported = suppliers;
+
+        await _eventService.PublishFaliedImportEvent(
+            Exchanges.SupplierExchange, 
+            RoutingKeys.Supplier.Imported,
+            EventActions.Supplier.ImportCsv,
+            supplierImported
+        );
     }
 
     private async Task<IEnumerable<Supplier>> ParseCSV(IFormFile file)

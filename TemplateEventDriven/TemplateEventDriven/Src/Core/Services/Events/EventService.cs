@@ -16,12 +16,13 @@ public class EventService<T> where T: EventBase, new()
         _repository = repository;
     }
 
-    public async Task PublishCreatedEvent(int? entityId, string exchange, object newObj, string routingKey)
+    public async Task PublishCreatedEvent(int entityId, string exchange, string routingKey, string actionName, object newObj)
     {
         var eventObj = new T
         {
             EntityId = entityId,
             EventType = EventTypeEnum.Created,
+            ActionName = actionName,
             EventData = SerializeData(newObj),
             CreatedAt = DateTime.UtcNow
         };
@@ -29,12 +30,13 @@ public class EventService<T> where T: EventBase, new()
         await _rabbitMQProducer.PublishToExchange(exchange, newObj, routingKey);
     }
 
-    public async Task PublishUpdatedEvent(int? entityId, string exchange,  object before, object after, string routingKey)
+    public async Task PublishUpdatedEvent(int entityId, string exchange, string routingKey, string actionName, object before, object after)
     {
         var eventObj = new T
         {
             EntityId = entityId,
             EventType = EventTypeEnum.Updated,
+            ActionName = actionName,
             EventData = SerializeData(new { Before = before, After = after }),
             CreatedAt = DateTime.UtcNow
         };
@@ -42,17 +44,44 @@ public class EventService<T> where T: EventBase, new()
         await _rabbitMQProducer.PublishToExchange(exchange, after, routingKey);
     }
 
-    public async Task PublishDeletedEvent(int? entityId, string exchange,  object deletedObj, string routingKey)
+    public async Task PublishDeletedEvent(int entityId, string exchange, string routingKey, string actionName, object deletedObj)
     {
         var eventObj = new T
         {
             EntityId = entityId,
             EventType = EventTypeEnum.Deleted,
+            ActionName = actionName,
             EventData = SerializeData(deletedObj),
             CreatedAt = DateTime.UtcNow
         };
         await _repository.CreateAsync(eventObj);
         await _rabbitMQProducer.PublishToExchange(exchange, deletedObj, routingKey);
+    }
+
+    public async Task PublishImportedEvent(string exchange, string routingKey, string actionName, object importedObj)
+    {
+        var eventObj = new T
+        {
+            EventType = EventTypeEnum.Imported,
+            ActionName = actionName,
+            EventData = SerializeData(importedObj),
+            CreatedAt = DateTime.UtcNow
+        };
+        await _repository.CreateAsync(eventObj);
+        await _rabbitMQProducer.PublishToExchange(exchange, importedObj, routingKey);
+    }
+
+    public async Task PublishFaliedImportEvent(string exchange, string routingKey, string actionName, object importedObj)
+    {
+        var eventObj = new T
+        {
+            EventType = EventTypeEnum.FailedImport,
+            ActionName = actionName,
+            EventData = SerializeData(importedObj),
+            CreatedAt = DateTime.UtcNow
+        };
+        await _repository.CreateAsync(eventObj);
+        await _rabbitMQProducer.PublishToExchange(exchange, importedObj, routingKey);
     }
 
     private string SerializeData(object eventData)

@@ -1,22 +1,24 @@
 using TemplateEventDriven.Common.Exceptions;
 using TemplateEventDriven.Common.Helpers;
 using TemplateEventDriven.Common.Messaging.RabbitMQ;
+using TemplateEventDriven.Core.Models.Events;
 using TemplateEventDriven.Core.Models.Messaging;
 using TemplateEventDriven.Core.Models.Products;
 using TemplateEventDriven.Core.Repositories.Products;
+using TemplateEventDriven.Core.Services.Events;
 
 namespace TemplateEventDriven.Core.Services.Products;
 
 public class CategoryService
 {
     private readonly CategoryRepository _repository;
-    private readonly RabbitMQProducer _rabbitMQProducer;
+    private readonly EventService<CategoryEvent> _eventService;
     private readonly IHttpContextAccessor _contextAccessor;
 
-    public CategoryService(CategoryRepository repository, RabbitMQProducer rabbitMQProducer, IHttpContextAccessor contextAccessor)
+    public CategoryService(CategoryRepository repository, EventService<CategoryEvent> eventService, IHttpContextAccessor contextAccessor)
     {
         _repository = repository;
-        _rabbitMQProducer = rabbitMQProducer;
+        _eventService = eventService;
         _contextAccessor = contextAccessor;
     }
 
@@ -36,7 +38,22 @@ public class CategoryService
             Description = request.Description
         };
         await _repository.CreateAsync(category);
-        await _rabbitMQProducer.PublishToExchange(Exchanges.CategoryExchange, category, RoutingKeys.Category.Created);
+
+        var categoryCreated = new
+        {
+            UniqueId = category.UniqueId,
+            CategoryName = request.CategoryName,
+            Description = request.Description,
+            CreatedAt = category.CreatedAt
+        };
+
+        await _eventService.PublishCreatedEvent(
+            category.CategoryId,
+            Exchanges.CategoryExchange, 
+            RoutingKeys.Category.Created, 
+            EventActions.Category.Create,
+            categoryCreated
+        );
     }
 
     public async Task UpdateCategory(CategoryRequest request, Guid uniqueId)
@@ -50,11 +67,36 @@ public class CategoryService
         {
             throw new NotFoundException("Category not found");
         }
+
+        var categoryBefore = new
+        {
+            UniqueId = category.UniqueId,
+            CategoryName = request.CategoryName,
+            Description = request.Description,
+            UpdatedAt = category.UpdatedAt
+        };
+
         category.CategoryName = request.CategoryName;
         category.Description = request.Description;
         category.UpdatedAt = DateTime.UtcNow;
         await _repository.UpdateAsync(category);
-        await _rabbitMQProducer.PublishToExchange(Exchanges.CategoryExchange, category, RoutingKeys.Category.Updated);
+
+        var categoryAfter = new
+        {
+            UniqueId = category.UniqueId,
+            CategoryName = request.CategoryName,
+            Description = request.Description,
+            Uptadedt = category.UpdatedAt
+        };
+
+        await _eventService.PublishUpdatedEvent(
+            category.CategoryId,
+            Exchanges.CategoryExchange, 
+            RoutingKeys.Category.Updated,
+            EventActions.Category.Update,
+            categoryBefore,
+            categoryAfter
+        );
     }
 
     public async Task<Pagination<Category>> GetAllCategories(PaginationParam param)
@@ -86,9 +128,24 @@ public class CategoryService
         {
             throw new NotFoundException("Category not found");
         }
-        var categoryDeleted = category;
+
+        var categoryDeleted = new
+        {
+            UniqueId = category.UniqueId,
+            CategoryName = category.CategoryName,
+            Description = category.Description,
+            CreatedAt = category.CreatedAt
+        };
+
         await _repository.DeleteAsync(category);
-        await _rabbitMQProducer.PublishToExchange(Exchanges.CategoryExchange, categoryDeleted, RoutingKeys.Category.Deleted);
+
+        await _eventService.PublishDeletedEvent(
+            category.CategoryId,
+            Exchanges.CategoryExchange, 
+            RoutingKeys.Category.Deleted,
+            EventActions.Category.Delete,
+            categoryDeleted
+        );
     }
 
     public async Task ImportCategoriesCSV(IFormFile formFile)
@@ -103,7 +160,15 @@ public class CategoryService
         }
         var categories = await ParseCSV(formFile);
         await _repository.CreateBatchAsync(categories);
-        await _rabbitMQProducer.PublishToExchange(Exchanges.CategoryExchange, categories, RoutingKeys.Category.Imported);
+
+        var categoryImported = categories;
+
+        await _eventService.PublishImportedEvent(
+            Exchanges.CategoryExchange,
+            RoutingKeys.Category.Imported,
+            EventActions.Category.ImportCsv,
+            categoryImported
+        );
     }
 
     private async Task<IEnumerable<Category>> ParseCSV(IFormFile formFile)

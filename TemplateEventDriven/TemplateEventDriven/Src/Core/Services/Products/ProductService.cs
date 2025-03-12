@@ -1,11 +1,12 @@
 using TemplateEventDriven.Common.Exceptions;
 using TemplateEventDriven.Common.Helpers;
-using TemplateEventDriven.Common.Messaging.RabbitMQ;
+using TemplateEventDriven.Core.Models.Events;
 using TemplateEventDriven.Core.Models.Messaging;
 using TemplateEventDriven.Core.Models.Products;
 using TemplateEventDriven.Core.Repositories;
 using TemplateEventDriven.Core.Repositories.Products;
 using TemplateEventDriven.Core.Repositories.Suppliers;
+using TemplateEventDriven.Core.Services.Events;
 
 namespace TemplateEventDriven.Core.Services.Products;
 
@@ -15,7 +16,7 @@ public class ProductService
     private readonly ProductImageRepository _imageRepository;
     private readonly CategoryRepository _categoryRepository;
     private readonly SupplierRepository _supplierRepository;
-    private readonly RabbitMQProducer _rabbitMQProducer;
+    private readonly EventService<ProductEvent> _eventService;
     private readonly IHttpContextAccessor _contextAccessor;
     private readonly IConfiguration _configuration;
     private readonly FileUploader _imageUploader;
@@ -23,13 +24,13 @@ public class ProductService
 
     public ProductService(ProductRepository repository, ProductImageRepository imageRepository, 
         CategoryRepository categoryRepository, SupplierRepository supplierRepository,
-        RabbitMQProducer rabbitMQProducer, IHttpContextAccessor contextAccessor, IConfiguration configuration)
+        EventService<ProductEvent> eventService, IHttpContextAccessor contextAccessor, IConfiguration configuration)
     {
         _repository = repository;
         _imageRepository = imageRepository;
         _categoryRepository = categoryRepository;
         _supplierRepository = supplierRepository;
-        _rabbitMQProducer = rabbitMQProducer;
+        _eventService = eventService;
         _contextAccessor = contextAccessor;
         _configuration = configuration;
 
@@ -61,7 +62,8 @@ public class ProductService
         // create message. First get category and supplier
         var category = await _categoryRepository.GetByIdAsync(product.CategoryId);
         var supplier = await _supplierRepository.GetByIdAsync(product.SupplierId);
-        var productMessage = new ProductMessage()
+        
+        var newProduct = new
         {
             ProductName = product.ProductName,
             Code = product.Code,
@@ -71,7 +73,14 @@ public class ProductService
             Category = category?.CategoryName,
             Supplier = supplier?.SupplierName
         };
-        await _rabbitMQProducer.PublishToExchange(Exchanges.ProductExchange, productMessage, RoutingKeys.Product.Created);
+
+        await _eventService.PublishCreatedEvent(
+            product.ProductId,
+            Exchanges.ProductExchange, 
+            RoutingKeys.Product.Created,
+            EventActions.Product.Create,
+            newProduct
+        );
     }
 
     public async Task UpdateProduct(ProductRequest request, Guid uniqueId)
@@ -85,19 +94,12 @@ public class ProductService
         {
             throw new NotFoundException($"Product with ID '{uniqueId}' not found");
         }
-        product.CategoryId = request.CategoryId;
-        product.SupplierId = request.SupplierId;
-        product.ProductName = request.ProductName;
-        product.Code = request.Code;
-        product.UnitPrice = request.UnitPrice;
-        product.Description = request.Description;
-        product.UpdatedAt = DateTime.UtcNow;
-        await _repository.UpdateAsync(product);
 
         // create message
         var category = await _categoryRepository.GetByIdAsync(product.CategoryId);
         var supplier = await _supplierRepository.GetByIdAsync(product.SupplierId);
-        var productMessage = new ProductMessage()
+
+        var productBefore = new
         {
             ProductName = product.ProductName,
             Code = product.Code,
@@ -107,7 +109,35 @@ public class ProductService
             Category = category?.CategoryName,
             Supplier = supplier?.SupplierName
         };
-        await _rabbitMQProducer.PublishToExchange(Exchanges.ProductExchange, productMessage, RoutingKeys.Product.Updated);
+        
+        product.CategoryId = request.CategoryId;
+        product.SupplierId = request.SupplierId;
+        product.ProductName = request.ProductName;
+        product.Code = request.Code;
+        product.UnitPrice = request.UnitPrice;
+        product.Description = request.Description;
+        product.UpdatedAt = DateTime.UtcNow;
+        await _repository.UpdateAsync(product);
+        
+        var productAfter = new
+        {
+            ProductName = product.ProductName,
+            Code = product.Code,
+            UnitPrice = product.UnitPrice,
+            CreatedAt = product.CreatedAt,
+            Description = product.Description,
+            Category = category?.CategoryName,
+            Supplier = supplier?.SupplierName
+        };
+
+        await _eventService.PublishUpdatedEvent(
+            product.ProductId,
+            Exchanges.ProductExchange, 
+            RoutingKeys.Product.Updated,
+            EventActions.Product.Update,
+            productBefore,
+            productAfter
+        );
     }
 
     public async Task<Pagination<ProductData>> GetAllProducts(PaginationParam param)
@@ -139,8 +169,29 @@ public class ProductService
         {
             throw new NotFoundException($"Product with ID '{uniqueId}' not found");
         }
+
+        var category = await _categoryRepository.GetByIdAsync(product.CategoryId);
+        var supplier = await _supplierRepository.GetByIdAsync(product.SupplierId);
+
+        var deletedObj = new
+        {
+            ProductName = product.ProductName,
+            Code = product.Code,
+            UnitPrice = product.UnitPrice,
+            CreatedAt = product.CreatedAt,
+            Description = product.Description,
+            Category = category?.CategoryName,
+            Supplier = supplier?.SupplierName
+        };
         await _repository.DeleteAsync(product);
-        await _rabbitMQProducer.PublishToExchange(Exchanges.ProductExchange, product, RoutingKeys.Product.Deleted);
+
+        await _eventService.PublishDeletedEvent(
+            product.ProductId,
+            Exchanges.ProductExchange, 
+            RoutingKeys.Product.Deleted,
+            EventActions.Product.Delete,
+            deletedObj
+        );
     }
 
     public async Task ImportProductsCSV(IFormFile formFile)
@@ -155,7 +206,15 @@ public class ProductService
         }
         var products = await ParseCSV(formFile);
         await _repository.CreateBatchAsync(products);
-        await _rabbitMQProducer.PublishToExchange(Exchanges.ProductExchange, products, RoutingKeys.Product.Imported);
+
+        var productImported = products;
+
+        await _eventService.PublishImportedEvent(
+            Exchanges.ProductExchange,
+            RoutingKeys.Product.Imported,
+            EventActions.Product.ImportCsv,
+            productImported
+        );
     }
 
     private async Task<IEnumerable<Product>> ParseCSV(IFormFile formFile)
@@ -231,7 +290,16 @@ public class ProductService
         }
 
         await _imageRepository.CreateBatchAsync(productImages);
-        await _rabbitMQProducer.PublishToExchange(Exchanges.ProductExchange, productImages, RoutingKeys.Product.ImageCreated);
+
+        var imageCreated = productImages;
+
+        await _eventService.PublishCreatedEvent(
+            product.ProductId,
+            Exchanges.ProductExchange, 
+            RoutingKeys.Product.ImageCreated,
+            EventActions.Product.UploadImages,
+            imageCreated
+        );
     }
 
     public async Task<IEnumerable<ProductImage>> GetProductImages(Guid uniqueId)

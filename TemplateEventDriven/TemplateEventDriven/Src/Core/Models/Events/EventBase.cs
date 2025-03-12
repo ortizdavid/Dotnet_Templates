@@ -8,6 +8,7 @@ public class EventBase
     public int EventId { get; set; }
     public int? EntityId { get; set; }
     public EventTypeEnum EventType { get; set; }
+    public string? ActionName { get; set; }
     public string? EventData { get; set; }
     public DateTime CreatedAt { get; set; }
 }

@@ -74,7 +74,13 @@ public class UserService
             CreatedAt = user.CreatedAt,
         };
         
-        await _eventService.PublishCreatedEvent(user.UserId, Exchanges.UserExchange, userCreated, RoutingKeys.User.Created);
+        await _eventService.PublishCreatedEvent(
+            user.UserId, 
+            Exchanges.UserExchange, 
+            RoutingKeys.User.Created, 
+            EventActions.User.Create, 
+            userCreated
+        );
     }
 
     public async Task ChangePassword(ChangePasswordRequest request, Guid uniqueId)
@@ -120,7 +126,14 @@ public class UserService
             UpdatedAt = user.UpdatedAt
         };
 
-        await _eventService.PublishUpdatedEvent(user.UserId, Exchanges.UserExchange, userBefore, userAfter, RoutingKeys.User.Updated);
+        await _eventService.PublishUpdatedEvent(
+            user.UserId, 
+            Exchanges.UserExchange, 
+            RoutingKeys.User.Updated, 
+            EventActions.User.ChangePassword,
+            userBefore, 
+            userAfter
+        );
     }
 
     public async Task<Pagination<UserData>> GetAllUsers(PaginationParam param)
@@ -202,7 +215,7 @@ public class UserService
             UniqueId = user.UniqueId,
             UserName = user.UserName,  
             Image = user.Image,
-            UploadDir = _uploadDirectory, 
+            UploadDir = user.Image is null ? null : _uploadDirectory, 
             UpdatedAt = user.UpdatedAt
         };
 
@@ -221,7 +234,14 @@ public class UserService
             UpdatedAt = user.UpdatedAt
         };
 
-        await _eventService.PublishUpdatedEvent(user.UserId, Exchanges.UserExchange, userBefore, userAfter, RoutingKeys.User.Updated);
+        await _eventService.PublishUpdatedEvent(
+            user.UserId, 
+            Exchanges.UserExchange, 
+            RoutingKeys.User.Updated, 
+            EventActions.User.UploadImage,
+            userBefore, 
+            userAfter
+        );
     }
 
     public async Task ActivateUser(Guid uniqueId)
@@ -258,7 +278,14 @@ public class UserService
             UpdatedAt = user.UpdatedAt
         };
 
-        await _eventService.PublishUpdatedEvent(user.UserId, Exchanges.UserExchange, userBefore, userAfter, RoutingKeys.User.Updated);
+        await _eventService.PublishUpdatedEvent(
+            user.UserId, 
+            Exchanges.UserExchange, 
+            RoutingKeys.User.Updated, 
+            EventActions.User.Activate, 
+            userBefore, 
+            userAfter
+        );
     }
 
     public async Task DeactivateUser(Guid uniqueId)
@@ -295,7 +322,14 @@ public class UserService
             UpdatedAt = user.UpdatedAt
         };
 
-        await _eventService.PublishUpdatedEvent(user.UserId, Exchanges.UserExchange, userBefore, userAfter, RoutingKeys.User.Updated);
+        await _eventService.PublishUpdatedEvent(
+            user.UserId, 
+            Exchanges.UserExchange, 
+            RoutingKeys.User.Updated, 
+            EventActions.User.Deactivate,
+            userBefore, 
+            userAfter
+        );
     }
 
     public async Task DeleteUser(Guid uniqueId)
@@ -319,7 +353,13 @@ public class UserService
             IsActive = user.IsActive,
             CreatedAt = user.CreatedAt,
         };
-        await _eventService.PublishDeletedEvent(user.UserId, Exchanges.UserExchange, userDeleted, RoutingKeys.User.Deleted); 
+        await _eventService.PublishDeletedEvent(
+            user.UserId, 
+            Exchanges.UserExchange, 
+            RoutingKeys.User.Deleted, 
+            EventActions.User.Delete,
+            userDeleted
+        ); 
     }   
 
     public async Task<UserData> GetUserByNameAndPassword(string? userName, string? password)

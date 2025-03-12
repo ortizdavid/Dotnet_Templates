@@ -154,11 +154,12 @@ IF OBJECT_ID('UserEvents') IS NOT NULL
 GO
 CREATE TABLE UserEvents (
     EventId INT IDENTITY PRIMARY KEY,
-    UserId INT,
+    EntityId INT,
     EventType INT NOT NULL,
+    ActionName NVARCHAR(100) NOT NULL,
     EventData NVARCHAR(MAX),
     CreatedAt DATETIME DEFAULT GETDATE(),
-    CONSTRAINT FK_User_Evt FOREIGN KEY(UserId) REFERENCES Users(UserId),
+    CONSTRAINT FK_User_Evt FOREIGN KEY(EntityId) REFERENCES Users(UserId),
     CONSTRAINT FK_EventType_User FOREIGN KEY(EventType) REFERENCES EventTypes(TypeId)
 );
 
@@ -170,6 +171,7 @@ CREATE TABLE ProductEvents (
     EventId INT IDENTITY PRIMARY KEY,
     EntityId INT,
     EventType INT NOT NULL,
+    ActionName NVARCHAR(100) NOT NULL,
     EventData NVARCHAR(MAX),
     CreatedAt DATETIME DEFAULT GETDATE(),
     CONSTRAINT FK_Product_Evt FOREIGN KEY(EntityId) REFERENCES Products(ProductId),
@@ -184,6 +186,7 @@ CREATE TABLE CategoryEvents (
     EventId INT IDENTITY PRIMARY KEY,
     EntityId INT,
     EventType INT NOT NULL,
+    ActionName NVARCHAR(100) NOT NULL,
     EventData NVARCHAR(MAX),
     CreatedAt DATETIME DEFAULT GETDATE(),
     CONSTRAINT FK_Categpry_Evt FOREIGN KEY(EntityId) REFERENCES Categories(CategoryId),
@@ -198,6 +201,7 @@ CREATE TABLE SupplierEvents (
     EventId INT IDENTITY PRIMARY KEY,
     EntityId INT,
     EventType INT NOT NULL,
+    ActionName NVARCHAR(100) NOT NULL,
     EventData NVARCHAR(MAX),
     CreatedAt DATETIME DEFAULT GETDATE(),
     CONSTRAINT FK_Supplier_Evt FOREIGN KEY(EntityId) REFERENCES Suppliers(SupplierId),
