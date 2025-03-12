@@ -1,4 +1,3 @@
-using System.Text.Json;
 using TemplateEventDriven.Common.Exceptions;
 using TemplateEventDriven.Common.Helpers;
 using TemplateEventDriven.Core.Models.Auth;

@@ -207,7 +207,11 @@ public class ProductService
         var products = await ParseCSV(formFile);
         await _repository.CreateBatchAsync(products);
 
-        var productImported = products;
+        var productImported = new 
+        {
+            TotalRecords = products.Count(),
+            Items = products
+        };
 
         await _eventService.PublishImportedEvent(
             Exchanges.ProductExchange,

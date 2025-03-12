@@ -10,7 +10,7 @@ DROP VIEW ViewProductReportData
 DROP TABLE Products;
 
 DROP TABLE Categories;
-DROP VIEW ViewCategoryReportData
+DROP VIEW ViewCategoryReportData;
 
 DROP TABLE Suppliers;
 DROP VIEW ViewSupplierReportData

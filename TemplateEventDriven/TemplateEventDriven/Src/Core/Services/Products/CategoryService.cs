@@ -1,6 +1,5 @@
 using TemplateEventDriven.Common.Exceptions;
 using TemplateEventDriven.Common.Helpers;
-using TemplateEventDriven.Common.Messaging.RabbitMQ;
 using TemplateEventDriven.Core.Models.Events;
 using TemplateEventDriven.Core.Models.Messaging;
 using TemplateEventDriven.Core.Models.Products;
@@ -161,7 +160,11 @@ public class CategoryService
         var categories = await ParseCSV(formFile);
         await _repository.CreateBatchAsync(categories);
 
-        var categoryImported = categories;
+        var categoryImported = new
+        {
+            TotalRecords = categories.Count(),
+            Items = categories
+        };
 
         await _eventService.PublishImportedEvent(
             Exchanges.CategoryExchange,

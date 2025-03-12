@@ -70,7 +70,7 @@ public class SupplierService
             CreatedAt = supplier.CreatedAt
         };
 
-        await _eventService.PublishCreatedEvent(~
+        await _eventService.PublishCreatedEvent(
             supplier.SupplierId,
             Exchanges.SupplierExchange, 
             RoutingKeys.Supplier.Created,
@@ -196,7 +196,11 @@ public class SupplierService
         var suppliers = await ParseCSV(formFile);
         await _repository.CreateBatchAsync(suppliers);
 
-        var supplierImported = suppliers;
+        var supplierImported = new 
+        {
+            TotalRecords = suppliers.Count(),
+            Items = suppliers
+        };
 
         await _eventService.PublishFaliedImportEvent(
             Exchanges.SupplierExchange, 
