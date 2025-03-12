@@ -32,7 +32,7 @@ public class ProductRepository : RepositoryBase<Product>
     {
         int offset = pageIndex * pageSize; 
         var sql = @"SELECT * FROM ViewProductData 
-                ORDER BY UserId ASC 
+                ORDER BY ProductId ASC 
                 OFFSET @Offset ROWS FETCH NEXT @PageSize ROWS ONLY;";
 
         var parameters = new { Offset = offset, PageSize = pageSize };
