@@ -12,7 +12,7 @@ This repository contains a collection of .NET project templates. From architectu
 - [X] **Minimal API**: A Minimal basic API
 - [X] **RabbitMQ API**: A RabbitMQ Producer and Consumer REST API
 - [X] **NATS API**:  A RabbitMQ Publisher and Subscriber REST API
-- [ ] **Event Driven**: A template for implementing an event-driven architecture in .NET applications.
+- [X] **Event Driven**: A template for implementing an event-driven architecture in .NET applications.
 - [ ] **CQRS**: A template for implementing the Command Query Responsibility Segregation (CQRS) pattern.
 
 ## Purpose

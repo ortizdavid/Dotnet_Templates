@@ -1,5 +1,4 @@
 using TemplateEventDriven.Common.Exceptions;
-using TemplateEventDriven.Common.Helpers;
 using TemplateEventDriven.Core.Models.Events;
 using TemplateEventDriven.Core.Models.Messaging;
 using TemplateEventDriven.Core.Models.Products;
@@ -8,20 +7,18 @@ using TemplateEventDriven.Core.Services.Events;
 
 namespace TemplateEventDriven.Core.Services.Products;
 
-public class CategoryService
+public class CategoryCommandService
 {
     private readonly CategoryRepository _repository;
     private readonly EventService<CategoryEvent> _eventService;
-    private readonly IHttpContextAccessor _contextAccessor;
 
-    public CategoryService(CategoryRepository repository, EventService<CategoryEvent> eventService, IHttpContextAccessor contextAccessor)
+    public CategoryCommandService(CategoryRepository repository, EventService<CategoryEvent> eventService)
     {
         _repository = repository;
         _eventService = eventService;
-        _contextAccessor = contextAccessor;
     }
 
-    public async Task CreateCategory(CategoryRequest request)
+     public async Task CreateCategory(CategoryRequest request)
     {
         if (request is null)
         {
@@ -96,28 +93,6 @@ public class CategoryService
             categoryBefore,
             categoryAfter
         );
-    }
-
-    public async Task<Pagination<Category>> GetAllCategories(PaginationParam param)
-    {
-        if (param is null)
-        {
-            throw new BadRequestException("Please provide 'PageIndex' and 'PageSize'");
-        }
-        var count = await _repository.CountAsync();
-        var categories = await _repository.GetAllAsync(param.PageSize, param.PageIndex);
-        var pagination = new Pagination<Category>(categories, count, param.PageIndex, param.PageSize, _contextAccessor);  
-        return pagination;
-    }
-
-    public async Task<Category> GetCategoryByUniqueId(Guid uniqueId)
-    {
-        var category = await _repository.GetByUniqueIdAsync(uniqueId);
-        if (category is null)
-        {
-            throw new NotFoundException("Category not found");
-        }
-        return category;
     }
 
     public async Task DeleteCategory(Guid uniqueId)
