@@ -67,8 +67,8 @@ public class CategoryCommandService
         var categoryBefore = new
         {
             UniqueId = category.UniqueId,
-            CategoryName = request.CategoryName,
-            Description = request.Description,
+            CategoryName = category.CategoryName,
+            Description = category.Description,
             UpdatedAt = category.UpdatedAt
         };
 

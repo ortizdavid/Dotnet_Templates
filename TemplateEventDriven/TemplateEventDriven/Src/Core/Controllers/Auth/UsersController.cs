@@ -12,13 +12,16 @@ namespace TemplateEventDriven.Core.Controllers.Auth;
 [ApiController]
 public class UsersController : ControllerBase
 {
-    private readonly UserService _service;
+    private readonly UserCommandService _userCommandService;
+    private readonly UserQueryService _userQueryService;
     private readonly AuthService _authService;
     private readonly ILogger<UsersController> _logger;
 
-    public UsersController(UserService service, AuthService authService, ILogger<UsersController> logger) 
+    public UsersController(UserCommandService userCommandService, UserQueryService userQueryService,
+        AuthService authService, ILogger<UsersController> logger) 
     {
-        _service = service;
+        _userCommandService = userCommandService;
+        _userQueryService = userQueryService;
         _authService = authService;
         _logger = logger;
     }
@@ -26,7 +29,7 @@ public class UsersController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetAllUsers([FromQuery]PaginationParam param)
     {
-        var users = await _service.GetAllUsers(param);
+        var users = await _userQueryService.GetAllUsers(param);
         return Ok(users);
     }
 
@@ -34,7 +37,7 @@ public class UsersController : ControllerBase
     [AllowAnonymous]
     public async Task<IActionResult> CreateUser([FromBody] CreateUserRequest request)
     {
-        await _service.CreateUser(request);
+        await _userCommandService.CreateUser(request);
         var msg = $"User '{request.UserName}' was created";
         _logger.LogInformation(msg);
         return StatusCode((int)HttpStatusCode.Created, new { Message = msg });
@@ -43,21 +46,21 @@ public class UsersController : ControllerBase
     [HttpGet("{uniqueId}")]
     public async Task<IActionResult> GetUserById(Guid uniqueId)
     {
-        var user = await _service.GetUserByUniqueId(uniqueId);
+        var user = await _userQueryService.GetUserByUniqueId(uniqueId);
         return Ok(user);
     }
 
     [HttpGet("by-name/{userName}")]
     public async Task<IActionResult> GetUserByName(string userName)
     {
-        var user = await _service.GetUserByName(userName);
+        var user = await _userQueryService.GetUserByName(userName);
         return Ok(user);
     }
 
     [HttpPut("{uniqueId}/upload-image")]
     public async Task<IActionResult> UploadImage(IFormFile file, Guid uniqueId)
     {
-        await _service.UploadUserImage(file, uniqueId);
+        await _userCommandService.UploadUserImage(file, uniqueId);
         var msg = $"User '{uniqueId}' image uploaded.";
         _logger.LogInformation(msg);
         return Ok(new { Message = msg });
@@ -66,7 +69,7 @@ public class UsersController : ControllerBase
     [HttpPut("{uniqueId}/change-password")]
     public async Task<IActionResult> ChangePassword([FromBody]ChangePasswordRequest request, Guid uniqueId)
     {
-        await _service.ChangePassword(request, uniqueId);
+        await _userCommandService.ChangePassword(request, uniqueId);
         var msg = $"User '{uniqueId}' password was changed";
         _logger.LogInformation(msg);
         return Ok(new { Message = msg });
@@ -75,7 +78,7 @@ public class UsersController : ControllerBase
     [HttpDelete("{uniqueId}")]
     public async Task<IActionResult> DeleteUser(Guid uniqueId)
     {
-        await _service.DeleteUser(uniqueId);
+        await _userCommandService.DeleteUser(uniqueId);
         _logger.LogInformation($"User with ID '{uniqueId}' was deleted");
         return NoContent();
     }
@@ -83,7 +86,7 @@ public class UsersController : ControllerBase
     [HttpPut("{uniqueId}/activate")]
     public async Task<IActionResult> ActivateUser(Guid uniqueId)
     {
-        await _service.ActivateUser(uniqueId);
+        await _userCommandService.ActivateUser(uniqueId);
         var msg = $"User with ID '{uniqueId}' was activated.";
         _logger.LogInformation(msg);
         return Ok(new { Message = msg }); 
@@ -92,7 +95,7 @@ public class UsersController : ControllerBase
     [HttpPut("{uniqueId}/deactivate")]
     public async Task<IActionResult> DeactivateUser(Guid uniqueId)
     {
-        await _service.DeactivateUser(uniqueId);
+        await _userCommandService.DeactivateUser(uniqueId);
         var msg = $"User with ID '{uniqueId}' was deactivated.";
         _logger.LogInformation(msg);
         return Ok(new { Message = msg });  

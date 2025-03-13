@@ -15,12 +15,16 @@ public static class ServiceExtensions
         services.AddScoped<JwtService>();
         services.AddScoped<AuthService>();
         services.AddScoped<RoleService>();
-        services.AddScoped<UserService>();
+        services.AddScoped<UserCommandService>();
+        services.AddScoped<UserQueryService>();
 
         // Products
-        services.AddScoped<CategoryService>();
-        services.AddScoped<SupplierService>();
-        services.AddScoped<ProductService>();
+        services.AddScoped<CategoryCommandService>();
+        services.AddScoped<CategoryQueryService>();
+        services.AddScoped<ProductCommandService>();
+        services.AddScoped<ProductQueryService>();
+        services.AddScoped<SupplierCommandService>();
+        services.AddScoped<SupplierQueryService>();
         
         // Reports
         services.AddScoped<CategoryReportService>();

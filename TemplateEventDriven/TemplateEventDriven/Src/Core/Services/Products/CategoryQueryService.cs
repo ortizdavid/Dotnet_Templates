@@ -3,7 +3,7 @@ using TemplateEventDriven.Common.Helpers;
 using TemplateEventDriven.Core.Models.Products;
 using TemplateEventDriven.Core.Repositories.Products;
 
-namespace TemplateEventDriven.Core.Services;
+namespace TemplateEventDriven.Core.Services.Products;
 
 public class CategoryQueryService
 {

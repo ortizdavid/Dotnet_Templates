@@ -7,15 +7,17 @@ namespace TemplateEventDriven.Core.Services.Auth;
 
 public class AuthService
 {
-    private readonly UserService _userService;
+    private readonly UserCommandService _userCommandService;
+    private readonly UserQueryService _userQueryService;
     private readonly JwtService _jwtService;
     private readonly EmailService _emailService;
     private readonly IConfiguration _configuration;
     private readonly IHttpContextAccessor _contextAccessor;
 
-    public AuthService(UserService userService, JwtService jwtService, EmailService emailService, IConfiguration configuration, IHttpContextAccessor contextAccessor)
+    public AuthService(UserCommandService userCommandService, UserQueryService userQueryService, JwtService jwtService, EmailService emailService, IConfiguration configuration, IHttpContextAccessor contextAccessor)
     {
-        _userService = userService;
+        _userCommandService = userCommandService;
+        _userQueryService = userQueryService;
         _jwtService = jwtService;
         _emailService = emailService;
         _configuration = configuration;
@@ -28,7 +30,7 @@ public class AuthService
         {
             throw new BadRequestException("Login request cannot be null.");
         }
-        var user = await _userService.GetUserByNameAndPassword(request.UserName, request.Password);
+        var user = await _userQueryService.GetUserByNameAndPassword(request.UserName, request.Password);
         // Generate tokens
         var accessToken = _jwtService.GenerateAccessToken(user);
         var refreshToken = await GetOrCreateRefreshToken(user);
@@ -46,7 +48,7 @@ public class AuthService
     public async Task Logout()
     {
         var userId = GetUserIdFromClaims();
-        await _userService.ClearUserRefreshToken(userId);
+        await _userCommandService.ClearUserRefreshToken(userId);
         var accessToken = _contextAccessor.HttpContext?.Request.Headers["Authorization"]
             .ToString()?.Replace("Bearer ", "").Trim();
 
@@ -72,7 +74,7 @@ public class AuthService
         {
             throw new BadRequestException("Invalid refresh token request.");
         }
-        var user = await _userService.GetUserByRefreshToken(request.Token);
+        var user = await _userQueryService.GetUserByRefreshToken(request.Token);
         if (user is null || string.IsNullOrEmpty(user.RefreshToken))
         {
             throw new NotFoundException("Invalid or expired refresh token.");
@@ -101,8 +103,8 @@ public class AuthService
         {
             throw new BadRequestException("Passwords does not match");
         }
-        var user = await _userService.GetUserByRecoveryToken(token);
-        await _userService.ChangePassword(request, user.UniqueId);
+        var user = await _userQueryService.GetUserByRecoveryToken(token);
+        await _userCommandService.ChangePassword(request, user.UniqueId);
         _emailService.SendEmail(user.Email, "Password recovery Success", $"Hello, User '{user.UserName}'! You've recovered password in successfully.");
     }
 
@@ -121,7 +123,7 @@ public class AuthService
         var expiryDays = int.Parse(expiryDaysStr);
         var newRefreshToken = _jwtService.GenerateRefreshToken();
         var expiryDate = DateTime.UtcNow.AddDays(expiryDays);
-        await _userService.CreateUserRefreshToken(user, newRefreshToken, expiryDate);
+        await _userCommandService.CreateUserRefreshToken(user, newRefreshToken, expiryDate);
         return newRefreshToken;
     }
 
@@ -140,7 +142,7 @@ public class AuthService
         }
 
         var userId = GetUserIdFromClaims();
-        var user = await _userService.GetUserById(userId);
+        var user = await _userQueryService.GetUserById(userId);
 
         if (user is null)
         {
@@ -164,5 +166,4 @@ public class AuthService
         }
         return userId;
     }
-
 }
