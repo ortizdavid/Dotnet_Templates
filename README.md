@@ -2,7 +2,9 @@
 
 This repository contains a collection of .NET project templates. From architecture designs to basic implementations, these templates serve as starting points for various types of .NET applications.
 
+
 ## Templates
+
 
 ### Available Templates:
 - [X] **Rest API**: A template for building a RESTful API with .NET.
@@ -14,6 +16,7 @@ This repository contains a collection of .NET project templates. From architectu
 - [X] **NATS API**:  A RabbitMQ Publisher and Subscriber REST API
 - [X] **Event Driven**: A template for implementing an event-driven architecture in .NET applications.
 - [ ] **CQRS**: A template for implementing the Command Query Responsibility Segregation (CQRS) pattern.
+
 
 ## Purpose
 
