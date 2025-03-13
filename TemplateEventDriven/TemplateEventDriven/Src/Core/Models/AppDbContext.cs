@@ -15,6 +15,7 @@ public class AppDbContext : DbContext
     public required DbSet<Supplier> Suppliers { get; set; }
     public required DbSet<Product> Products { get; set; }
     public required DbSet<ProductImage> ProductImages { get; set; }
+    public required DbSet<EventType> EventTypes { get; set; }
     public required DbSet<UserEvent> UserEvents { get; set; }
     public required DbSet<ProductEvent> ProductEvents { get; set; }
     public required DbSet<CategoryEvent> CategoryEvents { get; set; }

@@ -1,7 +1,10 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using EFIndex = Microsoft.EntityFrameworkCore.IndexAttribute;
 
 namespace TemplateEventDriven.Core.Models.Events;
 
+[EFIndex(nameof(Name), IsUnique = true)]
 public class EventType
 {
     [Key]

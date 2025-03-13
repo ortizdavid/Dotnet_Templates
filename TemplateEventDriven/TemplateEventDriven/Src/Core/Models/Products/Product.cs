@@ -1,8 +1,11 @@
 using System.ComponentModel.DataAnnotations;
+using EFIndex = Microsoft.EntityFrameworkCore.IndexAttribute;
 using TemplateEventDriven.Common.Helpers;
 
 namespace TemplateEventDriven.Core.Models.Products;
 
+[EFIndex(nameof(Code), IsUnique = true)]
+[EFIndex(nameof(Code), IsUnique = true)]
 public class Product
 {   
     [Key]
