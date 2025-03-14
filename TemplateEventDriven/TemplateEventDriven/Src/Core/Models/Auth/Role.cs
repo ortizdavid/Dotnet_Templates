@@ -1,12 +1,10 @@
 using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
 using TemplateEventDriven.Common.Helpers;
-using EFIndex = Microsoft.EntityFrameworkCore.IndexAttribute;
 
 namespace TemplateEventDriven.Core.Models.Auth;
 
-[EFIndex(nameof(RoleName), IsUnique = true)]
-[EFIndex(nameof(Code), IsUnique = true)]
-public class Role
+public class Role : IModel
 {
     [Key]
     public int RoleId { get; set; }
@@ -20,8 +18,18 @@ public class Role
     public string? Code { get; set; }
 
     public Guid UniqueId { get; set; } = Encryption.GenerateUUID();
-
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-    
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+
+    // RelationShips
+    public ICollection<User> Users { get; set; } = new List<User>(); 
+
+    public static void ConfigureModel(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Role>(entity =>
+        {
+            entity.HasIndex(e => e.RoleName).IsUnique();
+            entity.HasIndex(e => e.Code);
+        });
+    }
 }

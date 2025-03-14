@@ -51,8 +51,7 @@ namespace TemplateEventDriven.Migrations
 
                     b.HasKey("RoleId");
 
-                    b.HasIndex("Code")
-                        .IsUnique();
+                    b.HasIndex("Code");
 
                     b.HasIndex("RoleName")
                         .IsUnique();
@@ -111,6 +110,8 @@ namespace TemplateEventDriven.Migrations
                     b.HasIndex("Email")
                         .IsUnique();
 
+                    b.HasIndex("RoleId");
+
                     b.HasIndex("UserName")
                         .IsUnique();
 
@@ -146,6 +147,9 @@ namespace TemplateEventDriven.Migrations
                     b.HasIndex("Token")
                         .IsUnique()
                         .HasFilter("[Token] IS NOT NULL");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
 
                     b.ToTable("UserRefreshTokens");
                 });
@@ -343,16 +347,21 @@ namespace TemplateEventDriven.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Code")
-                        .HasColumnType("nvarchar(450)");
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
 
                     b.Property<string>("ProductName")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<int>("SupplierId")
                         .HasColumnType("int");
@@ -368,9 +377,10 @@ namespace TemplateEventDriven.Migrations
 
                     b.HasKey("ProductId");
 
+                    b.HasIndex("CategoryId");
+
                     b.HasIndex("Code")
-                        .IsUnique()
-                        .HasFilter("[Code] IS NOT NULL");
+                        .IsUnique();
 
                     b.ToTable("Products");
                 });
@@ -401,6 +411,8 @@ namespace TemplateEventDriven.Migrations
                         .HasColumnType("nvarchar(150)");
 
                     b.HasKey("ImageId");
+
+                    b.HasIndex("ProductId");
 
                     b.ToTable("ProductImages");
                 });
@@ -466,6 +478,83 @@ namespace TemplateEventDriven.Migrations
                         .HasFilter("[SecondaryPhone] IS NOT NULL");
 
                     b.ToTable("Suppliers");
+                });
+
+            modelBuilder.Entity("TemplateEventDriven.Core.Models.Auth.User", b =>
+                {
+                    b.HasOne("TemplateEventDriven.Core.Models.Auth.Role", "Role")
+                        .WithMany("Users")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Role");
+                });
+
+            modelBuilder.Entity("TemplateEventDriven.Core.Models.Auth.UserRefreshToken", b =>
+                {
+                    b.HasOne("TemplateEventDriven.Core.Models.Auth.User", "User")
+                        .WithOne("RefreshToken")
+                        .HasForeignKey("TemplateEventDriven.Core.Models.Auth.UserRefreshToken", "UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("TemplateEventDriven.Core.Models.Products.Product", b =>
+                {
+                    b.HasOne("TemplateEventDriven.Core.Models.Products.Category", "Category")
+                        .WithMany("Products")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TemplateEventDriven.Core.Models.Suppliers.Supplier", "Supplier")
+                        .WithMany("Products")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+
+                    b.Navigation("Supplier");
+                });
+
+            modelBuilder.Entity("TemplateEventDriven.Core.Models.Products.ProductImage", b =>
+                {
+                    b.HasOne("TemplateEventDriven.Core.Models.Products.Product", "Product")
+                        .WithMany("Images")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("TemplateEventDriven.Core.Models.Auth.Role", b =>
+                {
+                    b.Navigation("Users");
+                });
+
+            modelBuilder.Entity("TemplateEventDriven.Core.Models.Auth.User", b =>
+                {
+                    b.Navigation("RefreshToken");
+                });
+
+            modelBuilder.Entity("TemplateEventDriven.Core.Models.Products.Category", b =>
+                {
+                    b.Navigation("Products");
+                });
+
+            modelBuilder.Entity("TemplateEventDriven.Core.Models.Products.Product", b =>
+                {
+                    b.Navigation("Images");
+                });
+
+            modelBuilder.Entity("TemplateEventDriven.Core.Models.Suppliers.Supplier", b =>
+                {
+                    b.Navigation("Products");
                 });
 #pragma warning restore 612, 618
         }

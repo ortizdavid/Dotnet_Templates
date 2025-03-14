@@ -1,11 +1,10 @@
 using System.ComponentModel.DataAnnotations;
-using EFIndex = Microsoft.EntityFrameworkCore.IndexAttribute;
 using TemplateEventDriven.Common.Helpers;
+using Microsoft.EntityFrameworkCore;
 
 namespace TemplateEventDriven.Core.Models.Products;
 
-[EFIndex(nameof(CategoryName), IsUnique = true)]
-public class Category
+public class Category : IModel
 {
     [Key]
     public int CategoryId { get; set; }
@@ -18,8 +17,17 @@ public class Category
     public string? Description { get; set; }
 
     public Guid UniqueId { get; set; } = Encryption.GenerateUUID();
-
     public DateTime CreatedAt { get; set; } = DateTime.Now;
-    
     public DateTime UpdatedAt { get; set; } = DateTime.Now;
+
+    // Relationships
+    public ICollection<Product> Products { get; set; } = new List<Product>();
+
+    public static void ConfigureModel(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Category>(entity =>
+            // unique key
+            entity.HasIndex(e => e.CategoryName).IsUnique()
+        );
+    }
 }

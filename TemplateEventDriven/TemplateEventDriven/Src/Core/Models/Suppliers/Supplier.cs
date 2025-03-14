@@ -1,14 +1,11 @@
 using System.ComponentModel.DataAnnotations;
-using EFIndex = Microsoft.EntityFrameworkCore.IndexAttribute;
 using TemplateEventDriven.Common.Helpers;
+using Microsoft.EntityFrameworkCore;
+using TemplateEventDriven.Core.Models.Products;
 
 namespace TemplateEventDriven.Core.Models.Suppliers;
 
-[EFIndex(nameof(IdentificationNumber), IsUnique = true)]
-[EFIndex(nameof(Email), IsUnique = true)]
-[EFIndex(nameof(PrimaryPhone), IsUnique = true)]
-[EFIndex(nameof(SecondaryPhone), IsUnique = true)]
-public class Supplier
+public class Supplier : IModel
 {
     [Key]
     public int SupplierId { get; set; }
@@ -36,8 +33,21 @@ public class Supplier
     public string? Address { get; set; }
 
     public Guid UniqueId { get; set; } = Encryption.GenerateUUID();
-
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-
     public DateTime UpdatedAt { get; set;} = DateTime.UtcNow;
+
+    // Relationships
+    public ICollection<Product> Products { get; set; } = new List<Product>();
+
+    public static void ConfigureModel(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Supplier>(entity =>
+        {
+            // unique keys
+            entity.HasIndex(e => e.IdentificationNumber).IsUnique();
+            entity.HasIndex(e => e.Email).IsUnique();
+            entity.HasIndex(e => e.PrimaryPhone).IsUnique();
+            entity.HasIndex(e => e.SecondaryPhone).IsUnique();
+        });
+    }
 }
