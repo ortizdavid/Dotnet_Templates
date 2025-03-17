@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "6a0a2572-19c2-43b8-adc9-438a53cc03e3",
+		"_postman_id": "637bbe0f-514a-47da-92d1-801855e56451",
 		"name": ".NET Template Event Driven",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "13144775"
@@ -484,101 +484,366 @@
 					"name": "Users",
 					"item": [
 						{
-							"name": "Get All Users",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "{{TEMPLATE_API_JWT}}",
-											"type": "string"
-										}
-									]
-								},
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{TEMPLATE_EVENT_DRIVEN}}/users?pageIndex=0&pageSize=10",
-									"host": [
-										"{{TEMPLATE_EVENT_DRIVEN}}"
-									],
-									"path": [
-										"users"
-									],
-									"query": [
-										{
-											"key": "pageIndex",
-											"value": "0"
+							"name": "Commands",
+							"item": [
+								{
+									"name": "Create User",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{TEMPLATE_API_JWT}}",
+													"type": "string"
+												}
+											]
 										},
-										{
-											"key": "pageSize",
-											"value": "10"
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"roleId\": 1,\r\n    \"userName\": \"customer03\",\r\n    \"email\": \"customer03@gmail.com\",\r\n    \"password\": \"Customer123$\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{TEMPLATE_EVENT_DRIVEN}}/users",
+											"host": [
+												"{{TEMPLATE_EVENT_DRIVEN}}"
+											],
+											"path": [
+												"users"
+											]
 										}
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Get User By UniqueId",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "{{TEMPLATE_API_JWT}}",
-											"type": "string"
-										}
-									]
+									},
+									"response": []
 								},
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{TEMPLATE_EVENT_DRIVEN}}/users/eecd0044-4fac-4105-b6e7-e5e2e53490b3",
-									"host": [
-										"{{TEMPLATE_EVENT_DRIVEN}}"
-									],
-									"path": [
-										"users",
-										"eecd0044-4fac-4105-b6e7-e5e2e53490b3"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Get User By UserName",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "{{TEMPLATE_API_JWT}}",
-											"type": "string"
+								{
+									"name": "Upload User Image",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{TEMPLATE_API_JWT}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "formdata",
+											"formdata": [
+												{
+													"key": "file",
+													"type": "file",
+													"src": "/C:/Users/ortiz/Downloads/WhatsApp Image 2024-12-09 at 15.01.22.jpeg"
+												}
+											]
+										},
+										"url": {
+											"raw": "{{TEMPLATE_EVENT_DRIVEN}}/users/eecd0044-4fac-4105-b6e7-e5e2e53490b3/upload-image",
+											"host": [
+												"{{TEMPLATE_EVENT_DRIVEN}}"
+											],
+											"path": [
+												"users",
+												"eecd0044-4fac-4105-b6e7-e5e2e53490b3",
+												"upload-image"
+											]
 										}
-									]
+									},
+									"response": []
 								},
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{TEMPLATE_API}}/users/by-name/admin01",
-									"host": [
-										"{{TEMPLATE_API}}"
-									],
-									"path": [
-										"users",
-										"by-name",
-										"admin01"
-									]
+								{
+									"name": "Change Password",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{TEMPLATE_API_JWT}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"newPassword\": \"Admin123$\",\r\n    \"passwordConfirmation\": \"Admin123$\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{TEMPLATE_EVENT_DRIVEN}}/users/678eb229-4069-4e72-84c7-2b985e4783b2/change-password",
+											"host": [
+												"{{TEMPLATE_EVENT_DRIVEN}}"
+											],
+											"path": [
+												"users",
+												"678eb229-4069-4e72-84c7-2b985e4783b2",
+												"change-password"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Activate User",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{TEMPLATE_API_JWT}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{TEMPLATE_EVENT_DRIVEN}}/users/a9060d6a-86c7-462b-8f89-0d1a0a6e8918/activate",
+											"host": [
+												"{{TEMPLATE_EVENT_DRIVEN}}"
+											],
+											"path": [
+												"users",
+												"a9060d6a-86c7-462b-8f89-0d1a0a6e8918",
+												"activate"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Deactivate User",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{TEMPLATE_API_JWT}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{TEMPLATE_EVENT_DRIVEN}}/users/678eb229-4069-4e72-84c7-2b985e4783b2/deactivate",
+											"host": [
+												"{{TEMPLATE_EVENT_DRIVEN}}"
+											],
+											"path": [
+												"users",
+												"678eb229-4069-4e72-84c7-2b985e4783b2",
+												"deactivate"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Delete User",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{TEMPLATE_API_JWT}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "{{TEMPLATE_EVENT_DRIVEN}}/users/7725cd5f-df4b-4f13-b6c3-eaf7801fe1a3",
+											"host": [
+												"{{TEMPLATE_EVENT_DRIVEN}}"
+											],
+											"path": [
+												"users",
+												"7725cd5f-df4b-4f13-b6c3-eaf7801fe1a3"
+											]
+										}
+									},
+									"response": []
 								}
-							},
-							"response": []
+							]
 						},
 						{
-							"name": "Create User",
+							"name": "Queries",
+							"item": [
+								{
+									"name": "Get All Users",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{TEMPLATE_API_JWT}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{TEMPLATE_EVENT_DRIVEN}}/users?pageIndex=0&pageSize=10",
+											"host": [
+												"{{TEMPLATE_EVENT_DRIVEN}}"
+											],
+											"path": [
+												"users"
+											],
+											"query": [
+												{
+													"key": "pageIndex",
+													"value": "0"
+												},
+												{
+													"key": "pageSize",
+													"value": "10"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Get User By UniqueId",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{TEMPLATE_API_JWT}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{TEMPLATE_EVENT_DRIVEN}}/users/678eb229-4069-4e72-84c7-2b985e4783b2",
+											"host": [
+												"{{TEMPLATE_EVENT_DRIVEN}}"
+											],
+											"path": [
+												"users",
+												"678eb229-4069-4e72-84c7-2b985e4783b2"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Get User By UserName",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{TEMPLATE_API_JWT}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{TEMPLATE_API}}/users/by-name/admin01",
+											"host": [
+												"{{TEMPLATE_API}}"
+											],
+											"path": [
+												"users",
+												"by-name",
+												"admin01"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Get Current User",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{TEMPLATE_API_JWT}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{TEMPLATE_EVENT_DRIVEN}}/users/current",
+											"host": [
+												"{{TEMPLATE_EVENT_DRIVEN}}"
+											],
+											"path": [
+												"users",
+												"current"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Categories",
+			"item": [
+				{
+					"name": "Commands",
+					"item": [
+						{
+							"name": "Create Category",
 							"request": {
 								"auth": {
 									"type": "bearer",
@@ -594,7 +859,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"roleId\": 1,\r\n    \"userName\": \"admin01\",\r\n    \"email\": \"admin01@gmail.com\",\r\n    \"password\": \"Admin123$\"\r\n}",
+									"raw": "{\r\n    \"CategoryName\": \"dssshhhhdAAaaaa\",\r\n    \"Description\": \"Test description\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -602,19 +867,19 @@
 									}
 								},
 								"url": {
-									"raw": "{{TEMPLATE_EVENT_DRIVEN}}/users",
+									"raw": "{{TEMPLATE_EVENT_DRIVEN}}/categories",
 									"host": [
 										"{{TEMPLATE_EVENT_DRIVEN}}"
 									],
 									"path": [
-										"users"
+										"categories"
 									]
 								}
 							},
 							"response": []
 						},
 						{
-							"name": "Upload User Image",
+							"name": "Import Categories CSV",
 							"request": {
 								"auth": {
 									"type": "bearer",
@@ -626,7 +891,7 @@
 										}
 									]
 								},
-								"method": "PUT",
+								"method": "POST",
 								"header": [],
 								"body": {
 									"mode": "formdata",
@@ -634,26 +899,25 @@
 										{
 											"key": "file",
 											"type": "file",
-											"src": "/C:/Users/ortiz/Downloads/WhatsApp Image 2024-12-09 at 15.01.22.jpeg"
+											"src": "/C:/Users/ortiz/Downloads/Uploads for Testing/Dotnet templates/CSV/categories_for_import.csv"
 										}
 									]
 								},
 								"url": {
-									"raw": "{{TEMPLATE_EVENT_DRIVEN}}/users/eecd0044-4fac-4105-b6e7-e5e2e53490b3/upload-image",
+									"raw": "{{TEMPLATE_EVENT_DRIVEN}}/categories/import-csv",
 									"host": [
 										"{{TEMPLATE_EVENT_DRIVEN}}"
 									],
 									"path": [
-										"users",
-										"eecd0044-4fac-4105-b6e7-e5e2e53490b3",
-										"upload-image"
+										"categories",
+										"import-csv"
 									]
 								}
 							},
 							"response": []
 						},
 						{
-							"name": "Change Password",
+							"name": "Update Category",
 							"request": {
 								"auth": {
 									"type": "bearer",
@@ -669,7 +933,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"newPassword\": \"Admin123$\",\r\n    \"passwordConfirmation\": \"Admin123$\"\r\n}",
+									"raw": "{\r\n    \"CategoryName\": \"Computers\",\r\n    \"Description\": \"Related to PCs\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -677,97 +941,20 @@
 									}
 								},
 								"url": {
-									"raw": "{{TEMPLATE_EVENT_DRIVEN}}/users/a9060d6a-86c7-462b-8f89-0d1a0a6e8918/change-password",
+									"raw": "{{TEMPLATE_EVENT_DRIVEN}}/categories/6510132b-207e-4abd-a912-fdaa10a9b9b8",
 									"host": [
 										"{{TEMPLATE_EVENT_DRIVEN}}"
 									],
 									"path": [
-										"users",
-										"a9060d6a-86c7-462b-8f89-0d1a0a6e8918",
-										"change-password"
+										"categories",
+										"6510132b-207e-4abd-a912-fdaa10a9b9b8"
 									]
 								}
 							},
 							"response": []
 						},
 						{
-							"name": "Activate User",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "{{TEMPLATE_API_JWT}}",
-											"type": "string"
-										}
-									]
-								},
-								"method": "PUT",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{TEMPLATE_EVENT_DRIVEN}}/users/a9060d6a-86c7-462b-8f89-0d1a0a6e8918/activate",
-									"host": [
-										"{{TEMPLATE_EVENT_DRIVEN}}"
-									],
-									"path": [
-										"users",
-										"a9060d6a-86c7-462b-8f89-0d1a0a6e8918",
-										"activate"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Deactivate User",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "{{TEMPLATE_API_JWT}}",
-											"type": "string"
-										}
-									]
-								},
-								"method": "PUT",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{TEMPLATE_EVENT_DRIVEN}}/users/a9060d6a-86c7-462b-8f89-0d1a0a6e8918/deactivate",
-									"host": [
-										"{{TEMPLATE_EVENT_DRIVEN}}"
-									],
-									"path": [
-										"users",
-										"a9060d6a-86c7-462b-8f89-0d1a0a6e8918",
-										"deactivate"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Delete User",
+							"name": "Delete Category",
 							"request": {
 								"auth": {
 									"type": "bearer",
@@ -782,20 +969,25 @@
 								"method": "DELETE",
 								"header": [],
 								"url": {
-									"raw": "{{TEMPLATE_EVENT_DRIVEN}}/users/7725cd5f-df4b-4f13-b6c3-eaf7801fe1a3",
+									"raw": "{{TEMPLATE_EVENT_DRIVEN}}/categories/00fed5bd-05b0-4cbb-adfe-454142e7c887",
 									"host": [
 										"{{TEMPLATE_EVENT_DRIVEN}}"
 									],
 									"path": [
-										"users",
-										"7725cd5f-df4b-4f13-b6c3-eaf7801fe1a3"
+										"categories",
+										"00fed5bd-05b0-4cbb-adfe-454142e7c887"
 									]
 								}
 							},
 							"response": []
-						},
+						}
+					]
+				},
+				{
+					"name": "Queries",
+					"item": [
 						{
-							"name": "Get Current User",
+							"name": "Get Category by Unique ID",
 							"request": {
 								"auth": {
 									"type": "bearer",
@@ -810,13 +1002,50 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{TEMPLATE_EVENT_DRIVEN}}/users/current",
+									"raw": "{{TEMPLATE_EVENT_DRIVEN}}/categories/f234c510-f64e-475e-9318-86f710f23ad5",
 									"host": [
 										"{{TEMPLATE_EVENT_DRIVEN}}"
 									],
 									"path": [
-										"users",
-										"current"
+										"categories",
+										"f234c510-f64e-475e-9318-86f710f23ad5"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get All Categories",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TEMPLATE_API_JWT}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{TEMPLATE_EVENT_DRIVEN}}/categories?pageIndex=0&pageSize=10",
+									"host": [
+										"{{TEMPLATE_EVENT_DRIVEN}}"
+									],
+									"path": [
+										"categories"
+									],
+									"query": [
+										{
+											"key": "pageIndex",
+											"value": "0"
+										},
+										{
+											"key": "pageSize",
+											"value": "10"
+										}
 									]
 								}
 							},
@@ -827,492 +1056,293 @@
 			]
 		},
 		{
-			"name": "Categories",
-			"item": [
-				{
-					"name": "Get All Categories",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{TEMPLATE_API_JWT}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{TEMPLATE_EVENT_DRIVEN}}/categories?pageIndex=0&pageSize=10",
-							"host": [
-								"{{TEMPLATE_EVENT_DRIVEN}}"
-							],
-							"path": [
-								"categories"
-							],
-							"query": [
-								{
-									"key": "pageIndex",
-									"value": "0"
-								},
-								{
-									"key": "pageSize",
-									"value": "10"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get Category by Unique ID",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{TEMPLATE_API_JWT}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{TEMPLATE_EVENT_DRIVEN}}/categories/f234c510-f64e-475e-9318-86f710f23ad5",
-							"host": [
-								"{{TEMPLATE_EVENT_DRIVEN}}"
-							],
-							"path": [
-								"categories",
-								"f234c510-f64e-475e-9318-86f710f23ad5"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Create Category",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{TEMPLATE_API_JWT}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"CategoryName\": \"dssshhhhdAAaaaa\",\r\n    \"Description\": \"Test description\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{TEMPLATE_EVENT_DRIVEN}}/categories",
-							"host": [
-								"{{TEMPLATE_EVENT_DRIVEN}}"
-							],
-							"path": [
-								"categories"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Import Categories CSV",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{TEMPLATE_API_JWT}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "file",
-									"type": "file",
-									"src": "/C:/Users/ortiz/Downloads/Uploads for Testing/Dotnet templates/CSV/categories_for_import.csv"
-								}
-							]
-						},
-						"url": {
-							"raw": "{{TEMPLATE_EVENT_DRIVEN}}/categories/import-csv",
-							"host": [
-								"{{TEMPLATE_EVENT_DRIVEN}}"
-							],
-							"path": [
-								"categories",
-								"import-csv"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Update Category",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{TEMPLATE_API_JWT}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"CategoryName\": \"Computers\",\r\n    \"Description\": \"Related to PCs\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{TEMPLATE_EVENT_DRIVEN}}/categories/6510132b-207e-4abd-a912-fdaa10a9b9b8",
-							"host": [
-								"{{TEMPLATE_EVENT_DRIVEN}}"
-							],
-							"path": [
-								"categories",
-								"6510132b-207e-4abd-a912-fdaa10a9b9b8"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Delete Category",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{TEMPLATE_API_JWT}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "{{TEMPLATE_EVENT_DRIVEN}}/categories/00fed5bd-05b0-4cbb-adfe-454142e7c887",
-							"host": [
-								"{{TEMPLATE_EVENT_DRIVEN}}"
-							],
-							"path": [
-								"categories",
-								"00fed5bd-05b0-4cbb-adfe-454142e7c887"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
 			"name": "Products",
 			"item": [
 				{
-					"name": "Get All products",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{TEMPLATE_API_JWT}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{TEMPLATE_EVENT_DRIVEN}}/products?pageIndex=0&pageSize=5",
-							"host": [
-								"{{TEMPLATE_EVENT_DRIVEN}}"
-							],
-							"path": [
-								"products"
-							],
-							"query": [
-								{
-									"key": "pageIndex",
-									"value": "0"
+					"name": "Commands",
+					"item": [
+						{
+							"name": "Create Product",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TEMPLATE_API_JWT}}",
+											"type": "string"
+										}
+									]
 								},
-								{
-									"key": "pageSize",
-									"value": "5"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Create Product",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{TEMPLATE_API_JWT}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"productName\": \"Iphone\",\r\n    \"code\": \"S222\",\r\n    \"unitPrice\": 1999.99,\r\n    \"description\": \"Test\",\r\n    \"categoryId\": 1,\r\n    \"supplierId\": 1\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{TEMPLATE_EVENT_DRIVEN}}/products",
-							"host": [
-								"{{TEMPLATE_EVENT_DRIVEN}}"
-							],
-							"path": [
-								"products"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Upload Product Images",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{TEMPLATE_API_JWT}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "files",
-									"type": "file",
-									"src": [
-										"/C:/Users/ortiz/OneDrive/Imagens/Capturas de Ecrã/Screenshot 2024-11-19 123516.png",
-										"/C:/Users/ortiz/OneDrive/Imagens/Capturas de Ecrã/Screenshot 2024-11-19 132035.png",
-										"/C:/Users/ortiz/OneDrive/Imagens/Capturas de Ecrã/Screenshot 2024-11-22 121738.png"
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"productName\": \"Iphone\",\r\n    \"code\": \"S222\",\r\n    \"unitPrice\": 1999.99,\r\n    \"description\": \"Test\",\r\n    \"categoryId\": 1,\r\n    \"supplierId\": 1\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{TEMPLATE_EVENT_DRIVEN}}/products",
+									"host": [
+										"{{TEMPLATE_EVENT_DRIVEN}}"
+									],
+									"path": [
+										"products"
 									]
 								}
-							]
+							},
+							"response": []
 						},
-						"url": {
-							"raw": "{{TEMPLATE_EVENT_DRIVEN}}/products/6fc2ac66-fe63-4386-aedb-5ecc468fcd54/images",
-							"host": [
-								"{{TEMPLATE_EVENT_DRIVEN}}"
-							],
-							"path": [
-								"products",
-								"6fc2ac66-fe63-4386-aedb-5ecc468fcd54",
-								"images"
-							]
+						{
+							"name": "Upload Product Images",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TEMPLATE_API_JWT}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "files",
+											"type": "file",
+											"src": [
+												"/C:/Users/ortiz/OneDrive/Imagens/Capturas de Ecrã/Screenshot 2024-11-19 123516.png",
+												"/C:/Users/ortiz/OneDrive/Imagens/Capturas de Ecrã/Screenshot 2024-11-19 132035.png",
+												"/C:/Users/ortiz/OneDrive/Imagens/Capturas de Ecrã/Screenshot 2024-11-22 121738.png"
+											]
+										}
+									]
+								},
+								"url": {
+									"raw": "{{TEMPLATE_EVENT_DRIVEN}}/products/6fc2ac66-fe63-4386-aedb-5ecc468fcd54/images",
+									"host": [
+										"{{TEMPLATE_EVENT_DRIVEN}}"
+									],
+									"path": [
+										"products",
+										"6fc2ac66-fe63-4386-aedb-5ecc468fcd54",
+										"images"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Import Produts CSV",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TEMPLATE_API_JWT}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "file",
+											"type": "file",
+											"src": "/C:/Users/ortiz/Downloads/Uploads for Testing/Dotnet templates/CSV/products_for_import.csv"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{TEMPLATE_EVENT_DRIVEN}}/products/import-csv",
+									"host": [
+										"{{TEMPLATE_EVENT_DRIVEN}}"
+									],
+									"path": [
+										"products",
+										"import-csv"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Product",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TEMPLATE_API_JWT}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{TEMPLATE_EVENT_DRIVEN}}/products/f06b88d0-7d3d-46eb-8c3a-ec68419a539b",
+									"host": [
+										"{{TEMPLATE_EVENT_DRIVEN}}"
+									],
+									"path": [
+										"products",
+										"f06b88d0-7d3d-46eb-8c3a-ec68419a539b"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Product",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TEMPLATE_API_JWT}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"productName\": \"Fitness Tracker\",\r\n    \"code\": \"F333\",\r\n    \"unitPrice\": 199.99,\r\n    \"description\": \"Test\",\r\n    \"categoryId\": 3,\r\n    \"supplierId\": 5\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{TEMPLATE_EVENT_DRIVEN}}/products/16d53674-4d2b-459c-8eef-3ef0ec1e7be1",
+									"host": [
+										"{{TEMPLATE_EVENT_DRIVEN}}"
+									],
+									"path": [
+										"products",
+										"16d53674-4d2b-459c-8eef-3ef0ec1e7be1"
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
+					]
 				},
 				{
-					"name": "Import Produts CSV",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{TEMPLATE_API_JWT}}",
-									"type": "string"
+					"name": "Queries",
+					"item": [
+						{
+							"name": "Get Product Images",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TEMPLATE_API_JWT}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{TEMPLATE_EVENT_DRIVEN}}/products/6fc2ac66-fe63-4386-aedb-5ecc468fcd54/images",
+									"host": [
+										"{{TEMPLATE_EVENT_DRIVEN}}"
+									],
+									"path": [
+										"products",
+										"6fc2ac66-fe63-4386-aedb-5ecc468fcd54",
+										"images"
+									]
 								}
-							]
+							},
+							"response": []
 						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "file",
-									"type": "file",
-									"src": "/C:/Users/ortiz/Downloads/Uploads for Testing/Dotnet templates/CSV/products_for_import.csv"
+						{
+							"name": "Get All products",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TEMPLATE_API_JWT}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{TEMPLATE_EVENT_DRIVEN}}/products?pageIndex=0&pageSize=5",
+									"host": [
+										"{{TEMPLATE_EVENT_DRIVEN}}"
+									],
+									"path": [
+										"products"
+									],
+									"query": [
+										{
+											"key": "pageIndex",
+											"value": "0"
+										},
+										{
+											"key": "pageSize",
+											"value": "5"
+										}
+									]
 								}
-							]
+							},
+							"response": []
 						},
-						"url": {
-							"raw": "{{TEMPLATE_EVENT_DRIVEN}}/products/import-csv",
-							"host": [
-								"{{TEMPLATE_EVENT_DRIVEN}}"
-							],
-							"path": [
-								"products",
-								"import-csv"
-							]
+						{
+							"name": "Get Product by Unique ID",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TEMPLATE_API_JWT}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{TEMPLATE_EVENT_DRIVEN}}/products/6fc2ac66-fe63-4386-aedb-5ecc468fcd54",
+									"host": [
+										"{{TEMPLATE_EVENT_DRIVEN}}"
+									],
+									"path": [
+										"products",
+										"6fc2ac66-fe63-4386-aedb-5ecc468fcd54"
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get Product Images",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{TEMPLATE_API_JWT}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{TEMPLATE_EVENT_DRIVEN}}/products/6fc2ac66-fe63-4386-aedb-5ecc468fcd54/images",
-							"host": [
-								"{{TEMPLATE_EVENT_DRIVEN}}"
-							],
-							"path": [
-								"products",
-								"6fc2ac66-fe63-4386-aedb-5ecc468fcd54",
-								"images"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get Product by Unique ID",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{TEMPLATE_API_JWT}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{TEMPLATE_EVENT_DRIVEN}}/products/6fc2ac66-fe63-4386-aedb-5ecc468fcd54",
-							"host": [
-								"{{TEMPLATE_EVENT_DRIVEN}}"
-							],
-							"path": [
-								"products",
-								"6fc2ac66-fe63-4386-aedb-5ecc468fcd54"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Update Product",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{TEMPLATE_API_JWT}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"productName\": \"Fitness Tracker\",\r\n    \"code\": \"F333\",\r\n    \"unitPrice\": 199.99,\r\n    \"description\": \"Test\",\r\n    \"categoryId\": 3,\r\n    \"supplierId\": 5\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{TEMPLATE_EVENT_DRIVEN}}/products/16d53674-4d2b-459c-8eef-3ef0ec1e7be1",
-							"host": [
-								"{{TEMPLATE_EVENT_DRIVEN}}"
-							],
-							"path": [
-								"products",
-								"16d53674-4d2b-459c-8eef-3ef0ec1e7be1"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Delete Product",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{TEMPLATE_API_JWT}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "{{TEMPLATE_EVENT_DRIVEN}}/products/f06b88d0-7d3d-46eb-8c3a-ec68419a539b",
-							"host": [
-								"{{TEMPLATE_EVENT_DRIVEN}}"
-							],
-							"path": [
-								"products",
-								"f06b88d0-7d3d-46eb-8c3a-ec68419a539b"
-							]
-						}
-					},
-					"response": []
+					]
 				}
 			]
 		},
@@ -1320,237 +1350,247 @@
 			"name": "Suppliers",
 			"item": [
 				{
-					"name": "Get All Suppliers",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{TEMPLATE_API_JWT}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{TEMPLATE_EVENT_DRIVEN}}/suppliers?pageIndex=0&pageSize=20",
-							"host": [
-								"{{TEMPLATE_EVENT_DRIVEN}}"
-							],
-							"path": [
-								"suppliers"
-							],
-							"query": [
-								{
-									"key": "pageIndex",
-									"value": "0"
+					"name": "Commands",
+					"item": [
+						{
+							"name": "Create Supplier",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{PRODUCTS_JWT_TOKEN}}",
+											"type": "string"
+										}
+									]
 								},
-								{
-									"key": "pageSize",
-									"value": "20"
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"supplierName\": \"Supplier00\",\r\n    \"identificationNumber\": \"07234s567890\",\r\n    \"email\": \"supplier00@example.com\",\r\n    \"primaryPhone\": \"023-456-7890\",\r\n    \"secondaryPhone\": \"986-654-3510\",\r\n    \"address\": \"123 Main St\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{TEMPLATE_EVENT_DRIVEN}}/suppliers",
+									"host": [
+										"{{TEMPLATE_EVENT_DRIVEN}}"
+									],
+									"path": [
+										"suppliers"
+									]
 								}
-							]
+							},
+							"response": []
+						},
+						{
+							"name": "Update Supplier",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TEMPLATE_API_JWT}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"supplierName\": \"Supplier00\",\r\n    \"identificationNumber\": \"07234s567890\",\r\n    \"email\": \"supplier00@example.com\",\r\n    \"primaryPhone\": \"023-456-7890\",\r\n    \"secondaryPhone\": \"986-654-3510\",\r\n    \"address\": \"123 Main St\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{TEMPLATE_EVENT_DRIVEN}}/suppliers/c09d0fa4-ce43-497a-a213-282da63f384a",
+									"host": [
+										"{{TEMPLATE_EVENT_DRIVEN}}"
+									],
+									"path": [
+										"suppliers",
+										"c09d0fa4-ce43-497a-a213-282da63f384a"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Import Suppliers CSV",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TEMPLATE_API_JWT}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "file",
+											"type": "file",
+											"src": "/C:/Users/ortiz/Downloads/Uploads for Testing/Dotnet templates/CSV/suppliers_for_import.csv"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{TEMPLATE_EVENT_DRIVEN}}/suppliers/import-csv",
+									"host": [
+										"{{TEMPLATE_EVENT_DRIVEN}}"
+									],
+									"path": [
+										"suppliers",
+										"import-csv"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Supplier",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TEMPLATE_API_JWT}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{TEMPLATE_EVENT_DRIVEN}}/suppliers/c09d0fa4-ce43-497a-a213-282da63f384a",
+									"host": [
+										"{{TEMPLATE_EVENT_DRIVEN}}"
+									],
+									"path": [
+										"suppliers",
+										"c09d0fa4-ce43-497a-a213-282da63f384a"
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
+					]
 				},
 				{
-					"name": "Get Supplier by Unique ID",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{TEMPLATE_API_JWT}}",
-									"type": "string"
+					"name": "Queries",
+					"item": [
+						{
+							"name": "Get All Suppliers",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TEMPLATE_API_JWT}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{TEMPLATE_EVENT_DRIVEN}}/suppliers?pageIndex=0&pageSize=20",
+									"host": [
+										"{{TEMPLATE_EVENT_DRIVEN}}"
+									],
+									"path": [
+										"suppliers"
+									],
+									"query": [
+										{
+											"key": "pageIndex",
+											"value": "0"
+										},
+										{
+											"key": "pageSize",
+											"value": "20"
+										}
+									]
 								}
-							]
+							},
+							"response": []
 						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{TEMPLATE_EVENT_DRIVEN}}/suppliers/313855d6-c09d-45c7-91b1-6578be4698c8",
-							"host": [
-								"{{TEMPLATE_EVENT_DRIVEN}}"
-							],
-							"path": [
-								"suppliers",
-								"313855d6-c09d-45c7-91b1-6578be4698c8"
-							]
+						{
+							"name": "Get Supplier by Unique ID",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TEMPLATE_API_JWT}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{TEMPLATE_EVENT_DRIVEN}}/suppliers/313855d6-c09d-45c7-91b1-6578be4698c8",
+									"host": [
+										"{{TEMPLATE_EVENT_DRIVEN}}"
+									],
+									"path": [
+										"suppliers",
+										"313855d6-c09d-45c7-91b1-6578be4698c8"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get All Supplier Products",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TEMPLATE_API_JWT}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{TEMPLATE_EVENT_DRIVEN}}/suppliers/417ac57b-c0c7-4ad6-aa59-9e4c84e5b76b/products",
+									"host": [
+										"{{TEMPLATE_EVENT_DRIVEN}}"
+									],
+									"path": [
+										"suppliers",
+										"417ac57b-c0c7-4ad6-aa59-9e4c84e5b76b",
+										"products"
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get All Supplier Products",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{TEMPLATE_API_JWT}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{TEMPLATE_EVENT_DRIVEN}}/suppliers/313855d6-c09d-45c7-91b1-6578be4698c8/products",
-							"host": [
-								"{{TEMPLATE_EVENT_DRIVEN}}"
-							],
-							"path": [
-								"suppliers",
-								"313855d6-c09d-45c7-91b1-6578be4698c8",
-								"products"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Create Supplier",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{PRODUCTS_JWT_TOKEN}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"supplierName\": \"Supplier00\",\r\n    \"identificationNumber\": \"07234s567890\",\r\n    \"email\": \"supplier00@example.com\",\r\n    \"primaryPhone\": \"023-456-7890\",\r\n    \"secondaryPhone\": \"986-654-3510\",\r\n    \"address\": \"123 Main St\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{TEMPLATE_EVENT_DRIVEN}}/suppliers",
-							"host": [
-								"{{TEMPLATE_EVENT_DRIVEN}}"
-							],
-							"path": [
-								"suppliers"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Update Supplier",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{TEMPLATE_API_JWT}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"supplierName\": \"Supplier00\",\r\n    \"identificationNumber\": \"07234s567890\",\r\n    \"email\": \"supplier00@example.com\",\r\n    \"primaryPhone\": \"023-456-7890\",\r\n    \"secondaryPhone\": \"986-654-3510\",\r\n    \"address\": \"123 Main St\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{TEMPLATE_EVENT_DRIVEN}}/suppliers/c09d0fa4-ce43-497a-a213-282da63f384a",
-							"host": [
-								"{{TEMPLATE_EVENT_DRIVEN}}"
-							],
-							"path": [
-								"suppliers",
-								"c09d0fa4-ce43-497a-a213-282da63f384a"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Import Suppliers CSV",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{TEMPLATE_API_JWT}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "file",
-									"type": "file",
-									"src": "/C:/Users/ortiz/Downloads/Uploads for Testing/Dotnet templates/CSV/suppliers_for_import.csv"
-								}
-							]
-						},
-						"url": {
-							"raw": "{{TEMPLATE_EVENT_DRIVEN}}/suppliers/import-csv",
-							"host": [
-								"{{TEMPLATE_EVENT_DRIVEN}}"
-							],
-							"path": [
-								"suppliers",
-								"import-csv"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Delete Supplier",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{TEMPLATE_API_JWT}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "{{TEMPLATE_EVENT_DRIVEN}}/suppliers/c09d0fa4-ce43-497a-a213-282da63f384a",
-							"host": [
-								"{{TEMPLATE_EVENT_DRIVEN}}"
-							],
-							"path": [
-								"suppliers",
-								"c09d0fa4-ce43-497a-a213-282da63f384a"
-							]
-						}
-					},
-					"response": []
+					]
 				}
 			]
 		},
