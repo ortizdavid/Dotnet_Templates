@@ -30,7 +30,7 @@ public class ApiRootController : ControllerBase
     [HttpGet("download-collections")]
     public IActionResult DownloadCollections()
     {
-        var fileName = ".NET Template RabbitMQ API.postman_collection.json";
+        var fileName = ".NET Template Event Driven.postman_collection.json";
         var path = _configuration["ApiCollectionsPath"] ?? string.Empty;
         var filePath = Path.Combine(path, fileName);
         
