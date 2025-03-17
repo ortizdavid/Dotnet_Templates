@@ -61,7 +61,7 @@ public class ProductService
         // create message. First get category and supplier
         var category = await _categoryRepository.GetByIdAsync(product.CategoryId);
         var supplier = await _supplierRepository.GetByIdAsync(product.SupplierId);
-        var productMessage = new ProductMessage()
+        var productMessage = new 
         {
             ProductName = product.ProductName,
             Code = product.Code,
@@ -97,7 +97,7 @@ public class ProductService
         // create message
         var category = await _categoryRepository.GetByIdAsync(product.CategoryId);
         var supplier = await _supplierRepository.GetByIdAsync(product.SupplierId);
-        var productMessage = new ProductMessage()
+        var productMessage = new 
         {
             ProductName = product.ProductName,
             Code = product.Code,

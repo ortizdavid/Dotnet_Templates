@@ -1,5 +1,6 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
 
 namespace TemplateSimpleMVC.Models;
 
@@ -26,4 +27,15 @@ public class Product
     [Required]
     [DisplayName("Description")]
     public string? Description { get; set; }
+
+    public static void ConfigureModel(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Product>(entity => 
+        {
+            entity.HasIndex(p => p.Code)
+                .IsUnique();
+            entity.Property(p => p.Price)
+                .HasColumnType("DECIMAL(18,2)");
+        });
+    }
 }

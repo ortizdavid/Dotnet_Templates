@@ -1,4 +1,4 @@
-using TemplateMVC.Helpers;
+using TemplateMVC.Common.Helpers;
 using Microsoft.AspNetCore.Mvc;
 using TemplateMVC.Core.Models.Auth;
 using TemplateMVC.Core.Services.Auth;

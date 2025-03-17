@@ -1,3 +1,4 @@
+using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using TemplateMVC.Core.Models.Auth;
 using TemplateMVC.Core.Models.Products;
@@ -19,10 +20,18 @@ public class AppDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Product>()
-            .Property(p => p.UnitPrice)
-            .HasColumnType("decimal(18, 2)");
-
         base.OnModelCreating(modelBuilder);
+
+        // Get all types implementing IModel
+        var modelTypes = Assembly.GetExecutingAssembly()
+            .GetTypes()
+            .Where(t => typeof(IModel).IsAssignableFrom(t) && !t.IsInterface && !t.IsAbstract);
+
+        // Call ConfigureModel on each model
+        foreach (var modelType in modelTypes)
+        {
+            var method = modelType.GetMethod(nameof(IModel.ConfigureModel));
+            method?.Invoke(null, new object[] { modelBuilder });
+        }
     }
 }

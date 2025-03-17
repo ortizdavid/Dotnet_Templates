@@ -1,5 +1,5 @@
 using TemplateApi.Common.Exceptions;
-using TemplateApi.Coommon.Helpers;
+using TemplateApi.Common.Helpers;
 using TemplateApi.Core.Models.Products;
 using TemplateApi.Core.Repositories.Products;
 

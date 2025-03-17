@@ -1,7 +1,7 @@
 using System;
 using System.Security.Cryptography;
 
-namespace TemplateMVC.Helpers;
+namespace TemplateMVC.Common.Helpers;
 
 public class Encryption
 {

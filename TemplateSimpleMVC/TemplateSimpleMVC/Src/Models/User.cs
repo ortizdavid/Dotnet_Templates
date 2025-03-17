@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
 
 namespace TemplateSimpleMVC.Models;
 
@@ -14,4 +15,12 @@ public class User
     [Required]
     [StringLength(150)]  
     public string? Password { get; set; }
+
+    public static void ConfigureModel(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<User>(entity => {
+            entity.HasIndex(u => u.UserName)
+                .IsUnique();
+        });
+    }
 }

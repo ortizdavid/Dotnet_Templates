@@ -1,6 +1,6 @@
 using TemplateMVC.Common.Helpers;
 using TemplateMVC.Core.Models.Auth;
-using TemplateMVC.Helpers;
+using TemplateMVC.Common.Helpers;
 
 namespace TemplateMVC.Core.Services.Auth;
 

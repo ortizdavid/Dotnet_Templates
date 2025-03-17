@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using TemplateMVC.Common.Exceptions;
-using TemplateMVC.Helpers;
+using TemplateMVC.Common.Helpers;
 using TemplateMVC.Core.Models.Auth;
 using TemplateMVC.Core.Services.Auth;
 using TemplateMVC.Common.Helpers;

@@ -1,5 +1,5 @@
 using TemplateMVC.Common.Exceptions;
-using TemplateMVC.Helpers;
+using TemplateMVC.Common.Helpers;
 using TemplateMVC.Core.Models.Auth;
 using TemplateMVC.Common.Messaging;
 using TemplateMVC.Common.Helpers;

@@ -61,7 +61,7 @@ public class UserService
         
         // message
         var role = await _roleRepository.GetByIdAsync(user.RoleId);
-        var userMessage = new UserMessage()
+        var userMessage = new
         {
             UniqueId = user.UniqueId,
             UserName = user.UserName,
@@ -99,7 +99,7 @@ public class UserService
 
         // message
         var role = await _roleRepository.GetByIdAsync(user.RoleId);
-        var userMessage = new UserMessage()
+        var userMessage = new
         {
             UniqueId = user.UniqueId,
             UserName = user.UserName,
@@ -190,7 +190,7 @@ public class UserService
 
         // message
         var role = await _roleRepository.GetByIdAsync(user.RoleId);
-        var userMessage = new UserMessage()
+        var userMessage = new
         {
             UniqueId = user.UniqueId,
             UserName = user.UserName,  
@@ -219,7 +219,7 @@ public class UserService
 
         // message
         var role = await _roleRepository.GetByIdAsync(user.RoleId);
-        var userMessage = new UserMessage()
+        var userMessage = new
         {
             UniqueId = user.UniqueId,
             UserName = user.UserName,  
@@ -247,7 +247,7 @@ public class UserService
 
         // message
         var role = await _roleRepository.GetByIdAsync(user.RoleId);
-        var userMessage = new UserMessage()
+        var userMessage = new
         {
             UniqueId = user.UniqueId,
             UserName = user.UserName,  
@@ -269,7 +269,7 @@ public class UserService
 
         // message
         var role = await _roleRepository.GetByIdAsync(user.RoleId);
-        var userMessage = new UserMessage()
+        var userMessage = new
         {
             UniqueId = user.UniqueId,
             UserName = user.UserName,

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using TemplateMVC.Common.Exceptions;
 
-namespace TemplateMVC.Helpers;
+namespace TemplateMVC.Common.Helpers;
 
 public class Pagination<T>
 {

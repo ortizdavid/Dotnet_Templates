@@ -9,6 +9,6 @@ public class CategoryRequest
     public string? CategoryName { get; set; }
 
     [Required]
-    [StringLength(150, MinimumLength = 10)]
+    [StringLength(150, MinimumLength = 5)]
     public string? Description { get; set; }
 }

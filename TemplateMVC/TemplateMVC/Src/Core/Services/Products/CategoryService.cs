@@ -1,5 +1,5 @@
 using TemplateMVC.Common.Exceptions;
-using TemplateMVC.Helpers;
+using TemplateMVC.Common.Helpers;
 using TemplateMVC.Core.Models.Products;
 using TemplateMVC.Core.Repositories.Products;
 using TemplateMVC.Common.Helpers;

@@ -1,4 +1,4 @@
-namespace TemplateMVC.Helpers;
+namespace TemplateMVC.Common.Helpers;
 
 public class CapacityUnit
 {

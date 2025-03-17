@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using TemplateMVC.Common.Exceptions;
-using TemplateMVC.Helpers;
+using TemplateMVC.Common.Helpers;
 using TemplateMVC.Core.Models.Products;
 using TemplateMVC.Core.Services.Products;
 using TemplateMVC.Common.Helpers;

@@ -2,12 +2,12 @@ using Microsoft.AspNetCore.Mvc;
 using TemplateApi.Core.Services.Products;
 using TemplateApi.Core.Models.Products;
 using Microsoft.AspNetCore.Authorization;
-using TemplateApi.Coommon.Helpers;
+using TemplateApi.Common.Helpers;
 using System.Net;
 
 namespace TemplateApi.Core.Controllers.Products;
 
-[Authorize]
+//[Authorize]
 [Route("api/[controller]")]
 [ApiController]
 public class CategoriesController : ControllerBase

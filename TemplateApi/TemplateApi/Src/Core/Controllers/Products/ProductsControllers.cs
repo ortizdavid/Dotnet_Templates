@@ -1,7 +1,7 @@
 using System.Net;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using TemplateApi.Coommon.Helpers;
+using TemplateApi.Common.Helpers;
 using TemplateApi.Core.Models.Products;
 using TemplateApi.Core.Services.Products;
 

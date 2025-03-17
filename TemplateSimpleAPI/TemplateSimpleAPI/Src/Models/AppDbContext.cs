@@ -12,10 +12,7 @@ namespace TemplateSimpleApi.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder) 
         {
-            modelBuilder.Entity<Product>()
-                .Property(p => p.Price)
-                .HasColumnType("DECIMAL(18,2)");
-
+            Product.ConfigureModel(modelBuilder);
             base.OnModelCreating(modelBuilder);
         }
     }
