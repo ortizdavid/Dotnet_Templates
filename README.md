@@ -17,7 +17,6 @@ A collection of .NET project templates designed for efficiency, simplicity, and 
 - [x] Observability  
 - [x] Structured Log Monitoring  
 - [ ] Containerization (In Progress)
-- [ ] Kubernetes  
 - [ ] Tests  
 - [ ] CI/CD Pipeline  
 
