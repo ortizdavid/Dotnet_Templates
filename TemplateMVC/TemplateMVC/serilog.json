@@ -1,6 +1,6 @@
 {
   "Serilog": {
-    "Using": ["Serilog.Sinks.Console", "Serilog.Sinks.File"],
+    "Using": ["Serilog.Sinks.Console", "Serilog.Sinks.File", "Serilog.Sinks.Seq"],
     "MinimumLevel": {
       "Default": "Information",
       "Override": {
@@ -19,8 +19,17 @@
           "rollingInterval": "Day",
           "retainedFileCountLimit": 7
         }
+      },
+      {
+        "Name": "Seq",
+        "Args": {
+          "serverUrl": "http://localhost:5059"
+        }
       }
     ],
-    "Enrich": ["FromLogContext", "WithMachineName", "WithThreadId"]
+    "Enrich": ["FromLogContext", "WithMachineName", "WithThreadId"],
+    "Properties": {
+      "Application": "Dotnet_Template_MVC"
+    }
   }
 }

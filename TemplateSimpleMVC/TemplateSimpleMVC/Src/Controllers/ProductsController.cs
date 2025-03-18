@@ -1,6 +1,4 @@
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using TemplateSimpleMVC.Helpers;
 using TemplateSimpleMVC.Models;
 using TemplateSimpleMVC.Repositories;
 

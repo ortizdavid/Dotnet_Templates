@@ -3,7 +3,6 @@ using TemplateMVC.Common.Exceptions;
 using TemplateMVC.Common.Helpers;
 using TemplateMVC.Core.Models.Auth;
 using TemplateMVC.Core.Services.Auth;
-using TemplateMVC.Common.Helpers;
 
 namespace TemplateMVC.Core.Controllers.Auth;
 

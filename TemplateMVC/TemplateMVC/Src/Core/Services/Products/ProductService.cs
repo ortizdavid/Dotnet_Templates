@@ -3,7 +3,6 @@ using TemplateMVC.Common.Helpers;
 using TemplateMVC.Core.Models.Products;
 using TemplateMVC.Core.Repositories;
 using TemplateMVC.Core.Repositories.Products;
-using TemplateMVC.Common.Helpers;
 
 namespace TemplateMVC.Core.Services.Products;
 

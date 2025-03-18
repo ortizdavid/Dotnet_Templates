@@ -1,4 +1,6 @@
 using Microsoft.EntityFrameworkCore;
+using Prometheus;
+using Serilog;
 using TemplateSimpleMVC.Controllers;
 using TemplateSimpleMVC.Middlewares;
 using TemplateSimpleMVC.Models;
@@ -31,7 +33,21 @@ internal class Program
         builder.Services.AddScoped<ProductRepository>();
         builder.Services.AddScoped<UserContext>();
 
+        // Configure Serilog for logging with console output and Seq for centralized log management.
+        Log.Logger = new LoggerConfiguration()
+            .WriteTo.Console()
+            .WriteTo.Seq("http://localhost:5059")
+            .Enrich.FromLogContext()
+            .Enrich.WithProperty("Application", "Dotnet_Template_Simple_MVC")
+            .CreateLogger();
+
+        builder.Host.UseSerilog();
+
         var app = builder.Build();
+
+        // Use Prometheus metrics from /metrics endpoint
+        app.UseMetricServer();
+        app.UseHttpMetrics();
 
         // Configure the HTTP request pipeline.
         if (!app.Environment.IsDevelopment())

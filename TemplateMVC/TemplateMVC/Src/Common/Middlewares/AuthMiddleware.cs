@@ -14,6 +14,7 @@ public class AuthMiddleware
         var currentPath = context.Request.Path.Value ?? "";
 
         if (currentPath == "/" || 
+            currentPath == "/metrics" || 
             currentPath == "/auth/login" || 
             currentPath.StartsWith("/auth/get-recover-link") || 
             currentPath.StartsWith("/auth/recover-password"))

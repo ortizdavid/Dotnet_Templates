@@ -1,0 +1,158 @@
+{
+	"info": {
+		"_postman_id": "32e4cd76-4de2-4a30-b156-873a8c504218",
+		"name": ".NET Template Simple API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "13144775"
+	},
+	"item": [
+		{
+			"name": "API Root",
+			"item": [
+				{
+					"name": "Index",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "127.0.0.1:5059",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5059"
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Index API",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{TEMPLATE_SIMPLE_API}}",
+							"host": [
+								"{{TEMPLATE_SIMPLE_API}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Products",
+			"item": [
+				{
+					"name": "Get All Products",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{TEMPLATE_SIMPLE_API}}/products",
+							"host": [
+								"{{TEMPLATE_SIMPLE_API}}"
+							],
+							"path": [
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Product By Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{TEMPLATE_SIMPLE_API}}/products/9",
+							"host": [
+								"{{TEMPLATE_SIMPLE_API}}"
+							],
+							"path": [
+								"products",
+								"9"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Product",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Pencil\",\r\n    \"code\": \"P-003\",\r\n    \"price\": 9.34,\r\n    \"description\": \"No description\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{TEMPLATE_SIMPLE_API}}/products",
+							"host": [
+								"{{TEMPLATE_SIMPLE_API}}"
+							],
+							"path": [
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Product",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Phone\",\r\n    \"code\": \"P-001\",\r\n    \"price\": 19.34,\r\n    \"description\": \"Phone description\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{TEMPLATE_SIMPLE_API}}/products/12",
+							"host": [
+								"{{TEMPLATE_SIMPLE_API}}"
+							],
+							"path": [
+								"products",
+								"12"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Product",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{TEMPLATE_SIMPLE_API}}/products/9",
+							"host": [
+								"{{TEMPLATE_SIMPLE_API}}"
+							],
+							"path": [
+								"products",
+								"9"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

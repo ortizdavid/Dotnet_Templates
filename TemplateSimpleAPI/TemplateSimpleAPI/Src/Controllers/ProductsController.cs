@@ -23,38 +23,65 @@ public class ProductsController : ControllerBase
     {
         if (productReq is null)
         {
+            _logger.LogError("Create Product request cannot be null");
             return BadRequest("Create Product request cannot be null");
         }
         if (_repository.ExistsRecord("Name", productReq.Name))
         {
+            _logger.LogError($"Product '{productReq.Name}' already exists");
             return StatusCode((int)HttpStatusCode.Conflict, $"Product '{productReq.Name}' already exists");
         }
         if (_repository.ExistsRecord("Code", productReq.Code))
         {
+            _logger.LogError($"Product code '{productReq.Code}' already exists");
             return StatusCode((int)HttpStatusCode.Conflict, $"Product code '{productReq.Code}' already exists");
         }
-        _repository.Create(productReq);
-        var msg = $"Product '{productReq.Name}' was created";
-        _logger.LogInformation(msg);	
-        return StatusCode((int)HttpStatusCode.Created, new { Message = msg });
+        try
+        {
+            _repository.Create(productReq);
+            var msg = $"Product '{productReq.Name}' was created";
+            _logger.LogInformation(msg);	
+            return StatusCode((int)HttpStatusCode.Created, new { Message = msg });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error while creating product");
+            return StatusCode((int)HttpStatusCode.InternalServerError, "An error ocurred while creating product");
+        }
     }
 
     [HttpGet]
     public IActionResult GetAllProducts()
     {
-        var products = _repository.GetAll();
-        return Ok(products);
+        try
+        {
+            var products = _repository.GetAll();
+            return Ok(products);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error retrieving all products");
+            return StatusCode((int)HttpStatusCode.InternalServerError, "An error ocurred while retrieving all products");
+        }
     }
 
     [HttpGet("{id}")]
     public IActionResult GetProductById(int id)
     {
-        var product = _repository.GetById(id);
-        if (product is null)
+        try
         {
-            return NotFound($"Product with ID '{id}' not found");
+            var product = _repository.GetById(id);
+            if (product is null)
+            {
+                return NotFound($"Product with ID '{id}' not found");
+            }
+            return Ok(product);
         }
-        return Ok(product);
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error retrieving product with ID '{id}'", id);
+            return StatusCode((int)HttpStatusCode.InternalServerError, "An error ocurred while retrieving product");
+        }
     }
 
     [HttpPut("{id}")]
@@ -69,24 +96,40 @@ public class ProductsController : ControllerBase
         {
             return NotFound($"Product with ID '{id}' not found");
         }
-        product.Name = productReq.Name;
-        product.Code = productReq.Code;
-        product.Price = productReq.Price;
-        _repository.Update(product);
-        var msg = $"Product '{product.Name}' was updated.";
-        _logger.LogInformation(msg);
-        return Ok(new { Message = msg });
+        try
+        {
+            product.Name = productReq.Name;
+            product.Code = productReq.Code;
+            product.Price = productReq.Price;
+            _repository.Update(product);
+            var msg = $"Product '{product.Name}' was updated.";
+            _logger.LogInformation(msg);
+            return Ok(new { Message = msg });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error updating product with ID '{id}'", id);
+            return StatusCode((int)HttpStatusCode.InternalServerError, "An error ocurred while updating product");
+        }
     }
 
     [HttpDelete("{id}")]
     public IActionResult DeleteProduct(int id)
     {
-        var product = _repository.GetById(id);
-        if (product is null)
+        try
         {
-            return NotFound($"Product with ID '{id}' not found");
+            var product = _repository.GetById(id);
+            if (product is null)
+            {
+                return NotFound($"Product with ID '{id}' not found");
+            }
+            _repository.Delete(product);
+            return NoContent();
         }
-        _repository.Delete(product);
-        return NoContent();
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error deleting product with ID '{id}'", id);
+            return StatusCode((int)HttpStatusCode.InternalServerError, "An error ocurred while deleting product");
+        }
     }
 }

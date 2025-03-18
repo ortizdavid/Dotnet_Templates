@@ -1,6 +1,4 @@
-using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using TemplateSimpleMVC.Models;
 using TemplateSimpleMVC.Repositories;
 
 namespace TemplateSimpleMVC.Controllers;

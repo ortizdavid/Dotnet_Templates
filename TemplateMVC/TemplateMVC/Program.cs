@@ -1,4 +1,5 @@
 using Microsoft.Extensions.FileProviders;
+using Prometheus;
 using TemplateMVC.Common.Extensions;
 using TemplateMVC.Common.Helpers;
 using TemplateMVC.Common.Middlewares;
@@ -35,6 +36,10 @@ internal class Program
         // Custom Middlewares
         app.UseMiddleware<AuthMiddleware>();
         app.UseMiddleware<ExceptionHandlerMiddleware>();
+
+        // Use Prometheus metrics from /metrics endpoint
+        app.UseMetricServer();
+        app.UseHttpMetrics();
 
         // Configure the HTTP request pipeline.
         if (!app.Environment.IsDevelopment())

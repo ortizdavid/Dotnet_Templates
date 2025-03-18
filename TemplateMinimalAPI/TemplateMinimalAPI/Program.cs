@@ -1,5 +1,6 @@
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
+using Prometheus;
+using Serilog;
 using TemplateMinimalAPI.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,7 +13,21 @@ builder.Services.AddOpenApi();
 builder.Services.AddDbContext<AppDbContext>(
     options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
+// Configure Serilog for logging with console output and Seq for centralized log management.
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .WriteTo.Seq("http://localhost:5059")
+    .Enrich.FromLogContext()
+    .Enrich.WithProperty("Application", "Dotnet_Template_Minimal_API")
+    .CreateLogger();
+
+builder.Host.UseSerilog();
+
 var app = builder.Build();
+
+// Use Prometheus metrics from /metrics endpoint
+app.UseMetricServer();
+app.UseHttpMetrics();
 
 if (app.Environment.IsDevelopment())
 {

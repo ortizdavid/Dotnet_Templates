@@ -1,3 +1,4 @@
+using Prometheus;
 using TemplateEventDriven.Common.Extensions;
 using TemplateEventDriven.Common.Middlewares;
 
@@ -28,6 +29,10 @@ internal class Program
         var app = builder.Build();
 
         app.LogApplicationStartup();
+
+        // Use Prometheus metrics from /metrics endpoint
+        app.UseMetricServer();
+        app.UseHttpMetrics();
 
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())

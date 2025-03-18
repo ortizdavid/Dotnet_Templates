@@ -3,7 +3,6 @@ using TemplateMVC.Common.Exceptions;
 using TemplateMVC.Common.Helpers;
 using TemplateMVC.Core.Models.Products;
 using TemplateMVC.Core.Services.Products;
-using TemplateMVC.Common.Helpers;
 using TemplateMVC.Core.Services.Suppliers;
 
 namespace TemplateMVC.Core.Controllers.Products;

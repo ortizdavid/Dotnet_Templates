@@ -1,4 +1,3 @@
-using System.Drawing;
 using Microsoft.AspNetCore.Mvc;
 using TemplateMVC.Common.Exceptions;
 using TemplateMVC.Core.Models.Auth;
