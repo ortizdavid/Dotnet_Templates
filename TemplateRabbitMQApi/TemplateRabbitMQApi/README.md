@@ -1,29 +1,29 @@
-# **.NET Template - Event-Driven Architecture**  
+# **.NET Template - RabbitMQ API**  
 
-A **production-ready template** for building event-driven applications using a lightweight **CQRS-based** architecture.  
+A **lightweight template** for building  applications using **RabbitMQ** as the message broker.  
 
 ## 🚀 **Tech Stack**  
 - **ASP.NET Core Web API** (C#)  
-- **SQL Server** (Event Store & Database)  
+- **SQL Server** (Database)  
 - **RabbitMQ** (Message Broker)  
 
 ## 📌 **Features**  
 This template provides a structured approach for managing:  
 ✔ **User Management**  
-✔ **Product Management**  
-✔ **Category Management**  
-✔ **Supplier Management**  
+✔ **Authentication & Authorization**  
+✔ **Event Publishing & Subscription**  
+✔ **Secure Connection to RabbitMQ**  
 
 ## 🏗 **Architecture Overview**  
-The system follows a **loosely coupled** event-driven design:  
+The system follows a **Producer - Consumer** design:  
 
 ![Architecture](Docs/Diagrams/Architecture.jpg)  
 
 ### **How It Works**  
-1️⃣ **Producers (Services)** generate events (e.g., user created, product updated).  
-2️⃣ **RabbitMQ (Event Bus)** routes events to relevant exchanges.  
-3️⃣ **Consumers** process events asynchronously and update external systems or databases.  
-4️⃣ **SQL Server (Event Store)** logs events for traceability.  
+1️⃣ **Producers (Services)** generate events (e.g., user created, order placed).  
+2️⃣ **RabbitMQ (Event Bus)** routes messages to relevant queues and exchanges.  
+3️⃣ **Consumers (Subscribers)** process events asynchronously and update external systems or databases.  
+4️⃣ **SQL Server** stores application data.  
 
 ---
 
@@ -31,13 +31,13 @@ The system follows a **loosely coupled** event-driven design:
 
 ### **Prerequisites**  
 - .NET 7+  
-- Docker (for RabbitMQ & SQL Server)  
+- Docker (for SQL Server & RabbitMQ)  
 - RabbitMQ Management Plugin enabled  
 
 ### **1️⃣ Clone the Repository**  
 ```sh
-git clone https://github.com/your-username/your-repository.git
-cd your-repository
+git clone https://github.com/your-username/TemplateRabbitMqApi.git
+cd TemplateRabbitMqApi
 ```  
 
 ### **2️⃣ Configure the Database**  
@@ -51,11 +51,11 @@ Ensure **SQL Server** is running. You can either:
 > **Update the connection string** in `appsettings.json`:  
 ```json
 "ConnectionStrings": {
-  "DefaultConnection": "Server=localhost,1433;Database=YourDatabase;User Id=sa;Password=YourPassword123;"
+  "DefaultConnection": "Server=localhost,1433;Database=rabbitmq_api;User Id=sa;Password=YourPassword123;"
 }
 ```  
 
-### **3️⃣ Start RabbitMQ**  
+### **3️⃣ Start RabbitMQ Server**  
 Run RabbitMQ via Docker:  
 ```sh
 docker run -d --hostname rabbitmq \
@@ -63,7 +63,7 @@ docker run -d --hostname rabbitmq \
   --name rabbitmq rabbitmq:3-management
 ```  
 > Access RabbitMQ **Management UI**: [http://localhost:15672](http://localhost:15672)  
-> **Default credentials:**  
+> **Default Credentials:**  
 > - **User:** `guest`  
 > - **Password:** `guest`  
 
