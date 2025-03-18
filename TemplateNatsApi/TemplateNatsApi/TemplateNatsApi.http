@@ -1,6 +1,0 @@
-@TemplateNatsApi_HostAddress = http://localhost:5195
-
-GET {{TemplateNatsApi_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
