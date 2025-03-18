@@ -1,0 +1,28 @@
+@model IEnumerable<TemplateMVC.Core.Models.Statistics.ProductTotalPriceBySuppliers>;
+
+@{
+    Layout = "_Layout";
+    ViewBag.Title = "Total Prices by Suppliers";
+}
+
+<a href="/statistics/products" class="btn btn-link mt-3">
+    <i class="bi bi-arrow-left"></i> Back to Statistics
+</a>
+
+<table class="table">
+    <thead class="table-dark">
+        <tr>
+            <th>Suppliers</th>
+            <th>Total</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.SupplierName</td>
+                <td>@item.TotalPrice.ToString("C")</td>
+            </tr>
+        }
+    </tbody>
+</table>

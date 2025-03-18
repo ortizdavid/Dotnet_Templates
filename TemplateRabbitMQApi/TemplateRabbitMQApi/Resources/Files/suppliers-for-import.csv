@@ -1,0 +1,16 @@
+SupplierName,IdentificationNumber,Email,PrimaryPhone,SecondaryPhone,Address
+Supplier1,1234567890,supplier1@example.com,123-456-7890,987-654-3510,123 Main St
+Supplier2,0987654321,supplier2@example.com,456-789-0123,210-987-1443,456 Oak Ave
+Supplier3,1357924680,supplier3@example.com,789-012-3456,321-654-0913,789 Elm St
+Supplier4,2468013579,supplier4@example.com,012-345-6789,654-987-1210,135 Maple St
+Supplier5,9876543210,supplier5@example.com,145-678-9012,789-012-3116,246 Cedar St
+Supplier6,0123456789,supplier6@example.com,567-890-1234,012-345-6719,357 Pine St
+Supplier7,7890123456,supplier7@example.com,678-901-2345,123-456-7899,468 Birch St
+Supplier8,6543210987,supplier8@example.com,890-123-4567,234-567-8908,579 Elmwood Dr
+Supplier9,3210987654,supplier9@example.com,901-234-5678,345-678-9072,680 Oakwood Ln
+Supplier10,2345678901,supplier10@example.com,523-456-7890,456-789-0126,791 Cedar Ln
+Supplier11,5432167890,supplier11@example.com,734-567-8901,567-890-1235,802 Maple Ave
+Supplier12,6789012345,supplier12@example.com,345-678-9012,678-901-2344,913 Birchwood Dr
+Supplier13,3456789012,supplier13@example.com,054-789-0123,789-012-3453,024 Pine Ln
+Supplier14,9012345678,supplier14@example.com,567-899-1234,890-123-4562,135 Oak Ave
+Supplier15,4567890123,supplier15@example.com,678-911-2345,901-234-5671,246 Elm St

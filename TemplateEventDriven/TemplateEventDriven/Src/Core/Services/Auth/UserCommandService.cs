@@ -1,0 +1,350 @@
+using TemplateEventDriven.Common.Exceptions;
+using TemplateEventDriven.Common.Helpers;
+using TemplateEventDriven.Core.Models.Auth;
+using TemplateEventDriven.Core.Models.Events;
+using TemplateEventDriven.Core.Models.Messaging;
+using TemplateEventDriven.Core.Repositories.Auth;
+using TemplateEventDriven.Core.Services.Events;
+
+namespace TemplateEventDriven.Core.Services.Auth;
+
+public class UserCommandService
+{
+    private readonly UserRepository _repository;
+    private readonly UserRefreshTokenRepository _refreshTokenRepository;
+    private readonly RoleRepository _roleRepository;
+    private readonly EventService<UserEvent> _eventService;
+    private readonly FileUploader _imageUploader;
+    private readonly IConfiguration _configuration;
+    private readonly string _uploadDirectory;
+
+    public UserCommandService(UserRepository repository, UserRefreshTokenRepository refreshTokenRepository, RoleRepository roleRepository,
+        EventService<UserEvent> eventService, IConfiguration configuration)
+    {
+        _repository = repository;
+        _refreshTokenRepository = refreshTokenRepository;
+        _roleRepository = roleRepository;
+        _eventService = eventService;
+        _configuration = configuration;
+
+        _uploadDirectory = _configuration["UploadsDirectory"] + "/Users";
+        _imageUploader = new FileUploader(_uploadDirectory, FileExtensions.Images, 5 * CapacityUnit.MEGA_BYTE);
+    }
+
+    public async Task CreateUser(CreateUserRequest request)
+    {
+        if (request is null)
+        {
+            throw new BadRequestException("Create user request cannot be null. Please provide UserName and Password");
+        }
+        if (!PasswordHelper.IsStrong(request.Password))
+        {
+            throw new BadRequestException("Password must include: uppercase and lowercase letters, numbers, special characters and  at least 8 characters long.");
+        }
+        if (await _repository.ExistsRecord("UserName", request.UserName))
+        {
+            throw new ConflictException($"User '{request.UserName}' already exists.");
+        }
+        if (await _repository.ExistsRecord("Email", request.Email))
+        {
+            throw new ConflictException($"Email '{request.Email}' is already in use.");
+        }
+        var user = new User()
+        {
+            RoleId = request.RoleId,
+            UserName = request.UserName,
+            Password = PasswordHelper.Hash(request.Password),
+            Email = request.Email,
+        };
+        await _repository.CreateAsync(user);
+
+        // message
+        var role = await _roleRepository.GetByIdAsync(user.RoleId);
+        var userCreated = new
+        {
+            UniqueId = user.UniqueId,
+            UserName = user.UserName,
+            Role = role?.RoleName,
+            Email = user.Email,
+            Password = user.Password,
+            IsActive = user.IsActive,
+            CreatedAt = user.CreatedAt,
+        };
+        
+        await _eventService.PublishCreatedEvent(
+            user.UserId, 
+            Exchanges.UserExchange, 
+            RoutingKeys.User.Created, 
+            EventActions.User.Create, 
+            userCreated
+        );
+    }
+
+    public async Task ChangePassword(ChangePasswordRequest request, Guid uniqueId)
+    {
+        if (request is null)
+        {
+            throw new BadRequestException("Change password request cannot be null. Please provide Password and Confirmation");
+        }
+        if (!string.Equals(request.NewPassword, request.PasswordConfirmation))
+        {
+            throw new BadRequestException("Password and Confirmation does not match.");
+        }
+        if (!PasswordHelper.IsStrong(request.NewPassword))
+        {
+            throw new BadRequestException("Password must include: uppercase and lowercase letters, numbers, special characters and  at least 8 characters long.");
+        }
+        var user = await _repository.GetByUniqueIdAsync(uniqueId);
+        if (user is null)
+        {
+            throw new NotFoundException($"User with ID '{uniqueId}' not found.");
+        }
+
+        // user before update
+        var userBefore = new
+        {
+            UniqueId = user.UniqueId,
+            UserName = user.UserName,
+            Password = user.Password,
+            UpdatedAt = user.UpdatedAt
+        };
+       
+        // update
+        user.Password = PasswordHelper.Hash(request.NewPassword);
+        user.UpdatedAt = DateTime.UtcNow;
+        await _repository.UpdateAsync(user);
+
+        // user after update
+        var userAfter = new
+        {
+            UniqueId = user.UniqueId,
+            UserName = user.UserName,
+            Password = user.Password,
+            UpdatedAt = user.UpdatedAt
+        };
+
+        await _eventService.PublishUpdatedEvent(
+            user.UserId, 
+            Exchanges.UserExchange, 
+            RoutingKeys.User.Updated, 
+            EventActions.User.ChangePassword,
+            userBefore, 
+            userAfter
+        );
+    }
+
+    public async Task UploadUserImage(IFormFile file, Guid uniqueId)
+    {
+        var user = await _repository.GetByUniqueIdAsync(uniqueId);
+        if (user is null)
+        {
+            throw new NotFoundException($"User with ID '{uniqueId}' not found.");
+        }
+        if (file is null)
+        {
+            throw new BadRequestException("No file selected.");
+        }
+
+        var userBefore = new
+        {
+            UniqueId = user.UniqueId,
+            UserName = user.UserName,  
+            Image = user.Image,
+            UploadDir = user.Image is null ? null : _uploadDirectory, 
+            UpdatedAt = user.UpdatedAt
+        };
+
+        var imageInfo = await _imageUploader.UploadSingleFile(file);
+        user.Image = imageInfo.FinalName;
+        user.UpdatedAt = DateTime.Now;
+        await _repository.UpdateAsync(user);
+
+        // message
+        var userAfter = new
+        {
+            UniqueId = user.UniqueId,
+            UserName = user.UserName,  
+            Image = user.Image,
+            UploadDir = _uploadDirectory, 
+            UpdatedAt = user.UpdatedAt
+        };
+
+        await _eventService.PublishUpdatedEvent(
+            user.UserId, 
+            Exchanges.UserExchange, 
+            RoutingKeys.User.Updated, 
+            EventActions.User.UploadImage,
+            userBefore, 
+            userAfter
+        );
+    }
+
+    public async Task ActivateUser(Guid uniqueId)
+    {
+        var user = await _repository.GetByUniqueIdAsync(uniqueId);
+        if (user is null)
+        {
+            throw new NotFoundException($"User with ID '{uniqueId}' not found");
+        }
+        if (user.IsActive)
+        {
+            throw new ConflictException("User is already active");
+        }
+
+        var userBefore = new 
+        {
+            UniqueId = user.UniqueId,
+            UserName = user.UserName,  
+            IsActive = user.IsActive,
+            UpdatedAt = user.UpdatedAt
+        };
+
+        user.IsActive = true;
+        user.RecoveryToken = Encryption.GenerateRandomToken(150);
+        user.UpdatedAt = DateTime.UtcNow;
+        await _repository.UpdateAsync(user);
+
+        // message
+        var userAfter = new 
+        {
+            UniqueId = user.UniqueId,
+            UserName = user.UserName,  
+            IsActive = user.IsActive,
+            UpdatedAt = user.UpdatedAt
+        };
+
+        await _eventService.PublishUpdatedEvent(
+            user.UserId, 
+            Exchanges.UserExchange, 
+            RoutingKeys.User.Updated, 
+            EventActions.User.Activate, 
+            userBefore, 
+            userAfter
+        );
+    }
+
+    public async Task DeactivateUser(Guid uniqueId)
+    {
+        var user = await _repository.GetByUniqueIdAsync(uniqueId);
+        if (user is null)
+        {
+            throw new NotFoundException($"User with ID '{uniqueId}' not found");
+        }
+        if (!user.IsActive)
+        {
+            throw new ConflictException("User is already inactive");
+        }
+        var userBefore = new 
+        {
+            UniqueId = user.UniqueId,
+            UserName = user.UserName,  
+            IsActive = user.IsActive,
+            UpdatedAt = user.UpdatedAt
+        };
+
+        user.IsActive = false;
+        user.UpdatedAt = DateTime.UtcNow;
+        await _repository.UpdateAsync(user);
+
+        // message
+        var role = await _roleRepository.GetByIdAsync(user.RoleId);
+        var userAfter = new
+        {
+            UniqueId = user.UniqueId,
+            UserName = user.UserName,  
+            Role = role?.RoleName,
+            IsActive = user.IsActive,
+            UpdatedAt = user.UpdatedAt
+        };
+
+        await _eventService.PublishUpdatedEvent(
+            user.UserId, 
+            Exchanges.UserExchange, 
+            RoutingKeys.User.Updated, 
+            EventActions.User.Deactivate,
+            userBefore, 
+            userAfter
+        );
+    }
+
+    public async Task DeleteUser(Guid uniqueId)
+    {
+        var user = await _repository.GetByUniqueIdAsync(uniqueId);
+        if (user is null)
+        {
+            throw new NotFoundException($"User with ID '{uniqueId}' not found");
+        }
+        await _repository.DeleteAsync(user);
+
+        // message
+        var role = await _roleRepository.GetByIdAsync(user.RoleId);
+        var userDeleted = new
+        {
+            UniqueId = user.UniqueId,
+            UserName = user.UserName,
+            Role = role?.RoleName,
+            Email = user.Email,
+            Password = user.Password,
+            IsActive = user.IsActive,
+            CreatedAt = user.CreatedAt,
+        };
+        await _eventService.PublishDeletedEvent(
+            user.UserId, 
+            Exchanges.UserExchange, 
+            RoutingKeys.User.Deleted, 
+            EventActions.User.Delete,
+            userDeleted
+        ); 
+    }   
+
+    public async Task CreateUserRefreshToken(UserData user, string token, DateTime expiryDate)
+    {
+        var userRefreshToken = new UserRefreshToken()
+        {
+            UserId = user.UserId,
+            Token = token,
+            ExpiryDate = expiryDate,
+        };
+        await _refreshTokenRepository.CreateAsync(userRefreshToken);
+    }   
+
+    public async Task UpdateUserRefreshToken(UserData user, string newRefreshToken)
+    {
+        if (string.IsNullOrEmpty(newRefreshToken))
+        {
+            throw new BadRequestException("New refresh token cannot be null or empty.");
+        }
+        var userRefreshToken = await _refreshTokenRepository.GetByUserIdAsync(user.UserId);
+        if (userRefreshToken is null)
+        {
+            throw new NotFoundException($"Refresh token for user with ID '{user.UserId}' not found.");
+        }
+        if (userRefreshToken.IsExpired)
+        {
+            throw new InvalidOperationException($"Cannot update an expired refresh token for user with ID '{user.UserId}'.");
+        }
+        if (userRefreshToken.Token == newRefreshToken)
+        {
+            throw new ConflictException("New refresh token must be different from the current token.");
+        }
+        userRefreshToken.Token = newRefreshToken;
+        userRefreshToken.UpdatedAt = DateTime.UtcNow;
+        await _refreshTokenRepository.UpdateAsync(userRefreshToken);
+    }   
+
+    public async Task ClearUserRefreshToken(int userId)
+    {
+        var userRefreshToken = await _refreshTokenRepository.GetByUserIdAsync(userId);
+        if (userRefreshToken is null)
+        {
+            throw new NotFoundException($"Refresh token for user with ID '{userId}' not found.");
+        }
+        if (string.IsNullOrEmpty(userRefreshToken.Token))
+        {
+            return; 
+        }
+        userRefreshToken.Token = null;
+        userRefreshToken.ExpiryDate = null;
+        await _refreshTokenRepository.UpdateAsync(userRefreshToken);
+    }     
+}

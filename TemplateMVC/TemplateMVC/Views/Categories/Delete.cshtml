@@ -1,0 +1,21 @@
+@model TemplateMVC.Core.Models.Products.DeleteCategoryViewModel;
+
+@{
+    Layout = "_Layout";
+    ViewBag.Title = "Delete Category";
+}
+
+<form asp-controller="Categories" asp-action="Delete" asp-route-uniqueid="@Model.UniqueId" method="post">
+    @Html.AntiForgeryToken()
+    
+    <div class="form-group">
+        <label asp-for="CategoryName" class="control-label"></label>
+        <input asp-for="CategoryName" type="text" class="form-control" aria-required="true" readonly />
+    </div>
+   
+    <br>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Confirm</button>
+        <a href="/categories/@Model.UniqueId/details" class="btn btn-secondary">Cancel</a>
+    </div>
+</form>

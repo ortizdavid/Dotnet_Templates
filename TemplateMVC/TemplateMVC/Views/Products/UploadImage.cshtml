@@ -1,0 +1,28 @@
+@model TemplateMVC.Core.Models.Products.UploadProductImageViewModel;
+
+@{
+    Layout = "_Layout";
+    ViewBag.Title = "Upload Image";
+}
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger">
+        @Html.ValidationSummary("", "Please fix the following errors:")
+    </div>
+}
+
+<form asp-controller="Products" asp-action="UploadImage" asp-route-uniqueid="@Model.UniqueId" method="post" enctype="multipart/form-data">
+    @Html.AntiForgeryToken()
+    
+    <div class="form-group">
+        <label for="files" class="control-label">Image:</label>
+        <input type="file" name="files" id="files" accept=".jpg,.jpeg,.png" class="form-control" multiple>
+    </div>
+
+    <br>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="reset" class="btn btn-secondary">Reset</button>
+    </div>
+</form>

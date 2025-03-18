@@ -1,0 +1,121 @@
+{
+	"info": {
+		"_postman_id": "47d52afd-1eff-48db-8291-399f6e8e308a",
+		"name": ".NET Template Minimal API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "13144775"
+	},
+	"item": [
+		{
+			"name": "Products",
+			"item": [
+				{
+					"name": "Get All",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{TEMPLATE_MINIMAL_API}}/products",
+							"host": [
+								"{{TEMPLATE_MINIMAL_API}}"
+							],
+							"path": [
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get by Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{TEMPLATE_MINIMAL_API}}/products/2",
+							"host": [
+								"{{TEMPLATE_MINIMAL_API}}"
+							],
+							"path": [
+								"products",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Product xsd\",\r\n    \"code\": \"P001\",\r\n    \"price\": 19.999\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{TEMPLATE_MINIMAL_API}}/products",
+							"host": [
+								"{{TEMPLATE_MINIMAL_API}}"
+							],
+							"path": [
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Product XX\",\r\n    \"code\": \"P008263\",\r\n    \"price\": 129.82\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{TEMPLATE_MINIMAL_API}}/products/3",
+							"host": [
+								"{{TEMPLATE_MINIMAL_API}}"
+							],
+							"path": [
+								"products",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{TEMPLATE_MINIMAL_API}}/products/4",
+							"host": [
+								"{{TEMPLATE_MINIMAL_API}}"
+							],
+							"path": [
+								"products",
+								"4"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

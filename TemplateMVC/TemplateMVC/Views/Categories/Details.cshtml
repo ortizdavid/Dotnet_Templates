@@ -1,0 +1,20 @@
+@model TemplateMVC.Core.Models.Products.Category;
+
+@{
+    Layout = "_Layout";
+    ViewBag.Title = "Details";
+}
+
+<div class="card">
+    <div class="card-body">
+        <p><strong>Category ID:</strong> @Model.CategoryId</p>
+        <p><strong>Category Name:</strong> @Model.CategoryName</p>
+        <p><strong>Description:</strong> @Model.Description</p>
+        <p><strong>Created At:</strong> @Model.CreatedAt</p>
+        <p><strong>Updated At:</strong> @Model.UpdatedAt</p>
+    </div>
+    <div class="card-footer">
+        <a class="btn btn-primary" href="/categories">Back to List</a>
+        <a class="btn btn-primary" href="/categories/@Model.UniqueId/edit">Edit</a>
+    </div>
+</div>

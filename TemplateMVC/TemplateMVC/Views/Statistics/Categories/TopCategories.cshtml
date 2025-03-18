@@ -1,0 +1,30 @@
+@model IEnumerable<TemplateMVC.Core.Models.Statistics.CategoryTopCategories>;
+
+@{
+    Layout = "_Layout";
+    ViewBag.Title = "Top Categoriess";
+}
+
+<a href="/statistics/categories" class="btn btn-link mt-3">
+    <i class="bi bi-arrow-left"></i> Back to Statistics
+</a>
+
+<table class="table">
+    <thead class="table-dark">
+        <tr>
+            <th>Category</th>
+            <th>Count</th>
+            <th>Percentage (%)</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.CategoryName</td>
+                <td>@item.ProductCount</td>
+                <td>@item.Percentage%</td>
+            </tr>
+        }
+    </tbody>
+</table>
