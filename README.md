@@ -23,10 +23,10 @@ A collection of .NET project templates designed for efficiency, simplicity, and 
 
 ## 📌 Available Templates  
 - [x] **REST API** – Full-featured RESTful API  
-- [x] **Simple REST API** – Lightweight version of REST API  
+- [x] **Simple REST API** – Lightweight version of REST API
+- [x] **Minimal API** – Lightweight API with minimal setup    
 - [x] **MVC App** – Model-View-Controller web application  
 - [x] **Simple MVC App** – Basic MVC template for prototyping  
-- [x] **Minimal API** – Lightweight API with minimal setup  
 - [x] **RabbitMQ API** – Producer/Consumer API using RabbitMQ  
 - [x] **NATS API** – Publisher/Subscriber API using NATS  
 - [x] **Event-Driven** – Event-driven architecture template  
