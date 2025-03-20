@@ -34,7 +34,7 @@ public class ExceptionHandlerMiddleware
         {
             AppException ex => new { status = ex.StatusCode, message = ex.Message },
             Exception ex => new { status = (int)HttpStatusCode.InternalServerError, message = ex.Message },
-            _ => new { status = (int)HttpStatusCode.InternalServerError, message = "An unexpected error occurred." }
+            _ => new { status = (int)HttpStatusCode.InternalServerError, message = $"An unexpected error occurred: {exception.Message}" }
         };
         context.Response.StatusCode = response.status;
         _logger.LogError(response.message);

@@ -3,6 +3,7 @@ using Serilog;
 using Prometheus;
 using TemplateSimpleApi.Models;
 using TemplateSimpleApi.Repositories;
+using Serilog.Sinks.Grafana.Loki;
 
 internal class Program
 {
@@ -26,9 +27,10 @@ internal class Program
         // Configure Serilog for logging with console output and Seq for centralized log management.
         Log.Logger = new LoggerConfiguration()
             .WriteTo.Console()
-            .WriteTo.Seq("http://localhost:5059")
+            .WriteTo.File("C:/logs/dotnet-apps/dotnet-simple-api/app.log", rollingInterval: RollingInterval.Day)
+            .WriteTo.GrafanaLoki("http://localhost:3100")
             .Enrich.FromLogContext()
-            .Enrich.WithProperty("Application", "Dotnet_Template_Simple_API")
+            .Enrich.WithProperty("Application", "Dotnet_Simple_API")
             .CreateLogger();
 
         builder.Host.UseSerilog();
@@ -48,7 +50,7 @@ internal class Program
             app.MapOpenApi();
         }
 
-        app.UseHttpsRedirection();
+        //app.UseHttpsRedirection();
 
         app.MapControllers();
 

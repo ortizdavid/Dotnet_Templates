@@ -30,7 +30,7 @@ A collection of .NET project templates designed for efficiency, simplicity, and 
 - [x] **RabbitMQ API** – Producer/Consumer API using RabbitMQ  
 - [x] **NATS API** – Publisher/Subscriber API using NATS  
 - [x] **Event-Driven** – Event-driven architecture template  
-- [ ] **CQRS** – Command Query Responsibility Segregation 
+- [ ] **CQRS** – Command Query Responsibility Segregation  template
 
 
 ## 🎯 Purpose  

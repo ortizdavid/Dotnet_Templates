@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Prometheus;
 using Serilog;
+using Serilog.Sinks.Grafana.Loki;
 using TemplateMinimalAPI.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,9 +17,10 @@ builder.Services.AddDbContext<AppDbContext>(
 // Configure Serilog for logging with console output and Seq for centralized log management.
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
-    .WriteTo.Seq("http://localhost:5059")
+    .WriteTo.File("C:/logs/dotnet-apps/dotnet-minimal-api/app.log", rollingInterval: RollingInterval.Day)
+    .WriteTo.GrafanaLoki("http://localhost:3100")
     .Enrich.FromLogContext()
-    .Enrich.WithProperty("Application", "Dotnet_Template_Minimal_API")
+    .Enrich.WithProperty("Application", "Dotnet_Minimal_API")
     .CreateLogger();
 
 builder.Host.UseSerilog();

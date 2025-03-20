@@ -1,6 +1,6 @@
 {
   "Serilog": {
-    "Using": ["Serilog.Sinks.Console", "Serilog.Sinks.File", "Serilog.Sinks.Seq"],
+    "Using": ["Serilog.Sinks.Console", "Serilog.Sinks.File", "Serilog.Sinks.Grafana.Loki"],
     "MinimumLevel": {
       "Default": "Information",
       "Override": {
@@ -15,21 +15,21 @@
       {
         "Name": "File",
         "Args": {
-          "path": "logs/log-.log",
+          "path": "C:/logs/dotnet-apps/dotnet-rabbitmq-api/log-.log",
           "rollingInterval": "Day",
           "retainedFileCountLimit": 7
         }
       },
       {
-        "Name": "Seq",
+        "Name": "GrafanaLoki",
         "Args": {
-          "serverUrl": "http://localhost:5059"
+          "endpoint": "http://localhost:3100"
         }
       }
     ],
     "Enrich": ["FromLogContext", "WithMachineName", "WithThreadId"],
     "Properties": {
-      "Application": "Dotnet_Template_RabbitMQ_API"
+      "Application": "Dotnet_RabbitMQ_API"
     }
   }
 }

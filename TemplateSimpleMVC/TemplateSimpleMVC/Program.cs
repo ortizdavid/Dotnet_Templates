@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Prometheus;
 using Serilog;
+using Serilog.Sinks.Grafana.Loki;
 using TemplateSimpleMVC.Controllers;
 using TemplateSimpleMVC.Middlewares;
 using TemplateSimpleMVC.Models;
@@ -36,9 +37,10 @@ internal class Program
         // Configure Serilog for logging with console output and Seq for centralized log management.
         Log.Logger = new LoggerConfiguration()
             .WriteTo.Console()
-            .WriteTo.Seq("http://localhost:5059")
+            .WriteTo.File("C:/logs/dotnet-apps/dotnet-simple-mvc/app.log", rollingInterval: RollingInterval.Day)
+            .WriteTo.GrafanaLoki("http://localhost:3100")
             .Enrich.FromLogContext()
-            .Enrich.WithProperty("Application", "Dotnet_Template_Simple_MVC")
+            .Enrich.WithProperty("Application", "Dotnet_Simple_MVC")
             .CreateLogger();
 
         builder.Host.UseSerilog();
@@ -56,7 +58,7 @@ internal class Program
             app.UseHsts();
         }
 
-        app.UseHttpsRedirection();
+        //app.UseHttpsRedirection();
 
         app.UseRouting();
 
