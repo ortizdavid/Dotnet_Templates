@@ -20,7 +20,7 @@ public class UserService : IUserService
         _configuration = configuration;
 
         _uploadDirectory = _configuration["UploadsDirectory"] + "/Users";
-        _imageUploader = new FileUploader(_uploadDirectory, FileExtensions.Images, 5 * CapacityUnit.MEGA_BYTE);
+        _imageUploader = new FileUploader(_uploadDirectory, FileExtensions.Images, 5 * CapacityUnit.MegaByte);
     }
 
     public async Task CreateUser(CreateUserViewModel viewModel)

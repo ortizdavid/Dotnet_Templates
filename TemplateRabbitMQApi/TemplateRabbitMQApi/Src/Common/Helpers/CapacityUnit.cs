@@ -2,9 +2,9 @@ namespace TemplateRabbitMQApi.Common.Helpers;
 
 public class CapacityUnit
 {
-    public const long KILO_BYTE = 1024;
-    public const long MEGA_BYTE = KILO_BYTE * 1024;
-    public const long GIGA_BYTE = MEGA_BYTE * 1024;
-    public const long TERA_BYTE = GIGA_BYTE * 1024;
-    public const long PETA_BYTE = TERA_BYTE * 1024;
+    public const long KiloByte = 1024;
+    public const long MegaByte = KiloByte * 1024;
+    public const long GigaByte = MegaByte * 1024;
+    public const long TeraByte = GigaByte * 1024;
+    public const long PetaByte = TeraByte * 1024;
 }

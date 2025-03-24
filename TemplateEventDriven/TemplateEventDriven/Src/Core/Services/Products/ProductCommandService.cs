@@ -33,7 +33,7 @@ public class ProductCommandService
         _configuration = configuration;
 
         _uploadDirectory = _configuration["UploadsDirectory"] + "/Products";
-        _imageUploader = new FileUploader(_uploadDirectory, FileExtensions.Images, 5 * CapacityUnit.MEGA_BYTE);
+        _imageUploader = new FileUploader(_uploadDirectory, FileExtensions.Images, 5 * CapacityUnit.MegaByte);
     }
     
     public async Task CreateProduct(ProductRequest request)
