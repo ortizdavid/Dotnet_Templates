@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace TemplateApi.Core.Controllers.Suppliers;
 
-[Authorize]
+//[Authorize]
 [Route("api/[controller]")]
 [ApiController]
 public class SuppliersController : ControllerBase

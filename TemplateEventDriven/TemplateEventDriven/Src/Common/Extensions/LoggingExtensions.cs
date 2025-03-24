@@ -17,6 +17,7 @@ public static class LoggingExtensions
         // Configure Serilog using the final configuration
         hostBuilder.UseSerilog((context, services, configuration) => 
             configuration.ReadFrom.Configuration(finalConfig)  
+            
         );
     }
 

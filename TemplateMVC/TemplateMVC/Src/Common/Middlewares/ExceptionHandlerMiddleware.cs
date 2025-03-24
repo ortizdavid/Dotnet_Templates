@@ -1,5 +1,6 @@
 using System.Net;
 using System.Text;
+using Serilog.Context;
 
 namespace TemplateMVC.Common.Middlewares;
 
@@ -22,7 +23,6 @@ public class ExceptionHandlerMiddleware
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex.Message);
             await HandleExceptionAsync(context, ex);
         }
     }
@@ -38,6 +38,18 @@ public class ExceptionHandlerMiddleware
         }
         var htmlContent = await File.ReadAllTextAsync(errorPath, Encoding.UTF8);
         htmlContent = htmlContent.Replace("{{ErrorMessage}}", exception.Message);
+
+        var routeData = context.GetRouteData();
+        var controller = routeData.Values["controller"]?.ToString() ?? "Unknown";
+        var action = routeData.Values["action"]?.ToString() ?? "Unknown";
+
+        using (LogContext.PushProperty("Controller", controller))
+        using (LogContext.PushProperty("Action", action))
+        using (LogContext.PushProperty("StatusCode", context.Response.StatusCode))
+        {
+            _logger.LogError(exception.Message);
+        }
+
         await context.Response.WriteAsync(htmlContent);
     }
 }

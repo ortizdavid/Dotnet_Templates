@@ -7,7 +7,7 @@ using TemplateApi.Core.Services.Products;
 
 namespace TemplateApi.Core.Controllers.Products;
 
-[Authorize]
+//[Authorize]
 [Route("api/[controller]")]
 [ApiController]
 public class ProductsController : ControllerBase

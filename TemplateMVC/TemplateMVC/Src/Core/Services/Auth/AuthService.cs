@@ -98,7 +98,7 @@ public class AuthService
         _emailService.SendEmail(user.Email, "Password Recovery Success", EmailTemplateHelper.ChangePassword(user.UserName, viewModel.NewPassword));
     }
 
-    public async Task<UserData?> GetLoggedUser()
+    public async Task<UserData> GetLoggedUser()
     {
         var userName = _contextAccessor.HttpContext?.Session.GetString("UserName") ?? string.Empty;
         var user = await _userService.GetUserByName(userName);

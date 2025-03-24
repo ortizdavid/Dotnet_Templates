@@ -1,4 +1,5 @@
 using System.Net;
+using Serilog.Context;
 using TemplateApi.Common.Exceptions;
 
 namespace TemplateApi.Common.Middlewares;
@@ -22,7 +23,6 @@ public class ExceptionHandlerMiddleware
         }
         catch (Exception ex)
         {
-            _logger.LogError("Unhandled error ocurred: "+ ex.Message);
             await HandleExceptionAsync(context, ex);
         }
     }
@@ -37,7 +37,18 @@ public class ExceptionHandlerMiddleware
             _ => new { status = (int)HttpStatusCode.InternalServerError, message = $"An unexpected error occurred: {exception.Message}" }
         };
         context.Response.StatusCode = response.status;
-        _logger.LogError(response.message);
+
+        var routeData = context.GetRouteData();
+        var controller = routeData.Values["controller"]?.ToString() ?? "Unknown";
+        var action = routeData.Values["action"]?.ToString() ?? "Unknown";
+        
+        using (LogContext.PushProperty("Controller", controller))
+        using (LogContext.PushProperty("Action", action))
+        using (LogContext.PushProperty("StatusCode", context.Response.StatusCode))
+        {
+            _logger.LogError(exception, response.message);
+        }
+        
         await context.Response.WriteAsJsonAsync(response);
     }
 }
