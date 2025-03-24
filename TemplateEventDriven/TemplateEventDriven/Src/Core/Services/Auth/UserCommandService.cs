@@ -60,7 +60,7 @@ public class UserCommandService
 
         // message
         var role = await _roleRepository.GetByIdAsync(user.RoleId);
-        var userCreated = new
+        var userCreated = new UserCreated()
         {
             UniqueId = user.UniqueId,
             UserName = user.UserName,
@@ -101,7 +101,7 @@ public class UserCommandService
         }
 
         // user before update
-        var userBefore = new
+        var userBefore = new UserChangedPassword()
         {
             UniqueId = user.UniqueId,
             UserName = user.UserName,
@@ -115,7 +115,7 @@ public class UserCommandService
         await _repository.UpdateAsync(user);
 
         // user after update
-        var userAfter = new
+        var userAfter = new UserChangedPassword()
         {
             UniqueId = user.UniqueId,
             UserName = user.UserName,
@@ -145,7 +145,7 @@ public class UserCommandService
             throw new BadRequestException("No file selected.");
         }
 
-        var userBefore = new
+        var userBefore = new UserUploadedImage()
         {
             UniqueId = user.UniqueId,
             UserName = user.UserName,  
@@ -160,7 +160,7 @@ public class UserCommandService
         await _repository.UpdateAsync(user);
 
         // message
-        var userAfter = new
+        var userAfter = new UserUploadedImage()
         {
             UniqueId = user.UniqueId,
             UserName = user.UserName,  
@@ -191,7 +191,7 @@ public class UserCommandService
             throw new ConflictException("User is already active");
         }
 
-        var userBefore = new 
+        var userBefore = new UserActivated()
         {
             UniqueId = user.UniqueId,
             UserName = user.UserName,  
@@ -205,7 +205,7 @@ public class UserCommandService
         await _repository.UpdateAsync(user);
 
         // message
-        var userAfter = new 
+        var userAfter = new UserActivated()
         {
             UniqueId = user.UniqueId,
             UserName = user.UserName,  
@@ -234,7 +234,7 @@ public class UserCommandService
         {
             throw new ConflictException("User is already inactive");
         }
-        var userBefore = new 
+        var userBefore = new UserDeactivated()
         {
             UniqueId = user.UniqueId,
             UserName = user.UserName,  
@@ -248,7 +248,7 @@ public class UserCommandService
 
         // message
         var role = await _roleRepository.GetByIdAsync(user.RoleId);
-        var userAfter = new
+        var userAfter = new UserDeactivated()
         {
             UniqueId = user.UniqueId,
             UserName = user.UserName,  
@@ -278,7 +278,7 @@ public class UserCommandService
 
         // message
         var role = await _roleRepository.GetByIdAsync(user.RoleId);
-        var userDeleted = new
+        var userDeleted = new UserDeleted()
         {
             UniqueId = user.UniqueId,
             UserName = user.UserName,
@@ -286,7 +286,7 @@ public class UserCommandService
             Email = user.Email,
             Password = user.Password,
             IsActive = user.IsActive,
-            CreatedAt = user.CreatedAt,
+            DeletedAt = DateTime.UtcNow,
         };
         await _eventService.PublishDeletedEvent(
             user.UserId, 

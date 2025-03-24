@@ -61,8 +61,9 @@ public class ProductCommandService
         var category = await _categoryRepository.GetByIdAsync(product.CategoryId);
         var supplier = await _supplierRepository.GetByIdAsync(product.SupplierId);
         
-        var newProduct = new
+        var newProduct = new ProductCreated()
         {
+            UniqueId = product.UniqueId,
             ProductName = product.ProductName,
             Code = product.Code,
             UnitPrice = product.UnitPrice,
@@ -97,15 +98,16 @@ public class ProductCommandService
         var category = await _categoryRepository.GetByIdAsync(product.CategoryId);
         var supplier = await _supplierRepository.GetByIdAsync(product.SupplierId);
 
-        var productBefore = new
+        var productBefore = new ProductUpdated()
         {
+            UniqueId = product.UniqueId,
             ProductName = product.ProductName,
             Code = product.Code,
             UnitPrice = product.UnitPrice,
-            CreatedAt = product.CreatedAt,
             Description = product.Description,
             Category = category?.CategoryName,
-            Supplier = supplier?.SupplierName
+            Supplier = supplier?.SupplierName,
+            UpdatedAt = product.UpdatedAt
         };
         
         product.CategoryId = request.CategoryId;
@@ -117,15 +119,16 @@ public class ProductCommandService
         product.UpdatedAt = DateTime.UtcNow;
         await _repository.UpdateAsync(product);
         
-        var productAfter = new
+        var productAfter = new ProductUpdated()
         {
+            UniqueId = product.UniqueId,
             ProductName = product.ProductName,
             Code = product.Code,
             UnitPrice = product.UnitPrice,
-            CreatedAt = product.CreatedAt,
             Description = product.Description,
             Category = category?.CategoryName,
-            Supplier = supplier?.SupplierName
+            Supplier = supplier?.SupplierName,
+            UpdatedAt = product.UpdatedAt,
         };
 
         await _eventService.PublishUpdatedEvent(
@@ -148,18 +151,20 @@ public class ProductCommandService
 
         var category = await _categoryRepository.GetByIdAsync(product.CategoryId);
         var supplier = await _supplierRepository.GetByIdAsync(product.SupplierId);
+       
+        await _repository.DeleteAsync(product);
 
-        var deletedObj = new
+        var deletedObj = new ProductDeleted()
         {
+            UniqueId = product.UniqueId,
             ProductName = product.ProductName,
             Code = product.Code,
             UnitPrice = product.UnitPrice,
-            CreatedAt = product.CreatedAt,
             Description = product.Description,
             Category = category?.CategoryName,
-            Supplier = supplier?.SupplierName
+            Supplier = supplier?.SupplierName,
+            DeletedAt = DateTime.UtcNow
         };
-        await _repository.DeleteAsync(product);
 
         await _eventService.PublishDeletedEvent(
             product.ProductId,
@@ -183,7 +188,7 @@ public class ProductCommandService
         var products = await ParseCSV(formFile);
         await _repository.CreateBatchAsync(products);
 
-        var productImported = new 
+        var productImported = new ProductImported()
         {
             TotalRecords = products.Count(),
             Items = products
@@ -271,7 +276,14 @@ public class ProductCommandService
 
         await _imageRepository.CreateBatchAsync(productImages);
 
-        var imageCreated = productImages;
+        var imageCreated = new ProductCreatedImage()
+        {
+            UniqueId = product.UniqueId,
+            ProductName = product.ProductName,
+            Images = imagesInfo.Select(im => im.FinalName).ToList(),
+            UploadDir = _uploadDirectory,
+            CreatedAt = DateTime.UtcNow
+        };
 
         await _eventService.PublishCreatedEvent(
             product.ProductId,

@@ -51,8 +51,9 @@ public class SupplierCommandService
         };
         await _repository.CreateAsync(supplier);
 
-        var newSupplier = new
+        var newSupplier = new SupplierCreated
         {
+            UniqueId = supplier.UniqueId,
             SupplierName = request.SupplierName,
             IdentificationNumber = request.IdentificationNumber,
             PrimaryPhone = request.PrimaryPhone,
@@ -83,8 +84,9 @@ public class SupplierCommandService
             throw new NotFoundException($"Supplier with ID '{uniqueId}' not found.");
         }
 
-        var supplierAfter = new
+        var supplierAfter = new SupplierUpdated()
         {
+            UniqueId = supplier.UniqueId,
             SupplierName = request.SupplierName,
             IdentificationNumber = request.IdentificationNumber,
             PrimaryPhone = request.PrimaryPhone,
@@ -103,8 +105,9 @@ public class SupplierCommandService
         supplier.UpdatedAt = DateTime.UtcNow;
         await _repository.UpdateAsync(supplier);
 
-        var supplierBefore = new
+        var supplierBefore = new SupplierUpdated()
         {
+            UniqueId = supplier.UniqueId,
             SupplierName = supplier.SupplierName,
             IdentificationNumber = supplier.IdentificationNumber,
             PrimaryPhone = supplier.PrimaryPhone,
@@ -131,15 +134,16 @@ public class SupplierCommandService
         {
             throw new NotFoundException($"Supplier with ID '{uniqueId}' not found.");
         }
-        var supplierDeleted = new
+        var supplierDeleted = new SupplierDeleted()
         {
+            UniqueId = supplier.UniqueId,
             SupplierName = supplier.SupplierName,
             IdentificationNumber = supplier.IdentificationNumber,
             PrimaryPhone = supplier.PrimaryPhone,
             SecondaryPhone = supplier.SecondaryPhone,
             Email = supplier.Email,
             Address = supplier.Address,
-            CreatedAt = supplier.CreatedAt
+            DeletedAt = DateTime.UtcNow
         };
 
         await _repository.DeleteAsync(supplier);

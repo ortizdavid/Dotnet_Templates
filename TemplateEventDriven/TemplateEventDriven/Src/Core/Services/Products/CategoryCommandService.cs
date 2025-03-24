@@ -18,7 +18,7 @@ public class CategoryCommandService
         _eventService = eventService;
     }
 
-     public async Task CreateCategory(CategoryRequest request)
+    public async Task CreateCategory(CategoryRequest request)
     {
         if (request is null)
         {
@@ -35,7 +35,7 @@ public class CategoryCommandService
         };
         await _repository.CreateAsync(category);
 
-        var categoryCreated = new
+        var categoryCreated = new CategoryCreated()
         {
             UniqueId = category.UniqueId,
             CategoryName = request.CategoryName,
@@ -64,7 +64,7 @@ public class CategoryCommandService
             throw new NotFoundException("Category not found");
         }
 
-        var categoryBefore = new
+        var categoryBefore = new CategoryUpdated()
         {
             UniqueId = category.UniqueId,
             CategoryName = category.CategoryName,
@@ -77,12 +77,12 @@ public class CategoryCommandService
         category.UpdatedAt = DateTime.UtcNow;
         await _repository.UpdateAsync(category);
 
-        var categoryAfter = new
+        var categoryAfter = new CategoryUpdated()
         {
             UniqueId = category.UniqueId,
             CategoryName = request.CategoryName,
             Description = request.Description,
-            Uptadedt = category.UpdatedAt
+            UpdatedAt = category.UpdatedAt
         };
 
         await _eventService.PublishUpdatedEvent(
@@ -103,15 +103,15 @@ public class CategoryCommandService
             throw new NotFoundException("Category not found");
         }
 
-        var categoryDeleted = new
+        await _repository.DeleteAsync(category);
+
+        var categoryDeleted = new CategoryDeleted()
         {
             UniqueId = category.UniqueId,
             CategoryName = category.CategoryName,
             Description = category.Description,
-            CreatedAt = category.CreatedAt
+            DeletedAt = DateTime.UtcNow
         };
-
-        await _repository.DeleteAsync(category);
 
         await _eventService.PublishDeletedEvent(
             category.CategoryId,
@@ -135,7 +135,7 @@ public class CategoryCommandService
         var categories = await ParseCSV(formFile);
         await _repository.CreateBatchAsync(categories);
 
-        var categoryImported = new
+        var categoryImported = new CategoryImported()
         {
             TotalRecords = categories.Count(),
             Items = categories
