@@ -17,7 +17,7 @@ This template provides a structured approach for managing:
 ## 🏗 **Architecture Overview**  
 The system follows a **Producer - Consumer** design:  
 
-![Architecture](Docs/Diagrams/Architecture.jpg)  
+![Architecture](Docs/Diagrams/Diagrams.jpg)  
 
 ### **How It Works**  
 1️⃣ **Producers (Services)** generate events (e.g., user created, order placed).  
