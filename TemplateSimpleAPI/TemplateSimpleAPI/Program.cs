@@ -41,9 +41,6 @@ internal class Program
         app.UseMetricServer();
         app.UseHttpMetrics();
 
-        // use Logger middleware
-        app.UseSerilogRequestLogging();
-
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
         {

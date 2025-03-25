@@ -9,6 +9,7 @@ namespace TemplateApi.Core.Controllers;
 public class ApiRootController : ControllerBase
 {
     private readonly IConfiguration _configuration;
+    
     public ApiRootController(IConfiguration configuration)
     {
         _configuration = configuration;

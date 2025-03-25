@@ -1,3 +1,4 @@
+using System.Text;
 using Microsoft.EntityFrameworkCore;
 using Prometheus;
 using Serilog;
@@ -39,8 +40,31 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 // Root
-app.MapGet("/", () => "Template Minimal API");
-app.MapGet("/api", () => "Template Minimal API");
+app.MapGet("/", () => Results.Redirect("/api"));
+app.MapGet("/api", () => 
+{
+    var templatePath = Path.Combine(configuration["TemplatesPath"] ?? "", "index.html");
+    if (!File.Exists(templatePath))
+    {
+        return Results.NotFound("Index Template file not found");
+    }
+    var htmlContent = File.ReadAllText(templatePath, Encoding.UTF8);
+    return Results.Content(htmlContent, "text/html", Encoding.UTF8);
+});
+
+app.MapGet("/download-collections", () => Results.Redirect("/api/download-collections"));
+app.MapGet("/api/download-collections", (HttpContext context) =>
+{
+    var configuration = context.RequestServices.GetRequiredService<IConfiguration>();
+    var fileName = ".NET Template Minimal API.postman_collection.json";
+    var filePath = Path.Combine(configuration["ApiCollectionsPath"] ?? "", fileName);
+
+    if (!File.Exists(filePath))
+    {
+        return Results.NotFound("Api collection file not found");
+    }
+    return Results.File(File.ReadAllBytes(filePath), "application/json", fileName);
+});
 
 // Get All
 app.MapGet("/api/products", async (AppDbContext db) =>
@@ -106,5 +130,6 @@ app.MapDelete("/api/products/{id}", async (AppDbContext db, int id) =>
     return Results.NoContent();
 });
 
+// Run application
 app.Run();
 
