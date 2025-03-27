@@ -30,7 +30,10 @@ A collection of .NET project templates designed for efficiency, simplicity, and 
 - [x] **RabbitMQ API** – Producer/Consumer API using RabbitMQ  
 - [x] **NATS API** – Publisher/Subscriber API using NATS  
 - [x] **Event-Driven** – Event-driven architecture template  
+- [ ] **MongoDB API** – REST API using MongoDB NoSQL database  
 - [ ] **CQRS** – Command Query Responsibility Segregation  template
+- [ ] **SOAP API** - SOAP-based API using CoreWCF
+- [ ] **gRPC API** - High-performance API using gRPC
 
 
 ## 🎯 Purpose  
