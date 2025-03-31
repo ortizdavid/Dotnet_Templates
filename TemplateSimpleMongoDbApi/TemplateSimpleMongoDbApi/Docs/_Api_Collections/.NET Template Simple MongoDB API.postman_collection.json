@@ -1,0 +1,140 @@
+{
+	"info": {
+		"_postman_id": "0afd8497-15d2-4022-bcd2-238d9d5daba6",
+		"name": ".NET Template Simple MongoDB API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "13144775"
+	},
+	"item": [
+		{
+			"name": "API Root",
+			"item": [
+				{
+					"name": "Index",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{TEMPLATE_SIMPLE_MONGODB_API}}",
+							"host": [
+								"{{TEMPLATE_SIMPLE_MONGODB_API}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Products",
+			"item": [
+				{
+					"name": "Get All Products",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{TEMPLATE_SIMPLE_MONGODB_API}}/products",
+							"host": [
+								"{{TEMPLATE_SIMPLE_MONGODB_API}}"
+							],
+							"path": [
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Product By Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{TEMPLATE_SIMPLE_MONGODB_API}}/products/67eaa3589b40424906be59d4",
+							"host": [
+								"{{TEMPLATE_SIMPLE_MONGODB_API}}"
+							],
+							"path": [
+								"products",
+								"67eaa3589b40424906be59d4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Product",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Pencil\",\r\n    \"code\": \"P-003\",\r\n    \"price\": 9.34,\r\n    \"description\": \"No description\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{TEMPLATE_SIMPLE_MONGODB_API}}/products",
+							"host": [
+								"{{TEMPLATE_SIMPLE_MONGODB_API}}"
+							],
+							"path": [
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Product",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Phone\",\r\n    \"code\": \"P-001\",\r\n    \"price\": 19.34,\r\n    \"description\": \"Phone description\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{TEMPLATE_SIMPLE_MONGODB_API}}/products/67eaa472890b6b8625a9dd5a",
+							"host": [
+								"{{TEMPLATE_SIMPLE_MONGODB_API}}"
+							],
+							"path": [
+								"products",
+								"67eaa472890b6b8625a9dd5a"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Product",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{TEMPLATE_SIMPLE_MONGODB_API}}/products/67eaa587890b6b8625a9dd5b",
+							"host": [
+								"{{TEMPLATE_SIMPLE_MONGODB_API}}"
+							],
+							"path": [
+								"products",
+								"67eaa587890b6b8625a9dd5b"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
