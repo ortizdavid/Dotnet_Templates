@@ -26,8 +26,9 @@ cd TemplateSimpleMongoDbApi
 ### 2. **Update the database connection string** in `appsettings.json`:
 ```json
 {
-  "ConnectionStrings": {
-    "DefaultConnection": "Server=your_server;Database=your_db;User Id=your_user;Password=your_password;"
+  "MongoDbSettings": {
+    "ConnectionString": "mongodb://127.0.0.1:27017/?tls=false",
+    "DatabaseName": "dotnet_template_simple_mongodb_api"
   }
 }
 ```

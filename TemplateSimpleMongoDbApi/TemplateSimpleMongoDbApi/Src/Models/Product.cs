@@ -11,13 +11,15 @@ public class Product
     public string? Id { get; set; }
 
     [Required]
-    [BsonElement("Name")]
+    [BsonElement("name")]
     public string Name { get; set; } = string.Empty;
 
     [Required]
+    [BsonElement("code")]
     public string Code { get; set; } = string.Empty;
 
     [Required]
+    [BsonElement("price")]
     [Range(0.01, 1_000_000)]
     public decimal Price { get; set; }
 }

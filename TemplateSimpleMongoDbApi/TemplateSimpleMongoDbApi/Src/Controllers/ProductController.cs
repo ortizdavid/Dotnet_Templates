@@ -91,6 +91,7 @@ public class ProductsController : ControllerBase
             var product = await _service.GetByIdAsync(id);
             if (product is null)
             {
+                _logger.LogError($"Product with ID '{id}' not found");
                 return NotFound($"Product with ID '{id}' not found");
             }
             product.Name = updatedProduct.Name;

@@ -12,7 +12,7 @@ public class ProductService
     {
         var mongoClient = new MongoClient(settings.Value.ConnectionString);
         var mongoDatabase = mongoClient.GetDatabase(settings.Value.DatabaseName);
-        _collection = mongoDatabase.GetCollection<Product>("Products");
+        _collection = mongoDatabase.GetCollection<Product>("products");
     }
 
     public async Task<List<Product>> GetAllAsync()
