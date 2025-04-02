@@ -1,4 +1,4 @@
-namespace TemplateApi.Core.Models.Statistics;
+namespace TemplateMongoDbApi.Core.Models.Statistics;
 
 public class SupplierTopSuppliers
 {

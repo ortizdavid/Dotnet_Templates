@@ -1,9 +1,9 @@
 using System.ComponentModel.DataAnnotations;
-using TemplateApi.Common.Helpers;
+using TemplateMongoDbApi.Common.Helpers;
 using Microsoft.EntityFrameworkCore;
-using TemplateApi.Core.Models.Products;
+using TemplateMongoDbApi.Core.Models.Products;
 
-namespace TemplateApi.Core.Models.Suppliers;
+namespace TemplateMongoDbApi.Core.Models.Suppliers;
 
 public class Supplier : IModel
 {

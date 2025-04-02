@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
-using TemplateApi.Core.Models;
-using TemplateApi.Core.Models.Auth;
+using TemplateMongoDbApi.Core.Models;
+using TemplateMongoDbApi.Core.Models.Auth;
 
-namespace TemplateApi.Core.Repositories.Auth;
+namespace TemplateMongoDbApi.Core.Repositories.Auth;
 
 public class UserRefreshTokenRepository : RepositoryBase<UserRefreshToken>
 {

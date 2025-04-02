@@ -4,9 +4,9 @@ using System.Security.Cryptography;
 using System.Text;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using TemplateApi.Core.Models.Auth;
+using TemplateMongoDbApi.Core.Models.Auth;
 
-namespace TemplateApi.Core.Services.Auth;
+namespace TemplateMongoDbApi.Core.Services.Auth;
 
 public class JwtService
 {

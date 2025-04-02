@@ -2,10 +2,10 @@ using System.Text;
 using OfficeOpenXml;
 using PdfSharp.Drawing;
 using PdfSharp.Pdf;
-using TemplateApi.Core.Models.Reports;
-using TemplateApi.Core.Models.Suppliers;
+using TemplateMongoDbApi.Core.Models.Reports;
+using TemplateMongoDbApi.Core.Models.Suppliers;
 
-namespace TemplateApi.Core.Controllers.Reports;
+namespace TemplateMongoDbApi.Core.Controllers.Reports;
 
 public class SupplierGenerator : IGenerator<SupplierReport>
 {

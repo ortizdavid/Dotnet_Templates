@@ -1,9 +1,9 @@
-using TemplateApi.Common.Exceptions;
-using TemplateApi.Common.Helpers;
-using TemplateApi.Core.Models.Auth;
-using TemplateApi.Common.Messaging;
+using TemplateMongoDbApi.Common.Exceptions;
+using TemplateMongoDbApi.Common.Helpers;
+using TemplateMongoDbApi.Core.Models.Auth;
+using TemplateMongoDbApi.Common.Messaging;
 
-namespace TemplateApi.Core.Services.Auth;
+namespace TemplateMongoDbApi.Core.Services.Auth;
 
 public class AuthService
 {

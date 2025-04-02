@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
-using TemplateApi.Core.Models.Reports;
-using TemplateApi.Core.Services.Reports;
+using TemplateMongoDbApi.Core.Models.Reports;
+using TemplateMongoDbApi.Core.Services.Reports;
 using Microsoft.AspNetCore.Authorization;
 
-namespace TemplateApi.Core.Controllers.Reports;
+namespace TemplateMongoDbApi.Core.Controllers.Reports;
 
 [Authorize]
 [Route("api/products-report")]

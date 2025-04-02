@@ -1,3 +1,4 @@
+using System.Reflection;
 using Prometheus;
 using TemplateMongoDbApi.Common.Extensions;
 using TemplateMongoDbApi.Common.Middlewares;
@@ -22,9 +23,9 @@ internal class Program
         builder.Host.AddSerilogConfiguration();
         builder.Services.AddJwtAuthentication(configuration);
         builder.Services.AddEmailConfiguration(configuration);
-        builder.Services.AddDatabaseConfiguration(configuration);
-        builder.Services.AddRepositories();
-        builder.Services.AddServices();
+        builder.Services.AddMongoDbConfiguration(configuration);
+        builder.Services.AddCoreRepositories(Assembly.GetExecutingAssembly());
+        builder.Services.AddCoreServices(Assembly.GetExecutingAssembly());
 
         // Application Initialization
         var app = builder.Build();

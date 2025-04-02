@@ -1,9 +1,9 @@
 using System.Data;
 using Dapper;
-using TemplateApi.Core.Models.Reports;
-using TemplateApi.Core.Models.Suppliers;
+using TemplateMongoDbApi.Core.Models.Reports;
+using TemplateMongoDbApi.Core.Models.Suppliers;
 
-namespace TemplateApi.Core.Repositories.Reports;
+namespace TemplateMongoDbApi.Core.Repositories.Reports;
 
 public class SupplierReportRepository
 {

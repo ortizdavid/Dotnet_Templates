@@ -1,4 +1,4 @@
-namespace TemplateApi.Core.Models.Reports;
+namespace TemplateMongoDbApi.Core.Models.Reports;
 
 public class ReportFilter
 {

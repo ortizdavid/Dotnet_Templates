@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
 
-namespace TemplateApi.Core.Models.Auth;
+namespace TemplateMongoDbApi.Core.Models.Auth;
 
 public class UserRefreshToken : IModel
 {

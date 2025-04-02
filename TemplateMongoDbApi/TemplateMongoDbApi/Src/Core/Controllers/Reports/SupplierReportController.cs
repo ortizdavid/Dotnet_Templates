@@ -1,10 +1,10 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using TemplateApi.Core.Models.Reports;
-using TemplateApi.Core.Models.Suppliers;
-using TemplateApi.Core.Services.Reports;
+using TemplateMongoDbApi.Core.Models.Reports;
+using TemplateMongoDbApi.Core.Models.Suppliers;
+using TemplateMongoDbApi.Core.Services.Reports;
 
-namespace TemplateApi.Core.Controllers.Reports;
+namespace TemplateMongoDbApi.Core.Controllers.Reports;
 
 [Authorize]
 [Route("api/suppliers-report")]

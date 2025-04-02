@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using TemplateApi.Core.Services.Statistics;
+using TemplateMongoDbApi.Core.Services.Statistics;
 
-namespace TemplateApi.Core.Controllers.Statistics;
+namespace TemplateMongoDbApi.Core.Controllers.Statistics;
 
 [Authorize]
 [Route("api/product-statistics")]

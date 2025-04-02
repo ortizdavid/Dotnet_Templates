@@ -1,11 +1,11 @@
 using System.Net;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using TemplateApi.Common.Helpers;
-using TemplateApi.Core.Models.Auth;
-using TemplateApi.Core.Services.Auth;
+using TemplateMongoDbApi.Common.Helpers;
+using TemplateMongoDbApi.Core.Models.Auth;
+using TemplateMongoDbApi.Core.Services.Auth;
 
-namespace TemplateApi.Core.Controllers.Auth;
+namespace TemplateMongoDbApi.Core.Controllers.Auth;
 
 [Authorize]
 [Route("api/[controller]")]

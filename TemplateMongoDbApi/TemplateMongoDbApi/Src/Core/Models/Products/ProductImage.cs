@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
 
-namespace TemplateApi.Core.Models.Products;
+namespace TemplateMongoDbApi.Core.Models.Products;
 
 public class ProductImage : IModel
 {   

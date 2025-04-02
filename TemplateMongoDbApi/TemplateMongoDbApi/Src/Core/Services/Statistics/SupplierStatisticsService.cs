@@ -1,7 +1,7 @@
-using TemplateApi.Core.Models.Statistics;
-using TemplateApi.Core.Repositories.Statistics;
+using TemplateMongoDbApi.Core.Models.Statistics;
+using TemplateMongoDbApi.Core.Repositories.Statistics;
 
-namespace TemplateApi.Core.Services.Statistics;
+namespace TemplateMongoDbApi.Core.Services.Statistics;
 
 public class SupplierStatisticsService
 {

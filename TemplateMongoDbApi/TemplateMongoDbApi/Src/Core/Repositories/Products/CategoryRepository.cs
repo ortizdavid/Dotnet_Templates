@@ -1,8 +1,8 @@
-using TemplateApi.Core.Models.Products;
-using TemplateApi.Core.Models;
+using TemplateMongoDbApi.Core.Models.Products;
+using TemplateMongoDbApi.Core.Models;
 using System.Data;
 
-namespace TemplateApi.Core.Repositories.Products;
+namespace TemplateMongoDbApi.Core.Repositories.Products;
 
 public class CategoryRepository : RepositoryBase<Category>
 {

@@ -1,23 +1,19 @@
+using MongoDB.Driver;
 
-using Microsoft.EntityFrameworkCore;
-using TemplateApi.Core.Models;
+namespace TemplateMongoDbApi.Core.Repositories;
 
-namespace TemplateApi.Core.Repositories;
-
-public class RepositoryBase<T> : IRepository<T> where T : class
+public class MongoRepository<T> : IMongoRepository<T> where T : class
 {
-    private readonly AppDbContext _context;
-    protected readonly DbSet<T> _dbSet;
+    private readonly IMongoCollection<T> _collection;
 
-    public RepositoryBase(AppDbContext context)
+    public MongoRepository(IMongoDatabase database, string collectionName)
     {
-        _context = context;
-        _dbSet = _context.Set<T>();
+        _collection = database.GetCollection<T>(collectionName);
     }
 
-    public async Task<int> CountAsync()
+    public async Task<long> CountAsync()
     {
-        return await _dbSet.CountAsync();
+        return await _collection.CountDocumentsAsync();
     }
 
     public async Task CreateAsync(T entity)
@@ -88,11 +84,6 @@ public class RepositoryBase<T> : IRepository<T> where T : class
         return await _dbSet.ToListAsync();
     }
 
-    public async Task<T?> GetByIdAsync(int id)
-    {
-        return await _dbSet.FindAsync(id);
-    }
-
     public async Task<T?> GetByUniqueIdAsync(Guid uniqueId)
     {
         return await _dbSet.FirstOrDefaultAsync(e => EF.Property<Guid>(e, "UniqueId") == uniqueId);
@@ -132,5 +123,10 @@ public class RepositoryBase<T> : IRepository<T> where T : class
     public async Task<T?> GetByFieldAsync(string field, object value)
     {
         return await _dbSet.FirstOrDefaultAsync(e => (object)EF.Property<string>(e, field) == value);
+    }
+
+    public Task<T?> GetByIdAsync(string id)
+    {
+        throw new NotImplementedException();
     }
 }

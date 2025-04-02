@@ -1,8 +1,8 @@
 using System.ComponentModel.DataAnnotations;
-using TemplateApi.Common.Helpers;
+using TemplateMongoDbApi.Common.Helpers;
 using Microsoft.EntityFrameworkCore;
 
-namespace TemplateApi.Core.Models.Products;
+namespace TemplateMongoDbApi.Core.Models.Products;
 
 public class Category : IModel
 {

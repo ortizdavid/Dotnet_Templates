@@ -1,6 +1,6 @@
-using TemplateApi.Core.Models.Reports;
+using TemplateMongoDbApi.Core.Models.Reports;
 
-namespace TemplateApi.Core.Controllers.Reports;
+namespace TemplateMongoDbApi.Core.Controllers.Reports;
 
 public interface IGenerator <T> where T : class
 {

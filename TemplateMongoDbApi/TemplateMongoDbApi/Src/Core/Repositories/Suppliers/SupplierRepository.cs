@@ -1,8 +1,8 @@
-using TemplateApi.Core.Models.Suppliers;
-using TemplateApi.Core.Models;
+using TemplateMongoDbApi.Core.Models.Suppliers;
+using TemplateMongoDbApi.Core.Models;
 using System.Data;
 
-namespace TemplateApi.Core.Repositories.Suppliers;
+namespace TemplateMongoDbApi.Core.Repositories.Suppliers;
 
 public class SupplierRepository : RepositoryBase<Supplier>
 {

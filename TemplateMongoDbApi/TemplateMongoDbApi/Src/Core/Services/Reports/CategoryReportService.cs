@@ -1,8 +1,8 @@
-using TemplateApi.Common.Exceptions;
-using TemplateApi.Core.Models.Reports;
-using TemplateApi.Core.Repositories.Reports;
+using TemplateMongoDbApi.Common.Exceptions;
+using TemplateMongoDbApi.Core.Models.Reports;
+using TemplateMongoDbApi.Core.Repositories.Reports;
 
-namespace TemplateApi.Core.Services.Reports;
+namespace TemplateMongoDbApi.Core.Services.Reports;
 
 public class CategoryReportService
 {

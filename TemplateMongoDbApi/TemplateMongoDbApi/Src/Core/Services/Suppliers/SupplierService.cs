@@ -1,12 +1,12 @@
 using Microsoft.AspNetCore.Http;
-using TemplateApi.Common.Exceptions;
-using TemplateApi.Common.Helpers;
-using TemplateApi.Core.Models.Products;
-using TemplateApi.Core.Models.Suppliers;
-using TemplateApi.Core.Repositories;
-using TemplateApi.Core.Repositories.Suppliers;
+using TemplateMongoDbApi.Common.Exceptions;
+using TemplateMongoDbApi.Common.Helpers;
+using TemplateMongoDbApi.Core.Models.Products;
+using TemplateMongoDbApi.Core.Models.Suppliers;
+using TemplateMongoDbApi.Core.Repositories;
+using TemplateMongoDbApi.Core.Repositories.Suppliers;
 
-namespace TemplateApi.Core.Services.Suppliers;
+namespace TemplateMongoDbApi.Core.Services.Suppliers;
 
 public class SupplierService
 {

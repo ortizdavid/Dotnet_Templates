@@ -1,8 +1,8 @@
-using TemplateApi.Core.Models;
+using TemplateMongoDbApi.Core.Models;
 using Microsoft.EntityFrameworkCore;
-using TemplateApi.Core.Models.Products;
+using TemplateMongoDbApi.Core.Models.Products;
 
-namespace TemplateApi.Core.Repositories.Products;
+namespace TemplateMongoDbApi.Core.Repositories.Products;
 
 public class ProductImageRepository : RepositoryBase<ProductImage>
 {

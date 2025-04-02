@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 
-namespace TemplateApi.Core.Models;
+namespace TemplateMongoDbApi.Core.Models;
 
 public interface IModel
 {

@@ -1,3 +1,4 @@
+using System.Reflection;
 using Microsoft.Extensions.FileProviders;
 using Prometheus;
 using TemplateMVC.Common.Extensions;
@@ -22,9 +23,10 @@ internal class Program
         builder.Host.AddSerilogConfiguration();
         builder.Services.AddEmailConfiguration(configuration);
         builder.Services.AddDatabaseConfiguration(configuration);
-        builder.Services.AddRepositories();
-        builder.Services.AddServices();
-        builder.Services.AddScoped<UrlHelperService>(); // Url Helper
+        builder.Services.AddCoreRepositories(Assembly.GetExecutingAssembly());
+        builder.Services.AddCoreServices(Assembly.GetExecutingAssembly());
+        builder.Services.AddCoreServicesManual();
+        builder.Services.AddScoped<UrlHelperService>(); 
 
         var app = builder.Build();
 

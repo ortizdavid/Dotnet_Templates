@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace TemplateApi.Core.Models.Auth;
+namespace TemplateMongoDbApi.Core.Models.Auth;
 
 public class RoleRequest
 {

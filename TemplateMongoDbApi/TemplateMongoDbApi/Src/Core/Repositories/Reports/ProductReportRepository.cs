@@ -1,8 +1,8 @@
 using System.Data;
 using Dapper;
-using TemplateApi.Core.Models.Reports;
+using TemplateMongoDbApi.Core.Models.Reports;
 
-namespace TemplateApi.Core.Repositories.Reports;
+namespace TemplateMongoDbApi.Core.Repositories.Reports;
 
 public class ProductReportRepository
 {

@@ -1,8 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
-using TemplateApi.Common.Helpers;
+using TemplateMongoDbApi.Common.Helpers;
 
-namespace TemplateApi.Core.Models.Auth;
+namespace TemplateMongoDbApi.Core.Models.Auth;
 
 public class Role : IModel
 {

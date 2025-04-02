@@ -1,10 +1,10 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-using TemplateApi.Common.Helpers;
+using TemplateMongoDbApi.Common.Helpers;
 using Microsoft.EntityFrameworkCore;
 
-namespace TemplateApi.Core.Models.Auth;
+namespace TemplateMongoDbApi.Core.Models.Auth;
 
 public class User : IModel
 {

@@ -1,8 +1,8 @@
 using System.Data;
 using Dapper;
-using TemplateApi.Core.Models.Statistics;
+using TemplateMongoDbApi.Core.Models.Statistics;
 
-namespace TemplateApi.Core.Repositories.Statistics;
+namespace TemplateMongoDbApi.Core.Repositories.Statistics;
 
 public class ProductStatisticsRepository
 {

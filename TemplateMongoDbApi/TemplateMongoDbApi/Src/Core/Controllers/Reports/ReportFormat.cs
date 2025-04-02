@@ -2,9 +2,9 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualBasic;
 using System.Net;
-using TemplateApi.Core.Models.Reports;
+using TemplateMongoDbApi.Core.Models.Reports;
 
-namespace TemplateApi.Core.Controllers.Reports;
+namespace TemplateMongoDbApi.Core.Controllers.Reports;
 
 public class ReportFormat
 {

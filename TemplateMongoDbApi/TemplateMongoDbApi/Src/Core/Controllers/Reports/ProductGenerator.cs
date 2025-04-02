@@ -2,9 +2,9 @@ using System.Text;
 using OfficeOpenXml;
 using PdfSharp.Drawing;
 using PdfSharp.Pdf;
-using TemplateApi.Core.Models.Reports;
+using TemplateMongoDbApi.Core.Models.Reports;
 
-namespace TemplateApi.Core.Controllers.Reports;
+namespace TemplateMongoDbApi.Core.Controllers.Reports;
 
 public class ProductGenerator : IGenerator<ProductReport>
 {

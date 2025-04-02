@@ -1,10 +1,10 @@
-using TemplateApi.Common.Exceptions;
-using TemplateApi.Common.Helpers;
-using TemplateApi.Core.Models.Products;
-using TemplateApi.Core.Repositories;
-using TemplateApi.Core.Repositories.Products;
+using TemplateMongoDbApi.Common.Exceptions;
+using TemplateMongoDbApi.Common.Helpers;
+using TemplateMongoDbApi.Core.Models.Products;
+using TemplateMongoDbApi.Core.Repositories;
+using TemplateMongoDbApi.Core.Repositories.Products;
 
-namespace TemplateApi.Core.Services.Products;
+namespace TemplateMongoDbApi.Core.Services.Products;
 
 public class ProductService
 {

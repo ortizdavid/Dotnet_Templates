@@ -1,3 +1,4 @@
+using System.Reflection;
 using Prometheus;
 using TemplateNatsApi.Common.Extensions;
 using TemplateNatsApi.Common.Middlewares;
@@ -23,8 +24,8 @@ internal class Program
         builder.Services.AddNatsConfiguration(configuration);
         builder.Services.AddEmailConfiguration(configuration);
         builder.Services.AddDatabaseConfiguration(configuration);
-        builder.Services.AddRepositories();
-        builder.Services.AddServices();
+        builder.Services.AddCoreRepositories(Assembly.GetExecutingAssembly());;
+        builder.Services.AddCoreServices(Assembly.GetExecutingAssembly());;
 
         var app = builder.Build();
 

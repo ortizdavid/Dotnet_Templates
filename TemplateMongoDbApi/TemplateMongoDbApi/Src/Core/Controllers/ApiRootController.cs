@@ -1,7 +1,7 @@
 using System.Text;
 using Microsoft.AspNetCore.Mvc;
 
-namespace TemplateApi.Core.Controllers;
+namespace TemplateMongoDbApi.Core.Controllers;
 
 [Route("")]
 [Route("/api")]

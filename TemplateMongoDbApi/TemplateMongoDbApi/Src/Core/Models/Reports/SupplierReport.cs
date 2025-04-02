@@ -1,4 +1,4 @@
-namespace TemplateApi.Core.Models.Suppliers;
+namespace TemplateMongoDbApi.Core.Models.Suppliers;
 
 public class SupplierReport
 {

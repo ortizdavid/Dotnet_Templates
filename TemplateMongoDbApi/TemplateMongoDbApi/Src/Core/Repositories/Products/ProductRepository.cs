@@ -1,10 +1,10 @@
-using TemplateApi.Core.Models;
+using TemplateMongoDbApi.Core.Models;
 using Microsoft.EntityFrameworkCore;
-using TemplateApi.Core.Models.Products;
+using TemplateMongoDbApi.Core.Models.Products;
 using System.Data;
 using Dapper;
 
-namespace TemplateApi.Core.Repositories;
+namespace TemplateMongoDbApi.Core.Repositories;
 
 public class ProductRepository : RepositoryBase<Product>
 {

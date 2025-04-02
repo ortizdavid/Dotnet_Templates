@@ -1,4 +1,4 @@
-namespace TemplateApi.Core.Models.Auth;
+namespace TemplateMongoDbApi.Core.Models.Auth;
 
 public class RefreshTokenRequest
 {
