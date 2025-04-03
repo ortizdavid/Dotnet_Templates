@@ -12,7 +12,8 @@ A collection of .NET project templates designed for efficiency, simplicity, and 
 
 ## 📦 Each Project Includes  
 - [x] All Features  
-- [x] Architecture Design  
+- [x] Architecture Design 
+- [x] API Collections (Postman)
 - [x] Database Migrations  
 - [x] Observability  
 - [x] Structured Log Monitoring  
