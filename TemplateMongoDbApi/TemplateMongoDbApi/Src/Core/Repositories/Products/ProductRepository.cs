@@ -6,7 +6,7 @@ using Dapper;
 
 namespace TemplateMongoDbApi.Core.Repositories;
 
-public class ProductRepository : RepositoryBase<Product>
+public class ProductRepository : MongoRepository<Product>
 {
     private readonly AppDbContext _context;
     private readonly IDbConnection _dapper;

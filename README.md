@@ -31,7 +31,8 @@ A collection of .NET project templates designed for efficiency, simplicity, and 
 - [x] **NATS API** – Publisher/Subscriber API using NATS  
 - [x] **Event-Driven** – Event-driven architecture template  
 - [ ] **MongoDB API** – REST API using MongoDB NoSQL database  
-- [ ] **Simple MongoDB API** – Simple REST API using MongoDB database 
+- [x] **Simple MongoDB API** – Simple REST API using MongoDB database 
+- [ ] **Redis API** – REST API using Redis NoSQL database  
 - [ ] **CQRS** – Command Query Responsibility Segregation  template
 - [ ] **SOAP API** - SOAP-based API using CoreWCF
 - [ ] **gRPC API** - High-performance API using gRPC

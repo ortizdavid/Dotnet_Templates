@@ -4,7 +4,7 @@ using TemplateMongoDbApi.Core.Models.Auth;
 
 namespace TemplateMongoDbApi.Core.Repositories.Auth;
 
-public class UserRefreshTokenRepository : RepositoryBase<UserRefreshToken>
+public class UserRefreshTokenRepository : MongoRepository<UserRefreshToken>
 {
     private readonly AppDbContext _context;
     public UserRefreshTokenRepository(AppDbContext context) : base(context)

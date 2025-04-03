@@ -4,7 +4,6 @@ namespace TemplateNatsApi.Common.Extensions;
 
 public static class CoreRegistrationExtensions
 {
-
     // Register core repositories
     public static void AddCoreRepositories(this IServiceCollection services, Assembly assembly)
     {

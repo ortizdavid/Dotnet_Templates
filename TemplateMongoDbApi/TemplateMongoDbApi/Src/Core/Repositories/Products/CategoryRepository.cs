@@ -1,15 +1,11 @@
 using TemplateMongoDbApi.Core.Models.Products;
-using TemplateMongoDbApi.Core.Models;
-using System.Data;
+using MongoDB.Driver;
 
 namespace TemplateMongoDbApi.Core.Repositories.Products;
 
-public class CategoryRepository : RepositoryBase<Category>
+public class CategoryRepository : MongoRepository<Category>
 {
-    private readonly AppDbContext _context;
-
-    public CategoryRepository(AppDbContext context) : base(context)
+    public CategoryRepository(IMongoDatabase database) : base(database, "categories")
     {
-        _context = context;
     }
 }

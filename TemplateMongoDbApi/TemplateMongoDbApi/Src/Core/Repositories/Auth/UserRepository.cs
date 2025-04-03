@@ -6,7 +6,7 @@ using Dapper;
 
 namespace TemplateMongoDbApi.Core.Repositories.Auth;
 
-public class UserRepository : RepositoryBase<User>
+public class UserRepository : MongoRepository<User>
 {
     private readonly AppDbContext _context;
     private readonly IDbConnection _dapper;

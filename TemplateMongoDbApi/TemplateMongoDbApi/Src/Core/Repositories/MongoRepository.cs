@@ -1,27 +1,29 @@
+using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace TemplateMongoDbApi.Core.Repositories;
 
 public class MongoRepository<T> : IMongoRepository<T> where T : class
 {
+    private readonly IMongoDatabase _database;
     private readonly IMongoCollection<T> _collection;
 
     public MongoRepository(IMongoDatabase database, string collectionName)
     {
-        _collection = database.GetCollection<T>(collectionName);
+        _database = database;
+        _collection = _database.GetCollection<T>(collectionName);
     }
 
     public async Task<long> CountAsync()
     {
-        return await _collection.CountDocumentsAsync();
+        return await _collection.CountDocumentsAsync(FilterDefinition<T>.Empty);
     }
 
     public async Task CreateAsync(T entity)
     {
         try
         {
-            await _dbSet.AddAsync(entity);
-            await _context.SaveChangesAsync();
+            await _collection.InsertOneAsync(entity);
         }
         catch (Exception)
         {
@@ -31,19 +33,13 @@ public class MongoRepository<T> : IMongoRepository<T> where T : class
 
     public async Task CreateBatchAsync(IEnumerable<T> entities)
     {
-        using (var transaction = _context.Database.BeginTransaction())
+        try
         {
-            try
-            {
-                await _dbSet.AddRangeAsync(entities);
-                await _context.SaveChangesAsync();
-                await transaction.CommitAsync();
-            }
-            catch (Exception)
-            {
-                await _context.Database.RollbackTransactionAsync();
-                throw;
-            }
+            await _collection.InsertManyAsync(entities);
+        }
+        catch (Exception)
+        {
+            throw;
         }
     }
 
@@ -51,8 +47,8 @@ public class MongoRepository<T> : IMongoRepository<T> where T : class
     {
         try
         {
-            _dbSet.Remove(entity);
-            await _context.SaveChangesAsync();
+            var filter = Builders<T>.Filter.Eq("_id", GetEntityId(entity));
+            await _collection.DeleteOneAsync(filter);
         }
         catch (Exception)
         {
@@ -62,7 +58,8 @@ public class MongoRepository<T> : IMongoRepository<T> where T : class
 
     public async Task<bool> ExistsRecord(string field, string? value)
     {
-        return await _dbSet.AnyAsync(e => EF.Property<string>(e, field) == value);
+        var filter = Builders<T>.Filter.Eq(field, value);
+        return await _collection.CountDocumentsAsync(filter) > 0;
     }
 
     public async Task<IEnumerable<T>> GetAllAsync(int pageSize, int pageIndex)
@@ -71,30 +68,25 @@ public class MongoRepository<T> : IMongoRepository<T> where T : class
         {
             throw new ArgumentException("Invalid pagination parameters.");
         }
-        return await _dbSet
-            .OrderByDescending(e => EF.Property<DateTime>(e, "CreatedAt")) 
+        var filter = FilterDefinition<T>.Empty;
+        return await _collection.Find(filter)
             .Skip(pageIndex * pageSize)
-            .Take(pageSize)
-            .AsNoTracking()
+            .Limit(pageSize)
             .ToListAsync();
     }
 
     public async Task<IEnumerable<T>> GetAllNotPaginatedAsync()
     {
-        return await _dbSet.ToListAsync();
-    }
-
-    public async Task<T?> GetByUniqueIdAsync(Guid uniqueId)
-    {
-        return await _dbSet.FirstOrDefaultAsync(e => EF.Property<Guid>(e, "UniqueId") == uniqueId);
+        var filter = FilterDefinition<T>.Empty;
+        return await _collection.Find(filter).ToListAsync();
     }
 
     public async Task UpdateAsync(T entity)
     {
         try
         {
-            _dbSet.Update(entity);
-            await _context.SaveChangesAsync();
+            var filter = Builders<T>.Filter.Eq("_id", GetEntityId(entity));
+            await _collection.ReplaceOneAsync(filter, entity);
         }
         catch (Exception)
         {
@@ -102,31 +94,21 @@ public class MongoRepository<T> : IMongoRepository<T> where T : class
         }
     }
 
-    public async Task UpdateBatchAsync(IEnumerable<T> entities)
-    {
-        using (var transaction = _context.Database.BeginTransaction())
-        {
-            try
-            {
-                _dbSet.UpdateRange(entities);
-                await _context.SaveChangesAsync();
-                await transaction.CommitAsync();
-            }
-            catch (Exception)
-            {
-                await transaction.RollbackAsync();
-                throw;
-            }
-        }
-    }
-
     public async Task<T?> GetByFieldAsync(string field, object value)
     {
-        return await _dbSet.FirstOrDefaultAsync(e => (object)EF.Property<string>(e, field) == value);
+        var filter = Builders<T>.Filter.Eq(field, value);
+        return await _collection.Find(filter).FirstOrDefaultAsync();
     }
 
-    public Task<T?> GetByIdAsync(string id)
+    public async Task<T?> GetByIdAsync(ObjectId id)
     {
-        throw new NotImplementedException();
+        var filter = Builders<T>.Filter.Eq("_id", id);
+        return await _collection.Find(filter).FirstOrDefaultAsync();
+    }
+
+    private object GetEntityId(T entity)
+    {
+        var property = typeof(T).GetProperty("_id");
+        return property?.GetValue(entity) ?? throw new InvalidOperationException("Entity does not have an _id property.");
     }
 }

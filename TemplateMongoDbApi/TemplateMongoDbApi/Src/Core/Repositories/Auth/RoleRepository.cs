@@ -6,7 +6,7 @@ using TemplateMongoDbApi.Core.Models.Auth;
 
 namespace TemplateMongoDbApi.Core.Repositories.Auth;
 
-public class RoleRepository : RepositoryBase<Role>
+public class RoleRepository : MongoRepository<Role>
 {
     private readonly AppDbContext _context;
     private readonly IDbConnection _dapper;

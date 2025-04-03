@@ -1,0 +1,56 @@
+{
+  "Serilog": {
+    "Using": [
+      "Serilog.Sinks.Console", 
+      "Serilog.Sinks.File", 
+      "Serilog.Sinks.Grafana.Loki"
+    ],
+    "MinimumLevel": {
+      "Default": "Information",
+      "Override": {
+        "Microsoft": "Warning",
+        "System": "Warning"
+      }
+    },
+    "WriteTo": [
+      {
+        "Name": "Console",
+        "Args": {
+          "formatter": "Serilog.Formatting.Json.JsonFormatter"
+        }
+      },
+      {
+        "Name": "File",
+        "Args": {
+          "formatter": "Serilog.Formatting.Json.JsonFormatter",
+          "path": "C:/logs/dotnet-apps/dotnet-rest-api/log-.log",
+          "rollingInterval": "Day",
+          "retainedFileCountLimit": 7
+        }
+      },
+      {
+        "Name": "GrafanaLoki",
+        "Args": {
+          "endpoint": "http://localhost:3100",
+          "labels": {
+            "app": "dotnet-rest-api",
+            "service": "api",
+            "env": "development"
+          },
+          "includeScopes": true
+        }
+      }
+    ],
+    "Enrich": [
+      "FromLogContext", 
+      "WithMachineName", 
+      "WithThreadId",
+      "WithHttpRequestId",
+      "WithAspNetCoreHttpContext",
+      "WithUserAgent"
+    ],
+    "Properties": {
+      "Application": "Dotnet_REST_API"
+    }
+  }
+}

@@ -4,7 +4,7 @@ using System.Data;
 
 namespace TemplateMongoDbApi.Core.Repositories.Suppliers;
 
-public class SupplierRepository : RepositoryBase<Supplier>
+public class SupplierRepository : MongoRepository<Supplier>
 {
     private readonly AppDbContext _context;
 

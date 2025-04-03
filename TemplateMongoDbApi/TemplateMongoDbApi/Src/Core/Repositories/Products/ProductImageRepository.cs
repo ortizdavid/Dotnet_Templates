@@ -1,19 +1,16 @@
-using TemplateMongoDbApi.Core.Models;
-using Microsoft.EntityFrameworkCore;
 using TemplateMongoDbApi.Core.Models.Products;
+using MongoDB.Driver;
+using MongoDB.Bson;
 
 namespace TemplateMongoDbApi.Core.Repositories.Products;
 
-public class ProductImageRepository : RepositoryBase<ProductImage>
+public class ProductImageRepository : MongoRepository<ProductImage>
 {
-    protected readonly AppDbContext _context;
-
-    public ProductImageRepository(AppDbContext context) : base(context) 
+    public ProductImageRepository(IMongoDatabase database) : base(database, "productImage")
     {
-        _context = context;
     }
 
-    public async Task DeleteByProductAsync(int productId)
+    public async Task DeleteByProductAsync(ObjectId productId)
     {
         try
         {
