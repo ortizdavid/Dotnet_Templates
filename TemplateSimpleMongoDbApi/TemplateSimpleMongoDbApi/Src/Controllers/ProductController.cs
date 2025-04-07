@@ -1,5 +1,6 @@
 using System.Net;
 using Microsoft.AspNetCore.Mvc;
+using MongoDB.Bson;
 using TemplateSimpleMongoDbApi.Models;
 using TemplateSimpleMongoDbApi.Services;
 

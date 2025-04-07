@@ -1,64 +1,38 @@
 using System.ComponentModel.DataAnnotations;
+using MongoDB.Bson.Serialization.Attributes;
 using TemplateMongoDbApi.Common.Helpers;
-using Microsoft.EntityFrameworkCore;
+using MongoDB.Bson;
 using TemplateMongoDbApi.Core.Models.Suppliers;
 
 namespace TemplateMongoDbApi.Core.Models.Products;
 
-public class Product : IModel
+public class Product
 {   
-    [Key]
-    public int ProductId { get; set; }
+    [BsonId]
+    [BsonRepresentation(BsonType.ObjectId)]
+    public ObjectId ProductId { get; set; }
 
-    [Required]
-    [StringLength(100)]
+    [BsonElement("product_name")]
     public string? ProductName { get; set; }
 
-    [Required]
-    [StringLength(30)]
+    [BsonElement("code")]
     public string? Code { get; set; }
 
-    [Required]
+    [BsonElement("unit_price")]
     public decimal UnitPrice { get; set; }
 
-    [StringLength(150)]
+    [BsonElement("description")]
     public string? Description { get; set; }
 
-    [Required]
-    public int CategoryId { get; set; }
-
-    [Required]
-    public int SupplierId { get; set; }
-
-    public Guid UniqueId { get; set; } = Encryption.GenerateUUID();
+    [BsonElement("created_at")]
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+    [BsonElement("updated_at")]
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 
-    // RelationShips
+    [BsonElement("category")]
     public Category? Category { get; set; }
+
+    [BsonElement("supplier")]
     public Supplier? Supplier { get; set; }
-    public ICollection<ProductImage> Images { get; set; } = new List<ProductImage>();
-
-    public static void ConfigureModel(ModelBuilder modelBuilder)
-    {
-        modelBuilder.Entity<Product>(entity =>
-        {
-            // unique key
-            entity.HasIndex(e => e.Code).IsUnique();
-
-            entity.Property(p => p.UnitPrice)
-                .HasColumnType("decimal(18, 2)");
-
-            // Foreign keys
-            entity.HasOne(p => p.Category)
-                .WithMany(c => c.Products)
-                .HasForeignKey(p => p.CategoryId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            entity.HasOne(p => p.Supplier)
-                .WithMany(s => s.Products)
-                .HasForeignKey(p => p.CategoryId)
-                .OnDelete(DeleteBehavior.Cascade);
-        });
-    }
 }

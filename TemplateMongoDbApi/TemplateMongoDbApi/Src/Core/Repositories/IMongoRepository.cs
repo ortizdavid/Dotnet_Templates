@@ -9,7 +9,7 @@ public interface IMongoRepository<T> where T : class
     Task UpdateAsync(T entity);
     Task DeleteAsync(T entity);
     Task<IEnumerable<T>> GetAllAsync(int pageSize, int pageIndex);
-    Task<T?> GetByIdAsync(ObjectId id);
+    Task<T?> GetByIdAsync(string id);
     Task<T?> GetByFieldAsync(string field, object value);
     Task<bool> ExistsRecord(string field, string value);
     Task<long> CountAsync();

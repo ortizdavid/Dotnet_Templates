@@ -1,64 +1,64 @@
-using TemplateMongoDbApi.Core.Models;
-using Microsoft.EntityFrameworkCore;
 using TemplateMongoDbApi.Core.Models.Products;
 using System.Data;
-using Dapper;
+using MongoDB.Driver;
+using MongoDB.Bson;
 
 namespace TemplateMongoDbApi.Core.Repositories;
 
 public class ProductRepository : MongoRepository<Product>
 {
-    private readonly AppDbContext _context;
-    private readonly IDbConnection _dapper;
-
-    public ProductRepository(AppDbContext context, IDbConnection ddapper) : base(context)
+    public ProductRepository(IMongoDatabase database) : base(database, "products")
     {
-        _context = context;
-        _dapper = ddapper;
     }
 
-    public async Task<IEnumerable<ProductData>> GetAllDataAsync(int pageSize, int pageIndex)
+    public async Task<IEnumerable<Product>> GetAllDataAsync(int pageSize, int pageIndex)
     {
-        int offset = pageIndex * pageSize; 
-        var sql = @"SELECT * FROM ViewProductData 
-                ORDER BY ProductId ASC 
-                OFFSET @Offset ROWS FETCH NEXT @PageSize ROWS ONLY;";
-
-        var parameters = new { Offset = offset, PageSize = pageSize };
-        return await _dapper.QueryAsync<ProductData>(sql, parameters);
-    }
-
-    public async Task<Product?> GetByCodeAsync(string? code)
-    {
-        return await _context.Products
-            .FirstOrDefaultAsync(p => p.Code == code);    
-    }
-
-    public async Task<ProductData> GetDataByIdAsync(int id)
-    {
-        var sql = "SELECT * FROM ViewProductData WHERE ProductId = @Id";
-        return await _dapper.QueryFirstAsync<ProductData>(sql, new { Id = id });
-    }
-
-    public async Task<ProductData> GetDataByUniqueIdAsync(Guid uniqueId)
-    {
-        var sql = "SELECT * FROM ViewProductData WHERE UniqueId = @Id";
-        return await _dapper.QueryFirstAsync<ProductData>(sql, new { Id = uniqueId });
-    }
-
-    public async Task<IEnumerable<Product>> GetAllBySupplierAsync(int id)
-    {
-        return await _context.Products
-            .OrderBy(p => p.ProductId)
-            .Where(s => s.SupplierId == id)
-            .AsNoTracking()
+        if (pageSize <= 0 || pageIndex < 0)
+        {
+            throw new ArgumentException("Invalid pagination parameters.");
+        }
+        int skip = pageIndex * pageSize; 
+        var result = await _collection
+            .Find(new BsonDocument())
+            .Skip(skip)
+            .Limit(pageSize)
             .ToListAsync();
+        return result;
     }
 
-    public async Task<bool> ExistsRecordExcluded(string? code, Guid excludedId)
+    public async Task<Product> GetByCodeAsync(string? code)
     {
-        return await _dbSet.AnyAsync(p => 
-            p.Code == code && p.UniqueId != excludedId
-        );
+        var filter = Builders<Product>.Filter.Eq(p => p.Code, code);
+        return await _collection.Find(filter).FirstOrDefaultAsync();   
+    }
+
+    public async Task<Product> GetDataByIdAsync(string id)
+    {
+        if(!ObjectId.TryParse(id, out var objectId))
+        {
+            throw new ArgumentException("Invalid ObjectId.");
+        }
+        var filter = Builders<Product>.Filter.Eq(p => p.ProductId, objectId);
+        return await _collection.Find(filter).FirstOrDefaultAsync();
+    }
+
+    public async Task<IEnumerable<Product>> GetAllBySupplierAsync(string id)
+    {
+        if(!ObjectId.TryParse(id, out var objectId))
+        {
+            throw new ArgumentException("Invalid ObjectId.");
+        }
+        var filter = Builders<Product>.Filter.Eq(p => p.Supplier!.SupplierId, objectId);
+        return await _collection.Find(filter).ToListAsync();
+    }
+
+    public async Task<bool> ExistsRecordExcluded(string? code, string excludedId)
+    {
+        if(!ObjectId.TryParse(excludedId, out var objectId))
+        {
+            throw new ArgumentException("Invalid ObjectId.");
+        }
+        var filter = Builders<Product>.Filter.Eq(p => p.ProductId, objectId);
+        return await _collection.Find(filter).AnyAsync();
     }
 }

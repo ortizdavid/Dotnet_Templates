@@ -6,17 +6,20 @@ namespace TemplateMongoDbApi.Core.Repositories.Products;
 
 public class ProductImageRepository : MongoRepository<ProductImage>
 {
-    public ProductImageRepository(IMongoDatabase database) : base(database, "productImage")
+    public ProductImageRepository(IMongoDatabase database) : base(database, "product_images")
     {
     }
 
-    public async Task DeleteByProductAsync(ObjectId productId)
+    public async Task DeleteByProductAsync(string id)
     {
         try
         {
-            var images = await GetAllByProductAsync(productId);
-            _dbSet.RemoveRange(images);
-            await _context.SaveChangesAsync(); 
+            if(!ObjectId.TryParse(id, out var objectId))
+            {
+                throw new ArgumentException("Invalid ObjectId.");
+            }
+            var filter = Builders<ProductImage>.Filter.Eq(img => img.ProductId, objectId);
+            await _collection.DeleteManyAsync(filter);
         }
         catch (Exception)
         {
@@ -24,12 +27,15 @@ public class ProductImageRepository : MongoRepository<ProductImage>
         }
     }
 
-    public async Task<IEnumerable<ProductImage>> GetAllByProductAsync(int productId)
+    public async Task<IEnumerable<ProductImage>> GetAllByProductAsync(string id)
     {
-        var images = await _dbSet
-                .OrderBy(img => img.ImageId)
-                .Where(img => img.ProductId == productId)
-                .ToListAsync();
+        if(!ObjectId.TryParse(id, out var objectId))
+        {
+            throw new ArgumentException("Invalid ObjectId.");
+        }
+        var filter = Builders<ProductImage>.Filter.Eq(img => img.ProductId, objectId);
+        var sort = Builders<ProductImage>.Sort.Ascending(img => img.ImageId);
+        var images = await _collection.Find(filter).Sort(sort).ToListAsync();
         return images;
     }
 }

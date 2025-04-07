@@ -1,36 +1,27 @@
 using System.ComponentModel.DataAnnotations;
-using Microsoft.EntityFrameworkCore;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace TemplateMongoDbApi.Core.Models.Products;
 
-public class ProductImage : IModel
+public class ProductImage 
 {   
-    [Key]
-    public int ImageId { get; set; }
+    [BsonId]
+    [BsonRepresentation(BsonType.ObjectId)]
+    public ObjectId ImageId { get; set; }
 
-    [Required]
-    public int ProductId { get; set; }
+    [BsonElement("product_id")]
+    public ObjectId ProductId { get; set; }
 
-    [StringLength(150)]
+    [BsonElement("file_name")]
     public string? FileName { get; set; }
 
-    [StringLength(150)]
+    [BsonElement("upload_dir")]
     public string? UploadDir { get; set; }
 
+    [BsonElement("created_at")]
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+    [BsonElement("updated_at")]
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
-
-    // RelationShips
-    public Product? Product { get; set; }
-
-    public static void ConfigureModel(ModelBuilder modelBuilder)
-    {
-        modelBuilder.Entity<ProductImage>(entity =>
-        {
-            entity.HasOne(pi => pi.Product)
-                .WithMany(p => p.Images)
-                .HasForeignKey(pi => pi.ProductId)
-                .OnDelete(DeleteBehavior.Cascade);
-        });
-    }
 }

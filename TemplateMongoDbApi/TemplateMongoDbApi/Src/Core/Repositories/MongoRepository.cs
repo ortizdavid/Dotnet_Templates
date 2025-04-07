@@ -6,7 +6,7 @@ namespace TemplateMongoDbApi.Core.Repositories;
 public class MongoRepository<T> : IMongoRepository<T> where T : class
 {
     private readonly IMongoDatabase _database;
-    private readonly IMongoCollection<T> _collection;
+    protected readonly IMongoCollection<T> _collection;
 
     public MongoRepository(IMongoDatabase database, string collectionName)
     {
@@ -100,9 +100,13 @@ public class MongoRepository<T> : IMongoRepository<T> where T : class
         return await _collection.Find(filter).FirstOrDefaultAsync();
     }
 
-    public async Task<T?> GetByIdAsync(ObjectId id)
+    public async Task<T?> GetByIdAsync(string id)
     {
-        var filter = Builders<T>.Filter.Eq("_id", id);
+        if(!ObjectId.TryParse(id, out var objectId))
+        {
+            throw new ArgumentException("Invalid ObjectId.");
+        }
+        var filter = Builders<T>.Filter.Eq("_id", objectId);
         return await _collection.Find(filter).FirstOrDefaultAsync();
     }
 

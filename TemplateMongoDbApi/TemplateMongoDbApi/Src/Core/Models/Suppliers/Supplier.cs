@@ -1,14 +1,13 @@
 using System.ComponentModel.DataAnnotations;
+using MongoDB.Bson;
 using TemplateMongoDbApi.Common.Helpers;
-using Microsoft.EntityFrameworkCore;
-using TemplateMongoDbApi.Core.Models.Products;
 
 namespace TemplateMongoDbApi.Core.Models.Suppliers;
 
-public class Supplier : IModel
+public class Supplier 
 {
     [Key]
-    public int SupplierId { get; set; }
+    public ObjectId SupplierId { get; set; }
 
     [Required]
     [StringLength(150)]
@@ -35,19 +34,4 @@ public class Supplier : IModel
     public Guid UniqueId { get; set; } = Encryption.GenerateUUID();
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime UpdatedAt { get; set;} = DateTime.UtcNow;
-
-    // Relationships
-    public ICollection<Product> Products { get; set; } = new List<Product>();
-
-    public static void ConfigureModel(ModelBuilder modelBuilder)
-    {
-        modelBuilder.Entity<Supplier>(entity =>
-        {
-            // unique keys
-            entity.HasIndex(e => e.IdentificationNumber).IsUnique();
-            entity.HasIndex(e => e.Email).IsUnique();
-            entity.HasIndex(e => e.PrimaryPhone).IsUnique();
-            entity.HasIndex(e => e.SecondaryPhone).IsUnique();
-        });
-    }
 }
