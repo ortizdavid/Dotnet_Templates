@@ -18,11 +18,11 @@ public class JwtService
         _jwtSettings = jwtSettings.Value;
     }
 
-    public string GenerateAccessToken(UserData user)
+    public string GenerateAccessToken(User user)
     {
         var userName = user.UserName ?? string.Empty;
         var userId = user.UserId.ToString();
-        var role = user.RoleName ?? string.Empty;
+        var role = user?.Role?.RoleName ?? string.Empty;
 
         var tokenHandler = new JwtSecurityTokenHandler();
         var key = Encoding.ASCII.GetBytes(_jwtSettings.SecretKey);

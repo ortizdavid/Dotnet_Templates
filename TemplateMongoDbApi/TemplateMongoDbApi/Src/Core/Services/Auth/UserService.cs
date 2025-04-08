@@ -1,3 +1,4 @@
+using MongoDB.Bson;
 using TemplateMongoDbApi.Common.Exceptions;
 using TemplateMongoDbApi.Common.Helpers;
 using TemplateMongoDbApi.Core.Models.Auth;
@@ -8,6 +9,7 @@ namespace TemplateMongoDbApi.Core.Services.Auth;
 public class UserService
 {
     private readonly UserRepository _repository;
+    private readonly RoleRepository _roleRepository;
     private readonly UserRefreshTokenRepository _refreshTokenRepository;
     private readonly IHttpContextAccessor _contextAccessor;
     private readonly FileUploader _imageUploader;
@@ -15,9 +17,11 @@ public class UserService
     private readonly string _uploadDirectory;
 
     public UserService(UserRepository repository, UserRefreshTokenRepository refreshTokenRepository,
+        RoleRepository roleRepository,
         IHttpContextAccessor contextAccessor, IConfiguration configuration)
     {
         _repository = repository;
+        _roleRepository = roleRepository;
         _refreshTokenRepository = refreshTokenRepository;
         _contextAccessor = contextAccessor;
         _configuration = configuration;
@@ -46,7 +50,7 @@ public class UserService
         }
         var user = new User()
         {
-            RoleId = request.RoleId,
+            Role = await _roleRepository.GetByCodeAsync(request!.RoleCode),
             UserName = request.UserName,
             Password = PasswordHelper.Hash(request.Password),
             Email = request.Email,
@@ -54,7 +58,7 @@ public class UserService
         await _repository.CreateAsync(user);
     }
 
-    public async Task ChangePassword(ChangePasswordRequest request, Guid uniqueId)
+    public async Task ChangePassword(ChangePasswordRequest request, string userId)
     {
         if (request is null)
         {
@@ -68,17 +72,17 @@ public class UserService
         {
             throw new BadRequestException("Password must include: uppercase and lowercase letters, numbers, special characters and  at least 8 characters long.");
         }
-        var user = await _repository.GetByUniqueIdAsync(uniqueId);
+        var user = await _repository.GetByIdAsync(userId);
         if (user is null)
         {
-            throw new NotFoundException($"User with ID '{uniqueId}' not found.");
+            throw new NotFoundException($"User with ID '{userId}' not found.");
         }
         user.Password = PasswordHelper.Hash(request.NewPassword);
         user.UpdatedAt = DateTime.UtcNow;
         await _repository.UpdateAsync(user);
     }
 
-    public async Task<Pagination<UserData>> GetAllUsers(PaginationParam param)
+    public async Task<Pagination<User>> GetAllUsers(PaginationParam param)
     {
         if (param is null)
         {
@@ -86,31 +90,21 @@ public class UserService
         }
         var count = await _repository.CountAsync();
         var users = await _repository.GetAllDataAsync(param.PageSize, param.PageIndex);
-        var pagination = new Pagination<UserData>(users, count, param.PageIndex, param.PageSize, _contextAccessor); 
+        var pagination = new Pagination<User>(users, count, param.PageIndex, param.PageSize, _contextAccessor); 
         return pagination;
     }
 
-    public async Task<UserData> GetUserById(int id)
+    public async Task<User> GetUserById(string userId)
     {
-        var user = await _repository.GetDataByIdAsync(id);
+        var user = await _repository.GetByIdAsync(userId);
         if (user is null)
         {
-            throw new NotFoundException($"User with ID '{id}' not found");
+            throw new NotFoundException($"User with ID '{userId}' not found");
         }
         return user;
     }
 
-    public async Task<UserData> GetUserByUniqueId(Guid uniqueId)
-    {
-        var user = await _repository.GetDataByUniqueIdAsync(uniqueId);
-        if (user is null)
-        {
-            throw new NotFoundException($"User with ID '{uniqueId}' not found");
-        }
-        return user;
-    }
-
-    public async Task<UserData> GetUserByName(string userName)
+    public async Task<User> GetUserByName(string userName)
     {
         var user = await _repository.GetDataByNameAsync(userName);
         if (user is null)
@@ -120,7 +114,7 @@ public class UserService
         return user;
     }
 
-    public async Task<UserData> GetUserByRefreshToken(string token)
+    public async Task<User> GetUserByRefreshToken(string token)
     {
         var user = await _repository.GetDataByRefreshTokenAsync(token);
         if (user is null)
@@ -140,12 +134,12 @@ public class UserService
         return user;
     }
 
-    public async Task UploadUserImage(IFormFile file, Guid uniqueId)
+    public async Task UploadUserImage(IFormFile file, string userId)
     {
-        var user = await _repository.GetByUniqueIdAsync(uniqueId);
+        var user = await _repository.GetByIdAsync(userId);
         if (user is null)
         {
-            throw new NotFoundException($"User with ID '{uniqueId}' not found.");
+            throw new NotFoundException($"User with ID '{userId}' not found.");
         }
         if (file is null)
         {
@@ -157,12 +151,12 @@ public class UserService
         await _repository.UpdateAsync(user);
     }
 
-    public async Task ActivateUser(Guid uniqueId)
+    public async Task ActivateUser(string userId)
     {
-        var user = await _repository.GetByUniqueIdAsync(uniqueId);
+        var user = await _repository.GetByIdAsync(userId);
         if (user is null)
         {
-            throw new NotFoundException($"User with ID '{uniqueId}' not found");
+            throw new NotFoundException($"User with ID '{userId}' not found");
         }
         if (user.IsActive)
         {
@@ -174,12 +168,12 @@ public class UserService
         await _repository.UpdateAsync(user);
     }
 
-    public async Task DeactivateUser(Guid uniqueId)
+    public async Task DeactivateUser(string userId)
     {
-        var user = await _repository.GetByUniqueIdAsync(uniqueId);
+        var user = await _repository.GetByIdAsync(userId);
         if (user is null)
         {
-            throw new NotFoundException($"User with ID '{uniqueId}' not found");
+            throw new NotFoundException($"User with ID '{userId}' not found");
         }
         if (!user.IsActive)
         {
@@ -190,17 +184,17 @@ public class UserService
         await _repository.UpdateAsync(user);
     }
 
-    public async Task DeleteUser(Guid uniqueId)
+    public async Task DeleteUser(string userId)
     {
-        var user = await _repository.GetByUniqueIdAsync(uniqueId);
+        var user = await _repository.GetByIdAsync(userId);
         if (user is null)
         {
-            throw new NotFoundException($"User with ID '{uniqueId}' not found");
+            throw new NotFoundException($"User with ID '{userId}' not found");
         }
         await _repository.DeleteAsync(user);
     }   
 
-    public async Task<UserData> GetUserByNameAndPassword(string? userName, string? password)
+    public async Task<User> GetUserByNameAndPassword(string? userName, string? password)
     {
         if (string.IsNullOrEmpty(userName) || string.IsNullOrEmpty(password))
         {
@@ -214,7 +208,7 @@ public class UserService
         return user;
     }
 
-    public async Task CreateUserRefreshToken(UserData user, string token, DateTime expiryDate)
+    public async Task CreateUserRefreshToken(User user, string token, DateTime expiryDate)
     {
         var userRefreshToken = new UserRefreshToken()
         {
@@ -225,7 +219,7 @@ public class UserService
         await _refreshTokenRepository.CreateAsync(userRefreshToken);
     }   
 
-    public async Task UpdateUserRefreshToken(UserData user, string newRefreshToken)
+    public async Task UpdateUserRefreshToken(User user, string newRefreshToken)
     {
         if (string.IsNullOrEmpty(newRefreshToken))
         {
@@ -249,9 +243,9 @@ public class UserService
         await _refreshTokenRepository.UpdateAsync(userRefreshToken);
     }   
 
-    public async Task ClearUserRefreshToken(int userId)
+    public async Task ClearUserRefreshToken(string userId)
     {
-        var userRefreshToken = await _refreshTokenRepository.GetByUserIdAsync(userId);
+        var userRefreshToken = await _refreshTokenRepository.GetByUserIdStrAsync(userId);
         if (userRefreshToken is null)
         {
             throw new NotFoundException($"Refresh token for user with ID '{userId}' not found.");

@@ -1,21 +1,16 @@
-using System.Data;
-using Dapper;
 using TemplateMongoDbApi.Core.Models.Statistics;
 
 namespace TemplateMongoDbApi.Core.Repositories.Statistics;
 
 public class SupplierStatisticsRepository
 {
-    private readonly IDbConnection _dapper;
-
-    public SupplierStatisticsRepository(IDbConnection dapper)
+    public SupplierStatisticsRepository()
     {
-        _dapper = dapper;
     }
 
     public async Task<IEnumerable<SupplierTopSuppliers>> GetTopSupplierCategoriesAsync()
     {
         var sql = "SELECT * FROM ViewSupplierTopSuppliers;";
-        return await _dapper.QueryAsync<SupplierTopSuppliers>(sql);
+        return null;
     }  
 }

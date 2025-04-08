@@ -1,27 +1,23 @@
-using System.Data;
-using Dapper;
 using TemplateMongoDbApi.Core.Models.Statistics;
 
 namespace TemplateMongoDbApi.Core.Repositories.Statistics;
 
 public class ProductStatisticsRepository
 {
-    private readonly IDbConnection _dapper;
 
-    public ProductStatisticsRepository(IDbConnection dapper)
+    public ProductStatisticsRepository()
     {
-        _dapper = dapper;
     }
 
-    public async Task<IEnumerable<ProductTotalPriceByCategories>> GetProductTotalPriceByCategoriesAsync()
+    public Task<IEnumerable<ProductTotalPriceByCategories>> GetProductTotalPriceByCategoriesAsync()
     {
         var sql = "SELECT * FROM ViewProductTotalPriceByCategories;";
-        return await _dapper.QueryAsync<ProductTotalPriceByCategories>(sql);
+        return null;
     }
 
     public async Task<IEnumerable<ProductTotalPriceBySuppliers>> GetProductTotalPriceBySuppliersAsync()
     {
         var sql = "SELECT * FROM ViewProductTotalPriceBySuppliers;";
-        return await _dapper.QueryAsync<ProductTotalPriceBySuppliers>(sql);
+        return null;
     }
 }

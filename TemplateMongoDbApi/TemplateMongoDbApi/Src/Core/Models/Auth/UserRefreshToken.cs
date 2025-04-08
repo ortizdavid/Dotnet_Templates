@@ -1,39 +1,28 @@
-using System.ComponentModel.DataAnnotations;
-using Microsoft.EntityFrameworkCore;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace TemplateMongoDbApi.Core.Models.Auth;
 
-public class UserRefreshToken : IModel
+public class UserRefreshToken 
 {
-    [Key]
-    public int RefreshId { get; set; }
+    [BsonId]
+    [BsonRepresentation(BsonType.ObjectId)]
+    public ObjectId RefreshId { get; set; }
     
-    [Required]
-    public int UserId { get; set; } 
+    [BsonElement("user_id")]
+    public ObjectId UserId { get; set; } 
 
-    [StringLength(200)]
+    [BsonElement("token")]
     public string? Token { get; set; }
 
+    [BsonElement("expity_date")]
     public DateTime? ExpiryDate { get; set; }
+
+    [BsonElement("created_at")]
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow; 
+
+    [BsonElement("updated_at")]
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 
     public bool IsExpired => ExpiryDate <= DateTime.UtcNow;
-    
-    // RelationShips
-    public User? User { get; set; }
-
-    public static void ConfigureModel(ModelBuilder modelBuilder)
-    {
-        modelBuilder.Entity<UserRefreshToken>(entity =>
-        {
-            entity.HasIndex(e => e.Token).IsUnique();
-
-            // Foreign key
-            entity.HasOne(urt => urt.User)
-                .WithOne(u => u.RefreshToken)
-                .HasForeignKey<UserRefreshToken>(urt => urt.UserId)
-                .OnDelete(DeleteBehavior.Restrict);
-        });
-    }
 }

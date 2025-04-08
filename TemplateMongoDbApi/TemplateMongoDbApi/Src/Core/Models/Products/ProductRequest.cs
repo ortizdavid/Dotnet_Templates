@@ -20,8 +20,8 @@ public class ProductRequest
     public string? Description { get; set; }
     
     [Required]
-    public int CategoryId { get; set; }
+    public string? CategoryId { get; set; }
 
     [Required]
-    public int SupplierId { get; set; }
+    public string? SupplierId { get; set; }
 }

@@ -1,5 +1,4 @@
 using System.Data;
-using Dapper;
 using TemplateMongoDbApi.Core.Models.Reports;
 using TemplateMongoDbApi.Core.Models.Suppliers;
 
@@ -7,16 +6,13 @@ namespace TemplateMongoDbApi.Core.Repositories.Reports;
 
 public class SupplierReportRepository
 {
-    private readonly IDbConnection _dapper;
-    
-    public SupplierReportRepository(IDbConnection dapper)
+    public SupplierReportRepository()
     {
-        _dapper = dapper;
     }
 
     public async Task<IEnumerable<SupplierReport>> GetAllAsync(ReportFilter filter)
     {
         var sql = "SELECT * FROM ViewSupplierReportData WHERE CreatedAt BETWEEN @StartDate AND @EndDate";
-        return await _dapper.QueryAsync<SupplierReport>(sql, new { StartDate = filter.StartDate, EndDate = filter.EndDate});
+        return null;
     }
 }

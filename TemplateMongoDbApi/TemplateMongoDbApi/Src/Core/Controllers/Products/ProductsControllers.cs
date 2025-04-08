@@ -37,43 +37,43 @@ public class ProductsController : ControllerBase
         return StatusCode((int)HttpStatusCode.Created, new { Message = msg });
     }
 
-    [HttpPut("{uniqueId}")]
-    public async Task<IActionResult> UpdateProduct([FromBody]ProductRequest request, Guid uniqueId)
+    [HttpPut("{productId}")]
+    public async Task<IActionResult> UpdateProduct([FromBody]ProductRequest request, string productId)
     {
-        await _service.UpdateProduct(request, uniqueId);
-        var msg = $"Product '{uniqueId}' updated.";
+        await _service.UpdateProduct(request, productId);
+        var msg = $"Product '{productId}' updated.";
         _logger.LogInformation(msg);
         return Ok(new { Message = msg });
     }
 
-    [HttpGet("{uniqueId}")]
-    public async Task<IActionResult> GetProductByUniqueId(Guid uniqueId)
+    [HttpGet("{productId}")]
+    public async Task<IActionResult> GetProductByUniqueId(string productId)
     {
-        var product = await _service.GetProductByUniqueId(uniqueId);
+        var product = await _service.GetProductByUniqueId(productId);
         return Ok(product);
     }
 
-    [HttpDelete("{uniqueId}")]
-    public async Task<IActionResult> DeleteProduct(Guid uniqueId)
+    [HttpDelete("{productId}")]
+    public async Task<IActionResult> DeleteProduct(string productId)
     {
-        await _service.DeleteProduct(uniqueId);
-        _logger.LogInformation($"Product '{uniqueId}' deleteted.");
+        await _service.DeleteProduct(productId);
+        _logger.LogInformation($"Product '{productId}' deleteted.");
         return NoContent();
     }
 
-    [HttpPost("{uniqueId}/images")]
-    public async Task<IActionResult> UploadProductImages(Guid uniqueId, IFormFileCollection files)
+    [HttpPost("{productId}/images")]
+    public async Task<IActionResult> UploadProductImages(string productId, IFormFileCollection files)
     {
-        await _service.UploadProductImages(uniqueId, files);
-        var msg = $"Product '{uniqueId}' images uploaded.";
+        await _service.UploadProductImages(productId, files);
+        var msg = $"Product '{productId}' images uploaded.";
         _logger.LogInformation(msg);
         return Ok(new { Message = msg });
     }
 
-    [HttpGet("{uniqueId}/images")]
-    public async Task<IActionResult> GetProductImages(Guid uniqueId)
+    [HttpGet("{productId}/images")]
+    public async Task<IActionResult> GetProductImages(string productId)
     {
-        var images = await _service.GetProductImages(uniqueId);
+        var images = await _service.GetProductImages(productId);
         return Ok(images);
     }
 

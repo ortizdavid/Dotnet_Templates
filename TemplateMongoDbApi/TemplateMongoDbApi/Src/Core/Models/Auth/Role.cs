@@ -1,35 +1,24 @@
 using System.ComponentModel.DataAnnotations;
-using Microsoft.EntityFrameworkCore;
-using TemplateMongoDbApi.Common.Helpers;
+using MongoDB.Bson.Serialization.Attributes;
+using MongoDB.Bson;
 
 namespace TemplateMongoDbApi.Core.Models.Auth;
 
-public class Role : IModel
+public class Role
 {
-    [Key]
-    public int RoleId { get; set; }
+    [BsonId]
+    [BsonRepresentation(BsonType.ObjectId)]
+    public ObjectId RoleId { get; set; }
 
-    [Required]
-    [StringLength(100)]
+    [BsonElement("role_name")]
     public string? RoleName { get; set; }
 
-    [Required]
-    [StringLength(30)]
+    [BsonElement("code")]
     public string? Code { get; set; }
 
-    public Guid UniqueId { get; set; } = Encryption.GenerateUUID();
+    [BsonElement("created_at")]
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+    [BsonElement("updated_at")]
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
-
-    // RelationShips
-    public ICollection<User> Users { get; set; } = new List<User>(); 
-
-    public static void ConfigureModel(ModelBuilder modelBuilder)
-    {
-        modelBuilder.Entity<Role>(entity =>
-        {
-            entity.HasIndex(e => e.RoleName).IsUnique();
-            entity.HasIndex(e => e.Code);
-        });
-    }
 }

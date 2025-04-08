@@ -6,7 +6,7 @@ public class Pagination<T>
     public IEnumerable<T> Items { get; private set; }
     public PaginationMetadata Metadata { get; set; }
     
-    public Pagination(IEnumerable<T> items, int count, int pageIndex, int pageSize, IHttpContextAccessor contextAccessor)
+    public Pagination(IEnumerable<T> items, long count, int pageIndex, int pageSize, IHttpContextAccessor contextAccessor)
     {
         _contextAccessor = contextAccessor ?? throw new ArgumentNullException(nameof(contextAccessor));
        
@@ -65,7 +65,7 @@ public class PaginationMetadata
 {
     public int PageIndex { get; set; }
     public int TotalPages { get; set; }
-    public int TotalItems { get; set; }
+    public long TotalItems { get; set; }
     public string? FirstPageUrl { get; set; }
     public string? LastPageUrl { get; set; }
     public string? PreviousPageUrl { get; set; }

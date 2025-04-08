@@ -1,61 +1,42 @@
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 using TemplateMongoDbApi.Common.Helpers;
-using Microsoft.EntityFrameworkCore;
 
 namespace TemplateMongoDbApi.Core.Models.Auth;
 
-public class User : IModel
+public class User 
 {
-    [Key]
-    public int UserId { get; set; }
+    [BsonId]
+    [BsonRepresentation(BsonType.ObjectId)]
+    public ObjectId UserId { get; set; }
 
-    [Required]
-    [ForeignKey("FK_Role")]
-    public int RoleId { get; set; }
-
-    [Required]
-    [StringLength(100)]
+    [BsonElement("user_name")]
     public string? UserName { get; set; }
 
-    [Required]
-    [StringLength(150)]
+    [BsonElement("email")]
     public string? Email { get; set; }
 
-    [Required]
-    [StringLength(150)]
+    [BsonElement("password")]
     public string? Password { get; set; }
 
+    [BsonElement("is_active")]
     public bool IsActive { get; set; } = true;
-
-    [StringLength(100)]
+  
+    [BsonElement("image")]
     public string? Image { get; set; }
 
-    [StringLength(200)]
+    [BsonElement("recovery_token")]
     public string? RecoveryToken { get; set; } = Encryption.GenerateRandomToken(150);
 
-    public Guid UniqueId { get; set; } = Encryption.GenerateUUID();
+    [BsonElement("created_at")]
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+    [BsonElement("updated_at")]
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 
-    // RelationShips
+    [BsonElement("role")]
     public Role? Role { get; set; }
-    public UserRefreshToken? RefreshToken { get; set; } // One to one
 
-    public static void ConfigureModel(ModelBuilder modelBuilder)
-    {
-        modelBuilder.Entity<User>(entity =>
-        {
-            // Unique Constraints
-            entity.HasIndex(e => e.UserName).IsUnique();
-            entity.HasIndex(e => e.Email).IsUnique();
-
-            // Foreign Key
-            entity.HasOne(u => u.Role)
-                .WithMany(r => r.Users)
-                .HasForeignKey(u => u.RoleId)
-                .OnDelete(DeleteBehavior.Restrict);
-        });
-    }
+    [BsonElement("user_refresh_token")]
+    public UserRefreshToken? UserRefreshToken { get; set; } 
 }

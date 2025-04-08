@@ -73,13 +73,13 @@ public class AuthService
             throw new BadRequestException("Invalid refresh token request.");
         }
         var user = await _userService.GetUserByRefreshToken(request.Token);
-        if (user is null || string.IsNullOrEmpty(user.RefreshToken))
+        if (user is null || string.IsNullOrEmpty(user?.UserRefreshToken?.Token))
         {
             throw new NotFoundException("Invalid or expired refresh token.");
         }
         // Generate a new access token
         var accessToken = _jwtService.GenerateAccessToken(user);
-        var refreshToken = user.RefreshToken;
+        var refreshToken = user?.UserRefreshToken?.Token;
         return new TokenResponse()
         {
             AccessToken = accessToken,
@@ -102,15 +102,15 @@ public class AuthService
             throw new BadRequestException("Passwords does not match");
         }
         var user = await _userService.GetUserByRecoveryToken(token);
-        await _userService.ChangePassword(request, user.UniqueId);
+        await _userService.ChangePassword(request, user!.UserId!.ToString());
         _emailService.SendEmail(user.Email, "Password recovery Success", $"Hello, User '{user.UserName}'! You've recovered password in successfully.");
     }
 
-    private async Task<string> GetOrCreateRefreshToken(UserData user)
+    private async Task<string> GetOrCreateRefreshToken(User user)
     {
-        if (!string.IsNullOrEmpty(user.RefreshToken))
+        if (!string.IsNullOrEmpty(user?.UserRefreshToken?.Token))
         {
-            return user.RefreshToken;
+            return user.UserRefreshToken.Token;
         }
         var expiryDaysStr = _configuration["JwtSettings:RefreshTokenExpiryDays"];
         if (string.IsNullOrEmpty(expiryDaysStr))
@@ -121,13 +121,15 @@ public class AuthService
         var expiryDays = int.Parse(expiryDaysStr);
         var newRefreshToken = _jwtService.GenerateRefreshToken();
         var expiryDate = DateTime.UtcNow.AddDays(expiryDays);
-        await _userService.CreateUserRefreshToken(user, newRefreshToken, expiryDate);
+        await _userService.CreateUserRefreshToken(user!, newRefreshToken, expiryDate);
         return newRefreshToken;
     }
 
-    public async Task<UserData> GetLoggedUser()
+    public async Task<User> GetLoggedUser()
     {
-        var accessToken = _contextAccessor.HttpContext?.Request.Headers["Authorization"].ToString()?.Replace("Bearer ", "").Trim();
+        var accessToken = _contextAccessor.HttpContext?
+            .Request.Headers["Authorization"]
+            .ToString()?.Replace("Bearer ", "").Trim();
 
         if (string.IsNullOrWhiteSpace(accessToken))
         {
@@ -155,14 +157,14 @@ public class AuthService
         return _contextAccessor.HttpContext?.User?.Identity?.IsAuthenticated ?? false;
     }
 
-    private int GetUserIdFromClaims()
+    private string GetUserIdFromClaims()
     {
         var userIdClaim = _contextAccessor.HttpContext?.User.FindFirst("userId")?.Value;
-        if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out var userId))
+        if (string.IsNullOrEmpty(userIdClaim))
         {
             throw new UnauthorizedException("User is not logged in. Missing user info");
         }
-        return userId;
+        return userIdClaim;
     }
 
 }

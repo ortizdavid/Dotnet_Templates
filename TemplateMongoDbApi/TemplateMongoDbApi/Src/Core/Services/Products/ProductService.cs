@@ -3,6 +3,7 @@ using TemplateMongoDbApi.Common.Helpers;
 using TemplateMongoDbApi.Core.Models.Products;
 using TemplateMongoDbApi.Core.Repositories;
 using TemplateMongoDbApi.Core.Repositories.Products;
+using TemplateMongoDbApi.Core.Repositories.Suppliers;
 
 namespace TemplateMongoDbApi.Core.Services.Products;
 
@@ -10,15 +11,20 @@ public class ProductService
 {
     private readonly ProductRepository _repository;
     private readonly ProductImageRepository _imageRepository;
+    private readonly CategoryRepository _categoryRepository;
+    private readonly SupplierRepository _supplierRepository;
     private readonly IHttpContextAccessor _contextAccessor;
     private readonly IConfiguration _configuration;
     private readonly FileUploader _imageUploader;
     private readonly string _uploadDirectory;
 
     public ProductService(ProductRepository repository, ProductImageRepository imageRepository, 
+        CategoryRepository categoryRepository, SupplierRepository supplierRepository,
         IHttpContextAccessor contextAccessor, IConfiguration configuration)
     {
         _repository = repository;
+        _categoryRepository = categoryRepository;
+        _supplierRepository = supplierRepository;
         _imageRepository = imageRepository;
         _contextAccessor = contextAccessor;
         _configuration = configuration;
@@ -39,8 +45,8 @@ public class ProductService
         }
         var product = new Product()
         {
-            CategoryId = request.CategoryId,
-            SupplierId = request.SupplierId,
+            Category = await _categoryRepository.GetByIdAsync(request!.CategoryId),
+            Supplier = await _supplierRepository.GetByIdAsync(request!.SupplierId),
             ProductName = request.ProductName,
             Code = request.Code,
             UnitPrice = request.UnitPrice,
@@ -49,19 +55,19 @@ public class ProductService
         await _repository.CreateAsync(product);
     }
 
-    public async Task UpdateProduct(ProductRequest request, Guid uniqueId)
+    public async Task UpdateProduct(ProductRequest request, string productId)
     {
         if (request is null)
         {
             throw new BadRequestException("The product request cannot be null. Please provide: Name, Code, Price and other data.");
         }
-        var product = await _repository.GetByUniqueIdAsync(uniqueId);
+        var product = await _repository.GetByIdAsync(productId);
         if (product is null)
         {
-            throw new NotFoundException($"Product with ID '{uniqueId}' not found");
+            throw new NotFoundException($"Product with ID '{productId}' not found");
         }
-        product.CategoryId = request.CategoryId;
-        product.SupplierId = request.SupplierId;
+        product.Category = await _categoryRepository.GetByIdAsync(request!.CategoryId);
+        product.Supplier = await _supplierRepository.GetByIdAsync(request!.SupplierId);
         product.ProductName = request.ProductName;
         product.Code = request.Code;
         product.UnitPrice = request.UnitPrice;
@@ -70,7 +76,7 @@ public class ProductService
         await _repository.UpdateAsync(product);
     }
 
-    public async Task<Pagination<ProductData>> GetAllProducts(PaginationParam param)
+    public async Task<Pagination<Product>> GetAllProducts(PaginationParam param)
     {
         if (param is null)
         {
@@ -78,26 +84,26 @@ public class ProductService
         }
         var count = await _repository.CountAsync();
         var products = await _repository.GetAllDataAsync(param.PageSize, param.PageIndex);
-        var pagination = new Pagination<ProductData>(products, count, param.PageIndex, param.PageSize, _contextAccessor);
+        var pagination = new Pagination<Product>(products, count, param.PageIndex, param.PageSize, _contextAccessor);
         return pagination;
     }
 
-    public async Task<ProductData> GetProductByUniqueId(Guid uniqueId)
+    public async Task<Product> GetProductByUniqueId(string productId)
     {
-        var product = await _repository.GetDataByUniqueIdAsync(uniqueId);
+        var product = await _repository.GetByIdAsync(productId);
         if (product is null)
         {
-            throw new NotFoundException($"Product with ID '{uniqueId}' not found");
+            throw new NotFoundException($"Product with ID '{productId}' not found");
         }
         return product;
     }
 
-    public async Task DeleteProduct(Guid uniqueId)
+    public async Task DeleteProduct(string productId)
     {
-        var product = await _repository.GetByUniqueIdAsync(uniqueId);
+        var product = await _repository.GetByIdAsync(productId);
         if (product is null)
         {
-            throw new NotFoundException($"Product with ID '{uniqueId}' not found");
+            throw new NotFoundException($"Product with ID '{productId}' not found");
         }
         await _repository.DeleteAsync(product);
     }
@@ -131,10 +137,10 @@ public class ProductService
                 // verify number of fields
                 if (data.Length != 5)
                 {
-                    throw new BadRequestException("Invalid CSV format. Each line must contain ProductName,Code,UnitPrice,CategoryId,SupplierId.");
+                    throw new BadRequestException("Invalid CSV format. Each line must contain ProductName,Code,UnitPrice,CategoryName,SupplierName.");
                 }
                 // verify csv format
-                if (!float.TryParse(data[2], out float unitPrice) || !int.TryParse(data[3], out int categoryId) || !int.TryParse(data[4], out int supplierId))
+                if (!float.TryParse(data[2], out float unitPrice))
                 {
                     throw new BadRequestException("Invalid CSV format. UnitPrice and CategoryId and SupplierId must be numeric.");
                 }
@@ -148,8 +154,8 @@ public class ProductService
                     ProductName = data[0],
                     Code = productCode,
                     UnitPrice = decimal.Parse(data[2]),
-                    CategoryId = int.Parse(data[3]),
-                    SupplierId = int.Parse(data[4]) 
+                    Category = await _categoryRepository.GetByNameAsync(data[3]),
+                    Supplier = await _supplierRepository.GetByNameAsync(data[4]) 
                 };
                 products.Add(product);
             }
@@ -157,12 +163,12 @@ public class ProductService
         return products;
     }
 
-    public async Task UploadProductImages(Guid uniqueId, IFormFileCollection files) 
+    public async Task UploadProductImages(string productId, IFormFileCollection files) 
     {
-        var product = await _repository.GetByUniqueIdAsync(uniqueId);
+        var product = await _repository.GetByIdAsync(productId);
         if (product is null)
         {
-            throw new NotFoundException($"Product with ID '{uniqueId}' not found");
+            throw new NotFoundException($"Product with ID '{productId}' not found");
         }
         if (files == null || files.Count == 0)
         {
@@ -191,15 +197,15 @@ public class ProductService
         await _imageRepository.CreateBatchAsync(productImages);
     }
 
-    public async Task<IEnumerable<ProductImage>> GetProductImages(Guid uniqueId)
+    public async Task<IEnumerable<ProductImage>> GetProductImages(string productId)
     {
-        var product = await _repository.GetByUniqueIdAsync(uniqueId);
+        var product = await _repository.GetByIdAsync(productId);
         if (product is null)
         {
-            throw new NotFoundException($"Product with ID '{uniqueId}' not found");
+            throw new NotFoundException($"Product with ID '{product}' not found");
         }
         
-        var images = await _imageRepository.GetAllByProductAsync(product.ProductId);
+        var images = await _imageRepository.GetAllByProductAsync(productId);
         return images;
     }
 }

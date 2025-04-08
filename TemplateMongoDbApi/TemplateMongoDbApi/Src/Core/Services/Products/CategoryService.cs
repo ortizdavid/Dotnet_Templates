@@ -22,7 +22,7 @@ public class CategoryService
         {
             throw new BadRequestException("The category request cannot be null. Please provide valid input.");
         }
-        if (await _repository.ExistsRecord("CategoryName", request.CategoryName))
+        if (await _repository.ExistsRecord("category_name", request.CategoryName))
         {
             throw new ConflictException($"Category '{request.CategoryName}' already exists");
         }
@@ -34,13 +34,13 @@ public class CategoryService
         await _repository.CreateAsync(category);
     }
 
-    public async Task UpdateCategory(CategoryRequest request, Guid uniqueId)
+    public async Task UpdateCategory(CategoryRequest request, string categoryId)
     {
         if (request is null)
         {
             throw new BadRequestException("The category request cannot be null. Please provide valid input.");
         }
-        var category = await _repository.GetByUniqueIdAsync(uniqueId);
+        var category = await _repository.GetByIdAsync(categoryId);
         if (category is null)
         {
             throw new NotFoundException("Category not found");
@@ -63,9 +63,9 @@ public class CategoryService
         return pagination;
     }
 
-    public async Task<Category> GetCategoryByUniqueId(Guid uniqueId)
+    public async Task<Category> GetCategoryById(string categoryId)
     {
-        var category = await _repository.GetByUniqueIdAsync(uniqueId);
+        var category = await _repository.GetByIdAsync(categoryId);
         if (category is null)
         {
             throw new NotFoundException("Category not found");
@@ -73,9 +73,9 @@ public class CategoryService
         return category;
     }
 
-    public async Task DeleteCategory(Guid uniqueId)
+    public async Task DeleteCategory(string categoryId)
     {
-        var category = await _repository.GetByUniqueIdAsync(uniqueId);
+        var category = await _repository.GetByIdAsync(categoryId);
         if (category is null)
         {
             throw new NotFoundException("Category not found");
@@ -130,5 +130,4 @@ public class CategoryService
         }
         return categories;
     }
-
 }

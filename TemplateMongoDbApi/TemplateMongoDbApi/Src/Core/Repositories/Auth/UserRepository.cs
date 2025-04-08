@@ -1,80 +1,83 @@
+using MongoDB.Bson;
+using MongoDB.Driver;
 using TemplateMongoDbApi.Core.Models.Auth;
-using Microsoft.EntityFrameworkCore;
-using TemplateMongoDbApi.Core.Models;
-using System.Data;
-using Dapper;
 
 namespace TemplateMongoDbApi.Core.Repositories.Auth;
 
 public class UserRepository : MongoRepository<User>
 {
-    private readonly AppDbContext _context;
-    private readonly IDbConnection _dapper;
-
-    public UserRepository(AppDbContext context, IDbConnection dapper) : base(context)
+    public UserRepository(IMongoDatabase database) : base(database, "users")
     {
-        _context = context;
-        _dapper = dapper;
     }
 
     public async Task<User?> GetByNameAsync(string? userName)
     {
-        return await _dbSet
-            .FirstOrDefaultAsync(u => u.UserName == userName);
+        var filter = _builder.Eq(u => u.UserName, userName);
+        return await _collection.Find(filter).FirstOrDefaultAsync();
     }
 
     public async Task<User?> GetByEmailAsync(string? email)
     {
-        return await _dbSet
-            .FirstOrDefaultAsync(u => u.Email == email);
+        var filter = _builder.Eq(u => u.Email, email);
+        return await _collection.Find(filter).FirstOrDefaultAsync();
     }
 
-    public async Task<IEnumerable<UserData>> GetAllDataAsync(int pageSize, int pageIndex)
+    public async Task<IEnumerable<User>> GetAllDataAsync(int pageSize, int pageIndex)
     {
-        int offset = pageIndex * pageSize; 
-
-        var sql = @"SELECT * FROM ViewUserData 
-                    ORDER BY UserId ASC 
-                    OFFSET @Offset ROWS FETCH NEXT @PageSize ROWS ONLY;";
-
-        var parameters = new { Offset = offset, PageSize = pageSize };
-        return await _dapper.QueryAsync<UserData>(sql, parameters);
+        if (pageSize <= 0 || pageIndex < 0)
+        {
+            throw new ArgumentException("Invalid pagination parameters.");
+        }
+        int skip = pageIndex * pageSize; 
+        var result = await _collection
+            .Find(new BsonDocument())
+            .Skip(skip)
+            .Limit(pageSize)
+            .ToListAsync();
+        return result;
     }
 
-    public async Task<bool> ExistsRecordExcluded(string? userName, string? email, Guid excludedId)
+    public async Task<bool> ExistsRecordExcluded(string? userName, string? email, string excludedId)
     {
-        return await _dbSet.AnyAsync(u => 
-            (u.UserName == userName || u.Email == email) && u.UniqueId != excludedId
+        if (!ObjectId.TryParse(excludedId, out var objectId))
+        {
+            throw new ArgumentException("Invalid ObjectId.");
+        }
+        var filter = _builder.And(
+            _builder.Or(
+                _builder.Eq(u => u.UserName, userName),
+                _builder.Eq(u => u.Email, email)
+            ),
+            _builder.Ne(u => u.UserId, objectId)
         );
+        return await _collection.Find(filter).AnyAsync();
     }
 
-    public async Task<UserData?> GetDataByIdAsync(int id)
+    public async Task<User?> GetDataByIdAsync(string id)
     {
-        var sql = "SELECT * FROM ViewUserData WHERE UserId = @Id";
-        return await _dapper.QueryFirstOrDefaultAsync<UserData>(sql, new { Id = id });
+        if (!ObjectId.TryParse(id, out var objectId))
+        {
+            throw new ArgumentException("Invalid ObjectId.");
+        }
+        var filter = _builder.Eq(u => u.UserId, objectId);
+        return await _collection.Find(filter).FirstOrDefaultAsync();
     }
 
-    public async Task<UserData?> GetDataByUniqueIdAsync(Guid uniqueId)
+    public async Task<User?> GetDataByNameAsync(string userName)
     {
-        var sql = "SELECT * FROM ViewUserData WHERE UniqueId = @Id";
-        return await _dapper.QueryFirstOrDefaultAsync<UserData>(sql, new { Id = uniqueId });
+        var filter = _builder.Eq(u => u.UserName, userName);
+        return await _collection.Find(filter).FirstOrDefaultAsync();
     }
 
-    public async Task<UserData?> GetDataByNameAsync(string userName)
+    public async Task<User?> GetDataByRefreshTokenAsync(string token)
     {
-        var sql = "SELECT * FROM ViewUserData WHERE UserName = @Name";
-        return await _dapper.QueryFirstOrDefaultAsync<UserData>(sql, new { Name = userName });
-    }
-
-    public async Task<UserData?> GetDataByRefreshTokenAsync(string token)
-    {
-        var sql = "SELECT * FROM ViewUserData WHERE RefreshToken = @Token";
-        return await _dapper.QueryFirstOrDefaultAsync<UserData>(sql, new { Token = token });
+        var filter = _builder.Eq(u => u.UserRefreshToken!.Token, token);
+        return await _collection.Find(filter).FirstOrDefaultAsync();
     }
 
     public async Task<User?> GetByRecoveryTokenAsync(string token)
     {
-        return await _dbSet
-            .FirstOrDefaultAsync(u => u.RecoveryToken == token);
+        var filter = _builder.Eq(u => u.RecoveryToken, token);
+        return await _collection.Find(filter).FirstOrDefaultAsync();
     }
 }

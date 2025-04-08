@@ -1,33 +1,35 @@
-using System.Data;
-using Dapper;
-using Microsoft.EntityFrameworkCore;
-using TemplateMongoDbApi.Core.Models;
+using MongoDB.Bson;
+using MongoDB.Driver;
 using TemplateMongoDbApi.Core.Models.Auth;
 
 namespace TemplateMongoDbApi.Core.Repositories.Auth;
 
 public class RoleRepository : MongoRepository<Role>
 {
-    private readonly AppDbContext _context;
-    private readonly IDbConnection _dapper;
-
-    public RoleRepository(AppDbContext context, IDbConnection dapper) : base(context)
+    public RoleRepository(IMongoDatabase database) : base(database, "roles")
     {
-        _context = context;
-        _dapper = dapper;
     }
 
-    public async Task<Role?> GetByCodeAsync(string code)
+    public async Task<Role?> GetByCodeAsync(string? code)
     {
-        return await _dbSet
-            .FirstOrDefaultAsync(r => r.Code == code);
+        var filter = _builder.Eq(r => r.Code, code);
+        return await _collection.Find(filter).FirstOrDefaultAsync();
     }
-
     
-    public async Task<bool> ExistsRecordExcluded(string? roleName, string? code, Guid excludedId)
+    public async Task<bool> ExistsRecordExcluded(string? roleName, string? code, string excludedId)
     {
-        return await _dbSet.AnyAsync(r => 
-            (r.RoleName == roleName || r.Code == code) && r.UniqueId != excludedId
+        if(!ObjectId.TryParse(excludedId, out var objectId))
+        {
+            throw new ArgumentException("Invalid ObjectId.");
+        }
+        var filter = _builder.And(
+            _builder.Or(
+                _builder.Eq(r => r.RoleName, roleName),
+                _builder.Eq(r => r.Code, code)
+            ),
+            _builder.Ne(r => r.RoleId, objectId)
         );
+        
+        return await _collection.Find(filter).AnyAsync();
     }
 }

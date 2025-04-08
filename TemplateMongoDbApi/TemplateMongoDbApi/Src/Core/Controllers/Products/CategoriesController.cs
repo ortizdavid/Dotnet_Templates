@@ -1,10 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using TemplateMongoDbApi.Core.Services.Products;
 using TemplateMongoDbApi.Core.Models.Products;
-using Microsoft.AspNetCore.Authorization;
 using TemplateMongoDbApi.Common.Helpers;
 using System.Net;
-using MongoDB.Bson;
 
 namespace TemplateMongoDbApi.Core.Controllers.Products;
 
@@ -29,10 +27,10 @@ public class CategoriesController : ControllerBase
         return Ok(categories); 
     }
 
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetCategoryByUniqueId(ObjectId id)
+    [HttpGet("{categoryId}")]
+    public async Task<IActionResult> GetCategoryById(string categoryId)
     {
-        var category = await _service.GetCategoryByUniqueId(id);
+        var category = await _service.GetCategoryById(categoryId);
         return Ok(category);
     }
 
@@ -45,19 +43,19 @@ public class CategoriesController : ControllerBase
         return StatusCode((int)HttpStatusCode.Created, new { Message = msg });
     }
 
-    [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateCategory([FromBody] CategoryRequest request, ObjectId id)
+    [HttpPut("{categoryId}")]
+    public async Task<IActionResult> UpdateCategory([FromBody] CategoryRequest request, string categoryId)
     {
-        await _service.UpdateCategory(request, id);
+        await _service.UpdateCategory(request, categoryId);
         var msg = $"Category '{request.CategoryName}' was updated.";
         _logger.LogInformation(msg);
         return Ok(new { Message = msg });
     }
 
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteCategory(ObjectId id)
+    [HttpDelete("{categoryId}")]
+    public async Task<IActionResult> DeleteCategory(string categoryId)
     {
-        await _service.DeleteCategory(id);
+        await _service.DeleteCategory(categoryId);
         _logger.LogInformation($"Category deleted.");
         return NoContent();
     }

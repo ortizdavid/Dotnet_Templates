@@ -1,27 +1,22 @@
-using System.Data;
-using Dapper;
 using TemplateMongoDbApi.Core.Models.Statistics;
 
 namespace TemplateMongoDbApi.Core.Repositories.Statistics;
 
 public class UserStatisticsRepository
 {
-    private readonly IDbConnection _dapper;
-
-    public UserStatisticsRepository(IDbConnection dapper)
+    public UserStatisticsRepository()
     {
-        _dapper = dapper;
     }
 
     public async Task<UserActivesAndInactives> GetUserActiveInactivesAsync()
     {
         var sql = "SELECT * FROM ViewUserActiveInactives;";
-        return await _dapper.QueryFirstAsync<UserActivesAndInactives>(sql);
+        return null;
     }
 
     public async Task<UserPercentageActivesAndInactives> GetUserPercentageActiveInactivesAsync()
     {
         var sql = "SELECT * FROM ViewUserPercentageActiveInactives;";
-        return await _dapper.QueryFirstAsync<UserPercentageActivesAndInactives>(sql);
+        return null;
     }
 }

@@ -36,34 +36,34 @@ public class SuppliersController : ControllerBase
         return StatusCode((int)HttpStatusCode.Created, new { Message = msg });
     }
 
-    [HttpGet("{uniqueId}")]
-    public async Task<IActionResult> GetSupplier(Guid uniqueId)
+    [HttpGet("{supplierId}")]
+    public async Task<IActionResult> GetSupplier(string supplierId)
     {
-        var supplier = await _service.GetSupplierByUniqueId(uniqueId);
+        var supplier = await _service.GetSupplierById(supplierId);
         return Ok(supplier);
     }
 
-    [HttpPut("{uniqueId}")]
-    public async Task<IActionResult> UpdateSupplier([FromBody]SupplierRequest request, Guid uniqueId)
+    [HttpPut("{supplierId}")]
+    public async Task<IActionResult> UpdateSupplier([FromBody]SupplierRequest request, string supplierId)
     {
-        await _service.UpdateSupplier(request, uniqueId);
+        await _service.UpdateSupplier(request, supplierId);
         var msg = $"Supplier '{request.SupplierName}' updated.";
         _logger.LogInformation(msg);
         return Ok(new { Message = msg });
     }
     
-    [HttpDelete("{uniqueId}")]
-    public async Task<IActionResult> DeleteSupplier(Guid uniqueId)
+    [HttpDelete("{supplierId}")]
+    public async Task<IActionResult> DeleteSupplier(string supplierId)
     {
-        await _service.DeleteSupplier(uniqueId);
-        _logger.LogInformation($"Supplier with ID '{uniqueId}' deleted.");
+        await _service.DeleteSupplier(supplierId);
+        _logger.LogInformation($"Supplier with ID '{supplierId}' deleted.");
         return NoContent();
     }
 
-    [HttpGet("{uniqueId}/products")]
-    public async Task<IActionResult> GetSupplierProducts(Guid uniqueId)
+    [HttpGet("{supplierId}/products")]
+    public async Task<IActionResult> GetSupplierProducts(string supplierId)
     {
-        var products = await _service.GetSupplierProducts(uniqueId);
+        var products = await _service.GetSupplierProducts(supplierId);
         return Ok(products);
     }
 

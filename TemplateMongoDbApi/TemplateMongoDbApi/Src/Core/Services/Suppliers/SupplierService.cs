@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Http;
 using TemplateMongoDbApi.Common.Exceptions;
 using TemplateMongoDbApi.Common.Helpers;
 using TemplateMongoDbApi.Core.Models.Products;
@@ -55,16 +54,16 @@ public class SupplierService
         await _repository.CreateAsync(supplier);
     }
 
-    public async Task UpdateSupplier(SupplierRequest request, Guid uniqueId)
+    public async Task UpdateSupplier(SupplierRequest request, string supplierId)
     {
         if (request is null)
         {
             throw new BadRequestException("The supplier request cannot be null. Please provide Name, Identification, Contacts and Address");
         }
-        var supplier = await _repository.GetByUniqueIdAsync(uniqueId);
+        var supplier = await _repository.GetByIdAsync(supplierId);
         if (supplier is null)
         {
-            throw new NotFoundException($"Supplier with ID '{uniqueId}' not found.");
+            throw new NotFoundException($"Supplier with ID '{supplierId}' not found.");
         }
         supplier.SupplierName = request.SupplierName;
         supplier.IdentificationNumber = request.IdentificationNumber;
@@ -88,22 +87,22 @@ public class SupplierService
         return pagination;
     }
 
-    public async Task<Supplier> GetSupplierByUniqueId(Guid uniqueId)
+    public async Task<Supplier> GetSupplierById(string supplierId)
     {
-        var supplier = await _repository.GetByUniqueIdAsync(uniqueId);
+        var supplier = await _repository.GetByIdAsync(supplierId);
         if (supplier is null)
         {
-            throw new NotFoundException($"Supplier with ID '{uniqueId}' not found.");
+            throw new NotFoundException($"Supplier with ID '{supplierId}' not found.");
         }
         return supplier;
     }
 
-    public async Task DeleteSupplier(Guid uniqueId)
+    public async Task DeleteSupplier(string supplierId)
     {
-        var supplier = await _repository.GetByUniqueIdAsync(uniqueId);
+        var supplier = await _repository.GetByIdAsync(supplierId);
         if (supplier is null)
         {
-            throw new NotFoundException($"Supplier with ID '{uniqueId}' not found.");
+            throw new NotFoundException($"Supplier with ID '{supplierId}' not found.");
         }
         await _repository.DeleteAsync(supplier);
     }
@@ -176,14 +175,14 @@ public class SupplierService
         return suppliers;
     }
 
-    public async Task<IEnumerable<Product>> GetSupplierProducts(Guid uniqueId)
+    public async Task<IEnumerable<Product>> GetSupplierProducts(string supplierId)
     {
-        var supplier = await _repository.GetByUniqueIdAsync(uniqueId);
+        var supplier = await _repository.GetByIdAsync(supplierId);
         if (supplier is null)
         {
-            throw new NotFoundException($"Supplier with ID '{uniqueId}' not found.");
+            throw new NotFoundException($"Supplier with ID '{supplierId}' not found.");
         }
-        var products = await _productRepository.GetAllBySupplierAsync(supplier.SupplierId);
+        var products = await _productRepository.GetAllBySupplierAsync(supplierId);
         return products;
     }
 }

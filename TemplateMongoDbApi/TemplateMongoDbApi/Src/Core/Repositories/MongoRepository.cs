@@ -7,6 +7,7 @@ public class MongoRepository<T> : IMongoRepository<T> where T : class
 {
     private readonly IMongoDatabase _database;
     protected readonly IMongoCollection<T> _collection;
+    protected readonly FilterDefinitionBuilder<T> _builder = Builders<T>.Filter;
 
     public MongoRepository(IMongoDatabase database, string collectionName)
     {
@@ -47,7 +48,7 @@ public class MongoRepository<T> : IMongoRepository<T> where T : class
     {
         try
         {
-            var filter = Builders<T>.Filter.Eq("_id", GetEntityId(entity));
+            var filter = _builder.Eq("_id", GetEntityId(entity));
             await _collection.DeleteOneAsync(filter);
         }
         catch (Exception)
@@ -58,7 +59,7 @@ public class MongoRepository<T> : IMongoRepository<T> where T : class
 
     public async Task<bool> ExistsRecord(string field, string? value)
     {
-        var filter = Builders<T>.Filter.Eq(field, value);
+        var filter = _builder.Eq(field, value);
         return await _collection.CountDocumentsAsync(filter) > 0;
     }
 
@@ -68,7 +69,7 @@ public class MongoRepository<T> : IMongoRepository<T> where T : class
         {
             throw new ArgumentException("Invalid pagination parameters.");
         }
-        var filter = FilterDefinition<T>.Empty;
+        var filter = _builder.Empty;
         return await _collection.Find(filter)
             .Skip(pageIndex * pageSize)
             .Limit(pageSize)
@@ -77,7 +78,7 @@ public class MongoRepository<T> : IMongoRepository<T> where T : class
 
     public async Task<IEnumerable<T>> GetAllNotPaginatedAsync()
     {
-        var filter = FilterDefinition<T>.Empty;
+        var filter = _builder.Empty;
         return await _collection.Find(filter).ToListAsync();
     }
 
@@ -85,7 +86,7 @@ public class MongoRepository<T> : IMongoRepository<T> where T : class
     {
         try
         {
-            var filter = Builders<T>.Filter.Eq("_id", GetEntityId(entity));
+            var filter = _builder.Eq("_id", GetEntityId(entity));
             await _collection.ReplaceOneAsync(filter, entity);
         }
         catch (Exception)
@@ -96,17 +97,17 @@ public class MongoRepository<T> : IMongoRepository<T> where T : class
 
     public async Task<T?> GetByFieldAsync(string field, object value)
     {
-        var filter = Builders<T>.Filter.Eq(field, value);
+        var filter = _builder.Eq(field, value);
         return await _collection.Find(filter).FirstOrDefaultAsync();
     }
 
-    public async Task<T?> GetByIdAsync(string id)
+    public async Task<T?> GetByIdAsync(string? id)
     {
         if(!ObjectId.TryParse(id, out var objectId))
         {
             throw new ArgumentException("Invalid ObjectId.");
         }
-        var filter = Builders<T>.Filter.Eq("_id", objectId);
+        var filter = _builder.Eq("_id", objectId);
         return await _collection.Find(filter).FirstOrDefaultAsync();
     }
 

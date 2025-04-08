@@ -1,5 +1,4 @@
 using TemplateMongoDbApi.Core.Models.Products;
-using System.Data;
 using MongoDB.Driver;
 using MongoDB.Bson;
 
@@ -28,7 +27,7 @@ public class ProductRepository : MongoRepository<Product>
 
     public async Task<Product> GetByCodeAsync(string? code)
     {
-        var filter = Builders<Product>.Filter.Eq(p => p.Code, code);
+        var filter = _builder.Eq(p => p.Code, code);
         return await _collection.Find(filter).FirstOrDefaultAsync();   
     }
 
@@ -38,7 +37,7 @@ public class ProductRepository : MongoRepository<Product>
         {
             throw new ArgumentException("Invalid ObjectId.");
         }
-        var filter = Builders<Product>.Filter.Eq(p => p.ProductId, objectId);
+        var filter = _builder.Eq(p => p.ProductId, objectId);
         return await _collection.Find(filter).FirstOrDefaultAsync();
     }
 
@@ -48,7 +47,7 @@ public class ProductRepository : MongoRepository<Product>
         {
             throw new ArgumentException("Invalid ObjectId.");
         }
-        var filter = Builders<Product>.Filter.Eq(p => p.Supplier!.SupplierId, objectId);
+        var filter = _builder.Eq(p => p.Supplier!.SupplierId, objectId);
         return await _collection.Find(filter).ToListAsync();
     }
 
@@ -58,7 +57,9 @@ public class ProductRepository : MongoRepository<Product>
         {
             throw new ArgumentException("Invalid ObjectId.");
         }
-        var filter = Builders<Product>.Filter.Eq(p => p.ProductId, objectId);
+        
+        var filter = _builder.Eq(p => p.ProductId, objectId) & 
+                     _builder.Ne(p => p.ProductId, objectId);
         return await _collection.Find(filter).AnyAsync();
     }
 }

@@ -1,37 +1,35 @@
-using System.ComponentModel.DataAnnotations;
 using MongoDB.Bson;
-using TemplateMongoDbApi.Common.Helpers;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace TemplateMongoDbApi.Core.Models.Suppliers;
 
 public class Supplier 
 {
-    [Key]
+    [BsonId]
+    [BsonRepresentation(BsonType.ObjectId)]
     public ObjectId SupplierId { get; set; }
 
-    [Required]
-    [StringLength(150)]
+    [BsonElement("supplier_name")]
     public string? SupplierName { get; set; }
 
-    [Required]
-    [StringLength(30)]
+    [BsonElement("identification_number")]
     public string? IdentificationNumber { get; set; }
 
-    [Required]
-    [StringLength(100)]
+    [BsonElement("email")]
     public string? Email { get; set; }  
 
-    [Required]
-    [StringLength(20)]
+    [BsonElement("primary_phone")]
     public string? PrimaryPhone { get; set; } 
 
-    [StringLength(20)]
+    [BsonElement("secondary_phone")]
     public string? SecondaryPhone { get; set; } 
 
-    [StringLength(150)]
+    [BsonElement("address")]
     public string? Address { get; set; }
 
-    public Guid UniqueId { get; set; } = Encryption.GenerateUUID();
+    [BsonElement("created_at")]
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+    [BsonElement("updated_at")]
     public DateTime UpdatedAt { get; set;} = DateTime.UtcNow;
 }

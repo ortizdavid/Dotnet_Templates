@@ -1,5 +1,4 @@
 using MongoDB.Driver;
-using TemplateMongoDbApi.Core.Models;
 
 namespace TemplateMongoDbApi.Common.Extensions;
 
@@ -9,14 +8,10 @@ public static class MongoDbExtensions
     {
         // Load settings from appsettings
         var settings = configuration.GetSection("MongoDbSettings").Get<MongoDbSettings>();
+        var mongoClient = new MongoClient(settings?.ConnectionString);
+        var mongoDatabase = mongoClient.GetDatabase(settings?.DatabaseName);
 
-        services.AddSingleton<IMongoClient>(_ => new MongoClient(settings?.ConnectionString)); 
-
-        services.AddScoped<IMongoDatabase>(sp => 
-        {
-            var client = sp.GetRequiredService<MongoClient>();
-            return client.GetDatabase(settings?.DatabaseName);
-        });
+        services.AddSingleton<IMongoDatabase>(mongoDatabase);
     }
 }
 

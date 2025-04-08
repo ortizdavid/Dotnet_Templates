@@ -38,16 +38,16 @@ public class RoleService
         await _repository.CreateAsync(role);
     }
 
-    public async Task UpdateRole(RoleRequest request, Guid uniqueId)
+    public async Task UpdateRole(RoleRequest request, string roleId)
     {
         if (request is null)
         {
             throw new BadRequestException("Please provide role name and code");
         }
-        var role = await _repository.GetByUniqueIdAsync(uniqueId);
+        var role = await _repository.GetByIdAsync(roleId);
         if (role is null)
         {
-            throw new NotFoundException($"Role with ID '{uniqueId}' not found");
+            throw new NotFoundException($"Role with ID '{roleId}' not found");
         }
         role.RoleName = request.RoleName;
         role.Code = request.Code;
@@ -72,12 +72,12 @@ public class RoleService
         return roles;
     }
 
-    public async Task<Role> GetRoleByUniqueId(Guid uniqueId)
+    public async Task<Role> GetRoleById(string roleId)
     {
-        var role = await _repository.GetByUniqueIdAsync(uniqueId);
+        var role = await _repository.GetByIdAsync(roleId);
         if (role is null)
         {
-            throw new NotFoundException($"Role with ID '{uniqueId}' not found");
+            throw new NotFoundException($"Role with ID '{roleId}' not found");
         }
         return role;
     }
@@ -92,14 +92,13 @@ public class RoleService
         return role;
     }
 
-    public async Task DeleteRole(Guid uniqueId)
+    public async Task DeleteRole(string roleId)
     {
-        var role = await _repository.GetByUniqueIdAsync(uniqueId);
+        var role = await _repository.GetByIdAsync(roleId);
         if (role is null)
         {
-            throw new NotFoundException($"Role with ID '{uniqueId}' not found");
+            throw new NotFoundException($"Role with ID '{roleId}' not found");
         } 
         await _repository.DeleteAsync(role);
     }
-
 }

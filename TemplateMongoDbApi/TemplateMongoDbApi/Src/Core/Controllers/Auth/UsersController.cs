@@ -40,10 +40,10 @@ public class UsersController : ControllerBase
         return StatusCode((int)HttpStatusCode.Created, new { Message = msg });
     }
 
-    [HttpGet("{uniqueId}")]
-    public async Task<IActionResult> GetUserById(Guid uniqueId)
+    [HttpGet("{userId}")]
+    public async Task<IActionResult> GetUserById(string userId)
     {
-        var user = await _service.GetUserByUniqueId(uniqueId);
+        var user = await _service.GetUserById(userId);
         return Ok(user);
     }
 
@@ -54,47 +54,47 @@ public class UsersController : ControllerBase
         return Ok(user);
     }
 
-    [HttpPut("{uniqueId}/upload-image")]
-    public async Task<IActionResult> UploadImage(IFormFile file, Guid uniqueId)
+    [HttpPut("{userId}/upload-image")]
+    public async Task<IActionResult> UploadImage(IFormFile file, string userId)
     {
-        await _service.UploadUserImage(file, uniqueId);
-        var msg = $"User '{uniqueId}' image uploaded.";
+        await _service.UploadUserImage(file, userId);
+        var msg = $"User '{userId}' image uploaded.";
         _logger.LogInformation(msg);
         return Ok(new { Message = msg });
     }
 
-    [HttpPut("{uniqueId}/change-password")]
-    public async Task<IActionResult> ChangePassword([FromBody]ChangePasswordRequest request, Guid uniqueId)
+    [HttpPut("{userId}/change-password")]
+    public async Task<IActionResult> ChangePassword([FromBody]ChangePasswordRequest request, string userId)
     {
-        await _service.ChangePassword(request, uniqueId);
-        var msg = $"User '{uniqueId}' password was changed";
+        await _service.ChangePassword(request, userId);
+        var msg = $"User '{userId}' password was changed";
         _logger.LogInformation(msg);
         return Ok(new { Message = msg });
     }
 
-    [HttpDelete("{uniqueId}")]
-    public async Task<IActionResult> DeleteUser(Guid uniqueId)
+    [HttpDelete("{userId}")]
+    public async Task<IActionResult> DeleteUser(string userId)
     {
-        await _service.DeleteUser(uniqueId);
-        _logger.LogInformation($"User with ID '{uniqueId}' was deleted");
+        await _service.DeleteUser(userId);
+        _logger.LogInformation($"User with ID '{userId}' was deleted");
         return NoContent();
     }
 
-    [HttpPut("{uniqueId}/activate")]
-    public async Task<IActionResult> ActivateUser(Guid uniqueId)
+    [HttpPut("{userId}/activate")]
+    public async Task<IActionResult> ActivateUser(string userId)
     {
-        await _service.ActivateUser(uniqueId);
-        var msg = $"User with ID '{uniqueId}' was activated.";
+        await _service.ActivateUser(userId);
+        var msg = $"User with ID '{userId}' was activated.";
         _logger.LogInformation(msg);
         return Ok(new { Message = msg }); 
     }
 
     [Authorize]
-    [HttpPut("{uniqueId}/deactivate")]
-    public async Task<IActionResult> DeactivateUser(Guid uniqueId)
+    [HttpPut("{userId}/deactivate")]
+    public async Task<IActionResult> DeactivateUser(string userId)
     {
-        await _service.DeactivateUser(uniqueId);
-        var msg = $"User with ID '{uniqueId}' was deactivated.";
+        await _service.DeactivateUser(userId);
+        var msg = $"User with ID '{userId}' was deactivated.";
         _logger.LogInformation(msg);
         return Ok(new { Message = msg });  
     }

@@ -7,7 +7,7 @@ using TemplateMongoDbApi.Core.Services.Auth;
 
 namespace TemplateMongoDbApi.Core.Controllers.Auth;
 
-[Authorize]
+//[Authorize]
 [Route("api/[controller]")]
 [ApiController]
 public class RolesController : ControllerBase
@@ -45,19 +45,19 @@ public class RolesController : ControllerBase
         return StatusCode((int)HttpStatusCode.Created, new{ Message = msg });
     }
 
-    [HttpPut("{uniqueId}")]
-    public async Task<IActionResult> UpdateRole([FromBody]RoleRequest request, Guid uniqueId)
+    [HttpPut("{roleId}")]
+    public async Task<IActionResult> UpdateRole([FromBody]RoleRequest request, string roleId)
     {
-        await _service.UpdateRole(request, uniqueId);
-        var msg = $"Role with ID '{uniqueId}' updated";
+        await _service.UpdateRole(request, roleId);
+        var msg = $"Role with ID '{roleId}' updated";
         _logger.LogInformation(msg);
         return Ok(new{ Message = msg });
     }
 
-    [HttpGet("{uniqueId}")]
-    public async Task<IActionResult> GetRoleByUniqueId(Guid uniqueId)
+    [HttpGet("{roleId}")]
+    public async Task<IActionResult> GetRoleByUniqueId(string roleId)
     {
-        var role = await _service.GetRoleByUniqueId(uniqueId);
+        var role = await _service.GetRoleById(roleId);
         return Ok(role);
     }
 
@@ -68,11 +68,11 @@ public class RolesController : ControllerBase
         return Ok(role);
     }
 
-    [HttpDelete("{uniqueId}")]
-    public async Task<IActionResult> DeleteRole(Guid uniqueId)
+    [HttpDelete("{roleId}")]
+    public async Task<IActionResult> DeleteRole(string roleId)
     {
-        await _service.DeleteRole(uniqueId);
-        _logger.LogInformation($"Role with ID '{uniqueId}' deleted");
+        await _service.DeleteRole(roleId);
+        _logger.LogInformation($"Role with ID '{roleId}' deleted");
         return NoContent();
     }
 }

@@ -5,7 +5,7 @@ namespace TemplateMongoDbApi.Core.Models.Auth
     public class CreateUserRequest
     {
         [Required]
-        public int RoleId { get; set; }
+        public string? RoleCode { get; set; }
 
         [Required]
         [StringLength(150)]

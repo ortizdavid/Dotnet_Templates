@@ -18,7 +18,7 @@ public class ProductImageRepository : MongoRepository<ProductImage>
             {
                 throw new ArgumentException("Invalid ObjectId.");
             }
-            var filter = Builders<ProductImage>.Filter.Eq(img => img.ProductId, objectId);
+            var filter = _builder.Eq(img => img.ProductId, objectId);
             await _collection.DeleteManyAsync(filter);
         }
         catch (Exception)
@@ -33,7 +33,7 @@ public class ProductImageRepository : MongoRepository<ProductImage>
         {
             throw new ArgumentException("Invalid ObjectId.");
         }
-        var filter = Builders<ProductImage>.Filter.Eq(img => img.ProductId, objectId);
+        var filter = _builder.Eq(img => img.ProductId, objectId);
         var sort = Builders<ProductImage>.Sort.Ascending(img => img.ImageId);
         var images = await _collection.Find(filter).Sort(sort).ToListAsync();
         return images;
