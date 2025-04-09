@@ -55,7 +55,7 @@ public class RolesController : ControllerBase
     }
 
     [HttpGet("{roleId}")]
-    public async Task<IActionResult> GetRoleByUniqueId(string roleId)
+    public async Task<IActionResult> GetRoleById(string roleId)
     {
         var role = await _service.GetRoleById(roleId);
         return Ok(role);

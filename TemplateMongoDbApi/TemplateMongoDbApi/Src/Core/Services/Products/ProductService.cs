@@ -76,7 +76,7 @@ public class ProductService
         await _repository.UpdateAsync(product);
     }
 
-    public async Task<Pagination<Product>> GetAllProducts(PaginationParam param)
+    public async Task<Pagination<ProductResponse>> GetAllProducts(PaginationParam param)
     {
         if (param is null)
         {
@@ -84,18 +84,20 @@ public class ProductService
         }
         var count = await _repository.CountAsync();
         var products = await _repository.GetAllDataAsync(param.PageSize, param.PageIndex);
-        var pagination = new Pagination<Product>(products, count, param.PageIndex, param.PageSize, _contextAccessor);
+        var productResponses = ProductMapper.ToResponseList(products);
+        var pagination = new Pagination<ProductResponse>(productResponses, count, param.PageIndex, param.PageSize, _contextAccessor);
         return pagination;
     }
 
-    public async Task<Product> GetProductByUniqueId(string productId)
+    public async Task<ProductResponse> GetProductByUniqueId(string productId)
     {
         var product = await _repository.GetByIdAsync(productId);
         if (product is null)
         {
             throw new NotFoundException($"Product with ID '{productId}' not found");
         }
-        return product;
+        var productResponse = ProductMapper.ToResponse(product);
+        return productResponse;
     }
 
     public async Task DeleteProduct(string productId)

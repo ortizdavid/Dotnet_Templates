@@ -54,7 +54,7 @@ public class RoleService
         await _repository.UpdateAsync(role); 
     }
 
-    public async Task<Pagination<Role>> GetAllRoles(PaginationParam param)
+    public async Task<Pagination<RoleResponse>> GetAllRoles(PaginationParam param)
     {
         if (param is null)
         {
@@ -62,34 +62,38 @@ public class RoleService
         }
         var count = await _repository.CountAsync();
         var roles = await _repository.GetAllAsync(param.PageSize, param.PageIndex);
-        var pagination = new Pagination<Role>(roles, count, param.PageIndex, param.PageSize, _contextAccessor);
+        var roleResponses = RoleMapper.ToResponseList(roles);
+        var pagination = new Pagination<RoleResponse>(roleResponses, count, param.PageIndex, param.PageSize, _contextAccessor);
         return pagination;
     }
 
-    public async Task<IEnumerable<Role>> GetRolesNotPaginated()
+    public async Task<IEnumerable<RoleResponse>> GetRolesNotPaginated()
     {
         var roles = await _repository.GetAllNotPaginatedAsync();
-        return roles;
+        var roleResponses = RoleMapper.ToResponseList(roles);
+        return roleResponses;
     }
 
-    public async Task<Role> GetRoleById(string roleId)
+    public async Task<RoleResponse> GetRoleById(string roleId)
     {
         var role = await _repository.GetByIdAsync(roleId);
         if (role is null)
         {
             throw new NotFoundException($"Role with ID '{roleId}' not found");
         }
-        return role;
+        var roleResponse = RoleMapper.ToResponse(role);
+        return roleResponse;
     }
 
-    public async Task<Role> GetRoleByCode(string code)
+    public async Task<RoleResponse> GetRoleByCode(string code)
     {
         var role = await _repository.GetByCodeAsync(code);
         if (role is null)
         {
             throw new NotFoundException($"Role with Code '{code}' not found");
         }
-        return role;
+        var roleResponse = RoleMapper.ToResponse(role);
+        return roleResponse;
     }
 
     public async Task DeleteRole(string roleId)

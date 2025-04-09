@@ -75,7 +75,7 @@ public class SupplierService
         await _repository.UpdateAsync(supplier);
     }
 
-    public async Task<Pagination<Supplier>> GetAllSuppliers(PaginationParam param)
+    public async Task<Pagination<SupplierResponse>> GetAllSuppliers(PaginationParam param)
     {
         if (param is null)
         {
@@ -83,18 +83,20 @@ public class SupplierService
         }
         var count = await _repository.CountAsync();
         var suppliers = await _repository.GetAllAsync(param.PageSize, param.PageIndex);
-        var pagination = new Pagination<Supplier>(suppliers, count, param.PageIndex, param.PageSize, _contextAccessor);
+        var supplierResponses = SupplierMapper.ToResponseList(suppliers);
+        var pagination = new Pagination<SupplierResponse>(supplierResponses, count, param.PageIndex, param.PageSize, _contextAccessor);
         return pagination;
     }
 
-    public async Task<Supplier> GetSupplierById(string supplierId)
+    public async Task<SupplierResponse> GetSupplierById(string supplierId)
     {
         var supplier = await _repository.GetByIdAsync(supplierId);
         if (supplier is null)
         {
             throw new NotFoundException($"Supplier with ID '{supplierId}' not found.");
         }
-        return supplier;
+        var supplierResponse = SupplierMapper.ToResponse(supplier);
+        return supplierResponse;
     }
 
     public async Task DeleteSupplier(string supplierId)

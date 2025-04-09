@@ -51,7 +51,7 @@ public class CategoryService
         await _repository.UpdateAsync(category);
     }
 
-    public async Task<Pagination<Category>> GetAllCategories(PaginationParam param)
+    public async Task<Pagination<CategoryResponse>> GetAllCategories(PaginationParam param)
     {
         if (param is null)
         {
@@ -59,18 +59,20 @@ public class CategoryService
         }
         var count = await _repository.CountAsync();
         var categories = await _repository.GetAllAsync(param.PageSize, param.PageIndex);
-        var pagination = new Pagination<Category>(categories, count, param.PageIndex, param.PageSize, _contextAccessor);  
+        var categoryResponses = CategoryMapper.ToResponseList(categories);
+        var pagination = new Pagination<CategoryResponse>(categoryResponses, count, param.PageIndex, param.PageSize, _contextAccessor);  
         return pagination;
     }
 
-    public async Task<Category> GetCategoryById(string categoryId)
+    public async Task<CategoryResponse> GetCategoryById(string categoryId)
     {
         var category = await _repository.GetByIdAsync(categoryId);
         if (category is null)
         {
             throw new NotFoundException("Category not found");
         }
-        return category;
+        var categoryResponse = CategoryMapper.ToResponse(category);
+        return categoryResponse;
     }
 
     public async Task DeleteCategory(string categoryId)

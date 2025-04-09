@@ -125,7 +125,7 @@ public class AuthService
         return newRefreshToken;
     }
 
-    public async Task<User> GetLoggedUser()
+    public async Task<UserResponse> GetLoggedUser()
     {
         var accessToken = _contextAccessor.HttpContext?
             .Request.Headers["Authorization"]

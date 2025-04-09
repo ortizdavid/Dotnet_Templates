@@ -28,8 +28,8 @@ public class Supplier
     public string? Address { get; set; }
 
     [BsonElement("created_at")]
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public DateTime? CreatedAt { get; set; } = DateTime.UtcNow;
 
     [BsonElement("updated_at")]
-    public DateTime UpdatedAt { get; set;} = DateTime.UtcNow;
+    public DateTime? UpdatedAt { get; set;} = DateTime.UtcNow;
 }

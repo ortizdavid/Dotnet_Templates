@@ -82,7 +82,7 @@ public class UserService
         await _repository.UpdateAsync(user);
     }
 
-    public async Task<Pagination<User>> GetAllUsers(PaginationParam param)
+    public async Task<Pagination<UserResponse>> GetAllUsers(PaginationParam param)
     {
         if (param is null)
         {
@@ -90,18 +90,20 @@ public class UserService
         }
         var count = await _repository.CountAsync();
         var users = await _repository.GetAllDataAsync(param.PageSize, param.PageIndex);
-        var pagination = new Pagination<User>(users, count, param.PageIndex, param.PageSize, _contextAccessor); 
+        var userResponses = UserMapper.ToResponseList(users);
+        var pagination = new Pagination<UserResponse>(userResponses, count, param.PageIndex, param.PageSize, _contextAccessor); 
         return pagination;
     }
 
-    public async Task<User> GetUserById(string userId)
+    public async Task<UserResponse> GetUserById(string userId)
     {
         var user = await _repository.GetByIdAsync(userId);
         if (user is null)
         {
             throw new NotFoundException($"User with ID '{userId}' not found");
         }
-        return user;
+        var userResponse = UserMapper.ToResponse(user);
+        return userResponse;
     }
 
     public async Task<User> GetUserByName(string userName)
@@ -217,6 +219,9 @@ public class UserService
             ExpiryDate = expiryDate,
         };
         await _refreshTokenRepository.CreateAsync(userRefreshToken);
+        
+        user.UserRefreshToken = userRefreshToken;
+        await _repository.UpdateAsync(user);
     }   
 
     public async Task UpdateUserRefreshToken(User user, string newRefreshToken)
