@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace TemplateMongoDbApi.Core.Models.Products;
+namespace TemplateMongoDbApi.Core.DTOs.Products;
 
 public class CategoryRequest
 {

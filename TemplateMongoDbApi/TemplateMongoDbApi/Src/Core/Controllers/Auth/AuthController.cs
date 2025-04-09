@@ -1,7 +1,7 @@
-using TemplateMongoDbApi.Core.Models.Auth;
 using Microsoft.AspNetCore.Mvc;
 using TemplateMongoDbApi.Core.Services.Auth;
 using Microsoft.AspNetCore.Authorization;
+using TemplateMongoDbApi.Core.DTOs.Auth;
 
 namespace TemplateMongoDbApi.Core.Controllers.Auth;
 

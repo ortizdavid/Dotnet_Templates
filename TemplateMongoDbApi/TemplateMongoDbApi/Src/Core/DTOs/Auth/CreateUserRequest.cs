@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace TemplateMongoDbApi.Core.Models.Auth
+namespace TemplateMongoDbApi.Core.DTOs.Auth
 {
     public class CreateUserRequest
     {

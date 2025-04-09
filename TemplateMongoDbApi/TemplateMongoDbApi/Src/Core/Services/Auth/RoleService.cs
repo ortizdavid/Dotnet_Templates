@@ -1,5 +1,7 @@
 using TemplateMongoDbApi.Common.Exceptions;
 using TemplateMongoDbApi.Common.Helpers;
+using TemplateMongoDbApi.Core.DTOs.Auth;
+using TemplateMongoDbApi.Core.Mappers.Auth;
 using TemplateMongoDbApi.Core.Models.Auth;
 using TemplateMongoDbApi.Core.Repositories.Auth;
 
@@ -51,7 +53,7 @@ public class RoleService
         }
         role.RoleName = request.RoleName;
         role.Code = request.Code;
-        await _repository.UpdateAsync(role); 
+        await _repository.UpdateAsync(role, roleId); 
     }
 
     public async Task<Pagination<RoleResponse>> GetAllRoles(PaginationParam param)
@@ -103,6 +105,6 @@ public class RoleService
         {
             throw new NotFoundException($"Role with ID '{roleId}' not found");
         } 
-        await _repository.DeleteAsync(role);
+        await _repository.DeleteAsync(roleId);
     }
 }

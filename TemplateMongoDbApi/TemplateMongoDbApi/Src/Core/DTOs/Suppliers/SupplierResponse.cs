@@ -1,4 +1,4 @@
-namespace TemplateMongoDbApi.Core.Models.Suppliers;
+namespace TemplateMongoDbApi.Core.DTOs.Suppliers;
 
 public class SupplierResponse 
 {

@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace TemplateMongoDbApi.Core.Services.Suppliers;
+namespace TemplateMongoDbApi.Core.DTOs.Suppliers;
 
 public class SupplierRequest
 {

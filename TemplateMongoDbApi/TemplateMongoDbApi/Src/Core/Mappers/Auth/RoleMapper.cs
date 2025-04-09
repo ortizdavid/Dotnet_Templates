@@ -1,4 +1,7 @@
-namespace TemplateMongoDbApi.Core.Models.Auth;
+using TemplateMongoDbApi.Core.DTOs.Auth;
+using TemplateMongoDbApi.Core.Models.Auth;
+
+namespace TemplateMongoDbApi.Core.Mappers.Auth;
 
 public static class RoleMapper
 {

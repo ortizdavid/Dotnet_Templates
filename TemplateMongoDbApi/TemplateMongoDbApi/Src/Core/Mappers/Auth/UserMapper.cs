@@ -1,4 +1,7 @@
-namespace TemplateMongoDbApi.Core.Models.Auth;
+using TemplateMongoDbApi.Core.DTOs.Auth;
+using TemplateMongoDbApi.Core.Models.Auth;
+
+namespace TemplateMongoDbApi.Core.Mappers.Auth;
 
 public static class UserMapper
 {
@@ -8,6 +11,7 @@ public static class UserMapper
         {
             UserId = user.UserId.ToString(),
             UserName = user.UserName,
+            Password = user.Password,
             Email = user.Email,
             IsActive = user.IsActive,
             RecoveryToken = user.RecoveryToken,
@@ -24,6 +28,7 @@ public static class UserMapper
         {
             UserId = u.UserId.ToString(),
             UserName = u.UserName,
+            Password = u.Password,
             Email = u.Email,
             IsActive = u.IsActive,
             RecoveryToken = u.RecoveryToken,

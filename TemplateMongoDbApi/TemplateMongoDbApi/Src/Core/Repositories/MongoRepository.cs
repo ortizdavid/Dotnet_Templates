@@ -44,11 +44,15 @@ public class MongoRepository<T> : IMongoRepository<T> where T : class
         }
     }
 
-    public async Task DeleteAsync(T entity)
+    public async Task DeleteAsync(string id)
     {
         try
         {
-            var filter = _builder.Eq("_id", GetEntityId(entity));
+            if(!ObjectId.TryParse(id, out var objectId))
+            {
+                throw new ArgumentException("Invalid ObjectId.");
+            }
+            var filter = _builder.Eq("_id", objectId);
             await _collection.DeleteOneAsync(filter);
         }
         catch (Exception)
@@ -82,11 +86,15 @@ public class MongoRepository<T> : IMongoRepository<T> where T : class
         return await _collection.Find(filter).ToListAsync();
     }
 
-    public async Task UpdateAsync(T entity)
+    public async Task UpdateAsync(T entity, string id)
     {
         try
         {
-            var filter = _builder.Eq("_id", GetEntityId(entity));
+            if(!ObjectId.TryParse(id, out var objectId))
+            {
+                throw new ArgumentException("Invalid ObjectId.");
+            }
+            var filter = _builder.Eq("_id", objectId);
             await _collection.ReplaceOneAsync(filter, entity);
         }
         catch (Exception)

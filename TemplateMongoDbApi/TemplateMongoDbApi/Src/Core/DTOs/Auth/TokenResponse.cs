@@ -1,4 +1,4 @@
-namespace TemplateMongoDbApi.Core.Models.Auth;
+namespace TemplateMongoDbApi.Core.DTOs.Auth;
 
 public class TokenResponse
 {

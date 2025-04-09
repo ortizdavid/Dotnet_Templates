@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using TemplateMongoDbApi.Core.Services.Products;
-using TemplateMongoDbApi.Core.Models.Products;
 using TemplateMongoDbApi.Common.Helpers;
 using System.Net;
+using TemplateMongoDbApi.Core.DTOs.Products;
 
 namespace TemplateMongoDbApi.Core.Controllers.Products;
 

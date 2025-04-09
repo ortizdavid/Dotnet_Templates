@@ -1,5 +1,7 @@
 using TemplateMongoDbApi.Common.Exceptions;
 using TemplateMongoDbApi.Common.Helpers;
+using TemplateMongoDbApi.Core.DTOs.Suppliers;
+using TemplateMongoDbApi.Core.Mappers.Suppliers;
 using TemplateMongoDbApi.Core.Models.Products;
 using TemplateMongoDbApi.Core.Models.Suppliers;
 using TemplateMongoDbApi.Core.Repositories;
@@ -72,7 +74,7 @@ public class SupplierService
         supplier.Email = request.Email;
         supplier.Address = request.Address;
         supplier.UpdatedAt = DateTime.UtcNow;
-        await _repository.UpdateAsync(supplier);
+        await _repository.UpdateAsync(supplier, supplierId);
     }
 
     public async Task<Pagination<SupplierResponse>> GetAllSuppliers(PaginationParam param)
@@ -106,7 +108,7 @@ public class SupplierService
         {
             throw new NotFoundException($"Supplier with ID '{supplierId}' not found.");
         }
-        await _repository.DeleteAsync(supplier);
+        await _repository.DeleteAsync(supplierId);
     }
 
     public async Task ImportSuppliersCSV(IFormFile formFile)

@@ -1,4 +1,7 @@
-namespace TemplateMongoDbApi.Core.Models.Suppliers;
+using TemplateMongoDbApi.Core.DTOs.Suppliers;
+using TemplateMongoDbApi.Core.Models.Suppliers;
+
+namespace TemplateMongoDbApi.Core.Mappers.Suppliers;
 
 public static class SupplierMapper
 {

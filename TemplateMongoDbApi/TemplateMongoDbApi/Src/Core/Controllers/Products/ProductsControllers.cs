@@ -2,7 +2,7 @@ using System.Net;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TemplateMongoDbApi.Common.Helpers;
-using TemplateMongoDbApi.Core.Models.Products;
+using TemplateMongoDbApi.Core.DTOs.Products;
 using TemplateMongoDbApi.Core.Services.Products;
 
 namespace TemplateMongoDbApi.Core.Controllers.Products;

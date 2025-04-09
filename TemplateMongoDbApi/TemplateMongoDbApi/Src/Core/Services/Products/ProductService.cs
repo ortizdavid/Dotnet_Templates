@@ -1,5 +1,7 @@
 using TemplateMongoDbApi.Common.Exceptions;
 using TemplateMongoDbApi.Common.Helpers;
+using TemplateMongoDbApi.Core.DTOs.Products;
+using TemplateMongoDbApi.Core.Mappers.Products;
 using TemplateMongoDbApi.Core.Models.Products;
 using TemplateMongoDbApi.Core.Repositories;
 using TemplateMongoDbApi.Core.Repositories.Products;
@@ -73,7 +75,7 @@ public class ProductService
         product.UnitPrice = request.UnitPrice;
         product.Description = request.Description;
         product.UpdatedAt = DateTime.UtcNow;
-        await _repository.UpdateAsync(product);
+        await _repository.UpdateAsync(product, productId);
     }
 
     public async Task<Pagination<ProductResponse>> GetAllProducts(PaginationParam param)
@@ -107,7 +109,7 @@ public class ProductService
         {
             throw new NotFoundException($"Product with ID '{productId}' not found");
         }
-        await _repository.DeleteAsync(product);
+        await _repository.DeleteAsync(productId);
     }
 
     public async Task ImportProductsCSV(IFormFile formFile)

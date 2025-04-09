@@ -1,4 +1,4 @@
-namespace TemplateMongoDbApi.Core.Models.Products;
+namespace TemplateMongoDbApi.Core.DTOs.Products;
 
 public class CategoryResponse 
 {

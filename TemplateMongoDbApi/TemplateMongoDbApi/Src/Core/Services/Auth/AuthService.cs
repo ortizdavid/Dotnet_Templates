@@ -2,6 +2,7 @@ using TemplateMongoDbApi.Common.Exceptions;
 using TemplateMongoDbApi.Common.Helpers;
 using TemplateMongoDbApi.Core.Models.Auth;
 using TemplateMongoDbApi.Common.Messaging;
+using TemplateMongoDbApi.Core.DTOs.Auth;
 
 namespace TemplateMongoDbApi.Core.Services.Auth;
 

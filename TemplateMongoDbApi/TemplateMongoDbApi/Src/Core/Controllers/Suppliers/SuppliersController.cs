@@ -3,6 +3,7 @@ using TemplateMongoDbApi.Core.Services.Suppliers;
 using TemplateMongoDbApi.Common.Helpers;
 using System.Net;
 using Microsoft.AspNetCore.Authorization;
+using TemplateMongoDbApi.Core.DTOs.Suppliers;
 
 namespace TemplateMongoDbApi.Core.Controllers.Suppliers;
 

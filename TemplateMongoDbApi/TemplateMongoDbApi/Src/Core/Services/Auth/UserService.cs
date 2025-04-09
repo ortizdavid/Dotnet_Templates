@@ -1,6 +1,7 @@
-using MongoDB.Bson;
 using TemplateMongoDbApi.Common.Exceptions;
 using TemplateMongoDbApi.Common.Helpers;
+using TemplateMongoDbApi.Core.DTOs.Auth;
+using TemplateMongoDbApi.Core.Mappers.Auth;
 using TemplateMongoDbApi.Core.Models.Auth;
 using TemplateMongoDbApi.Core.Repositories.Auth;
 
@@ -79,7 +80,7 @@ public class UserService
         }
         user.Password = PasswordHelper.Hash(request.NewPassword);
         user.UpdatedAt = DateTime.UtcNow;
-        await _repository.UpdateAsync(user);
+        await _repository.UpdateAsync(user, userId);
     }
 
     public async Task<Pagination<UserResponse>> GetAllUsers(PaginationParam param)
@@ -150,7 +151,7 @@ public class UserService
         var imageInfo = await _imageUploader.UploadSingleFile(file);
         user.Image = imageInfo.FinalName;
         user.UpdatedAt = DateTime.Now;
-        await _repository.UpdateAsync(user);
+        await _repository.UpdateAsync(user, userId);
     }
 
     public async Task ActivateUser(string userId)
@@ -167,7 +168,7 @@ public class UserService
         user.IsActive = true;
         user.RecoveryToken = Encryption.GenerateRandomToken(150);
         user.UpdatedAt = DateTime.UtcNow;
-        await _repository.UpdateAsync(user);
+        await _repository.UpdateAsync(user, userId);
     }
 
     public async Task DeactivateUser(string userId)
@@ -183,7 +184,7 @@ public class UserService
         }
         user.IsActive = false;
         user.UpdatedAt = DateTime.UtcNow;
-        await _repository.UpdateAsync(user);
+        await _repository.UpdateAsync(user, userId);
     }
 
     public async Task DeleteUser(string userId)
@@ -193,7 +194,7 @@ public class UserService
         {
             throw new NotFoundException($"User with ID '{userId}' not found");
         }
-        await _repository.DeleteAsync(user);
+        await _repository.DeleteAsync(userId);
     }   
 
     public async Task<User> GetUserByNameAndPassword(string? userName, string? password)
@@ -221,7 +222,7 @@ public class UserService
         await _refreshTokenRepository.CreateAsync(userRefreshToken);
         
         user.UserRefreshToken = userRefreshToken;
-        await _repository.UpdateAsync(user);
+        await _repository.UpdateAsync(user, user.UserId.ToString());
     }   
 
     public async Task UpdateUserRefreshToken(User user, string newRefreshToken)
@@ -245,7 +246,7 @@ public class UserService
         }
         userRefreshToken.Token = newRefreshToken;
         userRefreshToken.UpdatedAt = DateTime.UtcNow;
-        await _refreshTokenRepository.UpdateAsync(userRefreshToken);
+        await _refreshTokenRepository.UpdateAsync(userRefreshToken, userRefreshToken.RefreshId.ToString());
     }   
 
     public async Task ClearUserRefreshToken(string userId)
@@ -261,6 +262,6 @@ public class UserService
         }
         userRefreshToken.Token = null;
         userRefreshToken.ExpiryDate = null;
-        await _refreshTokenRepository.UpdateAsync(userRefreshToken);
+        await _refreshTokenRepository.UpdateAsync(userRefreshToken, userRefreshToken.RefreshId.ToString());
     }     
 }

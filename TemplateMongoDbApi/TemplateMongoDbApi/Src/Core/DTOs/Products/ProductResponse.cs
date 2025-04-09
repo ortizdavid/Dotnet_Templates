@@ -1,6 +1,6 @@
-using TemplateMongoDbApi.Core.Models.Suppliers;
+using TemplateMongoDbApi.Core.DTOs.Suppliers;
 
-namespace TemplateMongoDbApi.Core.Models.Products;
+namespace TemplateMongoDbApi.Core.DTOs.Products;
 
 public class ProductResponse
 {   

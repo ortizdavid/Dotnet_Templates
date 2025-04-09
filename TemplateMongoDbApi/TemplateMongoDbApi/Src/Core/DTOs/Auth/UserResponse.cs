@@ -1,4 +1,6 @@
-namespace TemplateMongoDbApi.Core.Models.Auth;
+using TemplateMongoDbApi.Core.Models.Auth;
+
+namespace TemplateMongoDbApi.Core.DTOs.Auth;
 
 public class UserResponse
 {

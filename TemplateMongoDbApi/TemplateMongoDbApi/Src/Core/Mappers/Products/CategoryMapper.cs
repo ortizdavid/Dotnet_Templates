@@ -1,4 +1,7 @@
-namespace TemplateMongoDbApi.Core.Models.Products;
+using TemplateMongoDbApi.Core.DTOs.Products;
+using TemplateMongoDbApi.Core.Models.Products;
+
+namespace TemplateMongoDbApi.Core.Mappers.Products;
 
 public static class CategoryMapper
 {

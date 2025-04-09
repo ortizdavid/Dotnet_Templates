@@ -1,6 +1,8 @@
-using TemplateMongoDbApi.Core.Models.Suppliers;
+using TemplateMongoDbApi.Core.DTOs.Products;
+using TemplateMongoDbApi.Core.Mappers.Suppliers;
+using TemplateMongoDbApi.Core.Models.Products;
 
-namespace TemplateMongoDbApi.Core.Models.Products;
+namespace TemplateMongoDbApi.Core.Mappers.Products;
 
 public static class ProductMapper
 {

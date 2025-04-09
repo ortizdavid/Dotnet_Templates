@@ -1,5 +1,7 @@
 using TemplateMongoDbApi.Common.Exceptions;
 using TemplateMongoDbApi.Common.Helpers;
+using TemplateMongoDbApi.Core.DTOs.Products;
+using TemplateMongoDbApi.Core.Mappers.Products;
 using TemplateMongoDbApi.Core.Models.Products;
 using TemplateMongoDbApi.Core.Repositories.Products;
 
@@ -48,7 +50,7 @@ public class CategoryService
         category.CategoryName = request.CategoryName;
         category.Description = request.Description;
         category.UpdatedAt = DateTime.UtcNow;
-        await _repository.UpdateAsync(category);
+        await _repository.UpdateAsync(category, categoryId);
     }
 
     public async Task<Pagination<CategoryResponse>> GetAllCategories(PaginationParam param)
@@ -82,7 +84,7 @@ public class CategoryService
         {
             throw new NotFoundException("Category not found");
         }
-        await _repository.DeleteAsync(category);
+        await _repository.DeleteAsync(categoryId);
     }
 
     public async Task ImportCategoriesCSV(IFormFile formFile)
