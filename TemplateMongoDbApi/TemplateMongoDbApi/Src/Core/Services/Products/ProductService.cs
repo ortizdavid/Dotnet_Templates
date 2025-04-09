@@ -201,7 +201,7 @@ public class ProductService
         await _imageRepository.CreateBatchAsync(productImages);
     }
 
-    public async Task<IEnumerable<ProductImage>> GetProductImages(string productId)
+    public async Task<IEnumerable<ProductImageResponse>> GetProductImages(string productId)
     {
         var product = await _repository.GetByIdAsync(productId);
         if (product is null)
@@ -210,6 +210,7 @@ public class ProductService
         }
         
         var images = await _imageRepository.GetAllByProductAsync(productId);
-        return images;
+        var imageResponses = ProductImageMapper.ToResponseList(images);
+        return imageResponses;
     }
 }

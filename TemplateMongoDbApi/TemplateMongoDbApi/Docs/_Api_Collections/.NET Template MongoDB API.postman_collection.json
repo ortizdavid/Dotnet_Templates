@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "2be9a134-0d27-45cf-b46a-811b1f096c8e",
+		"_postman_id": "6268e01f-415a-466b-b6a0-b95dfa6685ea",
 		"name": ".NET Template MongoDB API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "13144775"
@@ -65,7 +65,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"username\": \"dev-on-bits\",\r\n    \"password\": \"Admin123$\"\r\n}",
+									"raw": "{\r\n    \"username\": \"admin0111111\",\r\n    \"password\": \"Admin123$\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -261,7 +261,7 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{TEMPLATE_MONGODB_API}}/roles?pageIndex=0&pageSize=2",
+									"raw": "{{TEMPLATE_MONGODB_API}}/roles?pageIndex=0&pageSize=1",
 									"host": [
 										"{{TEMPLATE_MONGODB_API}}"
 									],
@@ -275,7 +275,7 @@
 										},
 										{
 											"key": "pageSize",
-											"value": "2"
+											"value": "1"
 										}
 									]
 								}
@@ -326,21 +326,21 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{TEMPLATE_MONGODB_API}}/roles/by-code/role_admin",
+									"raw": "{{TEMPLATE_MONGODB_API}}/roles/by-code/role_super_admin",
 									"host": [
 										"{{TEMPLATE_MONGODB_API}}"
 									],
 									"path": [
 										"roles",
 										"by-code",
-										"role_admin"
+										"role_super_admin"
 									]
 								}
 							},
 							"response": []
 						},
 						{
-							"name": "Get By Unique ID",
+							"name": "Get By ID",
 							"request": {
 								"auth": {
 									"type": "bearer",
@@ -355,13 +355,13 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{TEMPLATE_MONGODB_API}}/roles/046d11e2-5a4e-4eb4-8d6d-c32f050583a2",
+									"raw": "{{TEMPLATE_MONGODB_API}}/roles/605c72ef1532070a12c618c9",
 									"host": [
 										"{{TEMPLATE_MONGODB_API}}"
 									],
 									"path": [
 										"roles",
-										"046d11e2-5a4e-4eb4-8d6d-c32f050583a2"
+										"605c72ef1532070a12c618c9"
 									]
 								}
 							},
@@ -384,7 +384,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"roleName\": \"User Test333\",\r\n    \"code\": \"role_test333\"\r\n}",
+									"raw": "{\r\n    \"roleName\": \"Role Tests\",\r\n    \"code\": \"role_test333\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -456,13 +456,13 @@
 								"method": "DELETE",
 								"header": [],
 								"url": {
-									"raw": "{{TEMPLATE_MONGODB_API}}/roles/989d1781-0bbe-4a32-a1d1-a6a68158c5c5",
+									"raw": "{{TEMPLATE_MONGODB_API}}/roles/67f65e507a69de0472a83d57",
 									"host": [
 										"{{TEMPLATE_MONGODB_API}}"
 									],
 									"path": [
 										"roles",
-										"989d1781-0bbe-4a32-a1d1-a6a68158c5c5"
+										"67f65e507a69de0472a83d57"
 									]
 								}
 							},
@@ -511,7 +511,7 @@
 							"response": []
 						},
 						{
-							"name": "Get User By UniqueId",
+							"name": "Get User By ID",
 							"request": {
 								"auth": {
 									"type": "bearer",
@@ -584,7 +584,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"roleId\": 1,\r\n    \"userName\": \"admin01\",\r\n    \"email\": \"admin01@gmail.com\",\r\n    \"password\": \"Admin123$\"\r\n}",
+									"raw": "{\r\n    \"roleCode\": \"role_super_admin\",\r\n    \"userName\": \"admin0111111\",\r\n    \"email\": \"admin01111111@gmail.com\",\r\n    \"password\": \"Admin123$\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -857,7 +857,7 @@
 					"response": []
 				},
 				{
-					"name": "Get Category by Unique ID",
+					"name": "Get Category by ID",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -872,13 +872,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{TEMPLATE_MONGODB_API}}/categories/f234c510-f64e-475e-9318-86f710f23ad5",
+							"raw": "{{TEMPLATE_MONGODB_API}}/categories/67f5219cca3110a921338ea4",
 							"host": [
 								"{{TEMPLATE_MONGODB_API}}"
 							],
 							"path": [
 								"categories",
-								"f234c510-f64e-475e-9318-86f710f23ad5"
+								"67f5219cca3110a921338ea4"
 							]
 						}
 					},
@@ -941,7 +941,7 @@
 								{
 									"key": "file",
 									"type": "file",
-									"src": "/C:/Users/ortiz/Downloads/Uploads for Testing/Dotnet templates/CSV/categories_for_import.csv"
+									"src": "/C:/Users/ortiz/projectos/projectos-dotnet/Dotnet_Templates/TemplateMongoDbApi/TemplateMongoDbApi/Resources/Files/categories-for-import.csv"
 								}
 							]
 						},
@@ -1066,7 +1066,7 @@
 					"response": []
 				},
 				{
-					"name": "Get Supplier by Unique ID",
+					"name": "Get Supplier by ID",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -1081,13 +1081,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{TEMPLATE_MONGODB_API}}/suppliers/313855d6-c09d-45c7-91b1-6578be4698c8",
+							"raw": "{{TEMPLATE_MONGODB_API}}/suppliers/67f5220a685c937ce8f0c569",
 							"host": [
 								"{{TEMPLATE_MONGODB_API}}"
 							],
 							"path": [
 								"suppliers",
-								"313855d6-c09d-45c7-91b1-6578be4698c8"
+								"67f5220a685c937ce8f0c569"
 							]
 						}
 					},
@@ -1361,21 +1361,21 @@
 									"key": "files",
 									"type": "file",
 									"src": [
-										"/C:/Users/ortiz/OneDrive/Imagens/Capturas de Ecrã/Screenshot 2024-11-19 123516.png",
-										"/C:/Users/ortiz/OneDrive/Imagens/Capturas de Ecrã/Screenshot 2024-11-19 132035.png",
-										"/C:/Users/ortiz/OneDrive/Imagens/Capturas de Ecrã/Screenshot 2024-11-22 121738.png"
+										"/C:/Users/ortiz/OneDrive/Imagens/Capturas de Ecrã/Screenshot 2025-04-08 123529.png",
+										"/C:/Users/ortiz/OneDrive/Imagens/Capturas de Ecrã/Screenshot 2025-04-08 123557.png",
+										"/C:/Users/ortiz/OneDrive/Imagens/Capturas de Ecrã/Screenshot 2025-04-08 123828.png"
 									]
 								}
 							]
 						},
 						"url": {
-							"raw": "{{TEMPLATE_MONGODB_API}}/products/6fc2ac66-fe63-4386-aedb-5ecc468fcd54/images",
+							"raw": "{{TEMPLATE_MONGODB_API}}/products/67f52a21751047ac33117df7/images",
 							"host": [
 								"{{TEMPLATE_MONGODB_API}}"
 							],
 							"path": [
 								"products",
-								"6fc2ac66-fe63-4386-aedb-5ecc468fcd54",
+								"67f52a21751047ac33117df7",
 								"images"
 							]
 						}
@@ -1421,6 +1421,34 @@
 					"response": []
 				},
 				{
+					"name": "Get Product by ID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TEMPLATE_MONGODB_API_JWT}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{TEMPLATE_MONGODB_API}}/products/67f52a21751047ac33117df7",
+							"host": [
+								"{{TEMPLATE_MONGODB_API}}"
+							],
+							"path": [
+								"products",
+								"67f52a21751047ac33117df7"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Get Product Images",
 					"request": {
 						"auth": {
@@ -1436,13 +1464,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{TEMPLATE_MONGODB_API}}/products/6fc2ac66-fe63-4386-aedb-5ecc468fcd54/images",
+							"raw": "{{TEMPLATE_MONGODB_API}}/products/67f52a21751047ac33117df7/images",
 							"host": [
 								"{{TEMPLATE_MONGODB_API}}"
 							],
 							"path": [
 								"products",
-								"6fc2ac66-fe63-4386-aedb-5ecc468fcd54",
+								"67f52a21751047ac33117df7",
 								"images"
 							]
 						}
@@ -1450,7 +1478,7 @@
 					"response": []
 				},
 				{
-					"name": "Get Product by Unique ID",
+					"name": "Get Product Image by FileName",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -1465,13 +1493,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{TEMPLATE_MONGODB_API}}/products/6fc2ac66-fe63-4386-aedb-5ecc468fcd54",
+							"raw": "{{TEMPLATE_MONGODB_API}}/product-images/aff3a47c-1918-474e-aa4a-817981ed3fd6.png",
 							"host": [
 								"{{TEMPLATE_MONGODB_API}}"
 							],
 							"path": [
-								"products",
-								"6fc2ac66-fe63-4386-aedb-5ecc468fcd54"
+								"product-images",
+								"aff3a47c-1918-474e-aa4a-817981ed3fd6.png"
 							]
 						}
 					},
@@ -2251,14 +2279,6 @@
 					]
 				}
 			]
-		},
-		{
-			"name": "New Request",
-			"request": {
-				"method": "GET",
-				"header": []
-			},
-			"response": []
 		}
 	]
 }
