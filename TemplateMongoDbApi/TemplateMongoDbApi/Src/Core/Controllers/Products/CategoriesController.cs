@@ -44,7 +44,7 @@ public class CategoriesController : ControllerBase
     }
 
     [HttpPut("{categoryId}")]
-    public async Task<IActionResult> UpdateCategory([FromBody] CategoryRequest request, string categoryId)
+    public async Task<IActionResult> UpdateCategory([FromBody]CategoryRequest request, string categoryId)
     {
         await _service.UpdateCategory(request, categoryId);
         var msg = $"Category '{request.CategoryName}' was updated.";
